@@ -6,12 +6,12 @@
 </description>
     <link>http://atlantix.com/</link>
     <atom:link href="http://atlantix.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 26 Aug 2016 14:38:50 +0800</pubDate>
-    <lastBuildDate>Fri, 26 Aug 2016 14:38:50 +0800</lastBuildDate>
+    <pubDate>Sat, 27 Aug 2016 15:16:35 +0800</pubDate>
+    <lastBuildDate>Sat, 27 Aug 2016 15:16:35 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
-        <title>Keras Learning Note: Framewise RNN Usage and CTC Setup</title>
+        <title>Keras Learning Note: Framewise RNN Usage and CTC Setup (Unfinished)</title>
         <description>&lt;h2 id=&quot;step-by-step-introduction-of-framewise-rnn-in-keras&quot;&gt;Step-by-step introduction of Framewise RNN in Keras&lt;/h2&gt;
 
 &lt;p&gt;Take Speech Recognition as example, RNN takes in frame input and produce framewise output. Using keras, this can be achieved with minimal code. But there is a shortcoming of using keras, that all input frame need to be of the same length to enable batch training. You will have to use &lt;code class=&quot;highlighter-rouge&quot;&gt;keras.preprocessing.sequence.pad_sentence&lt;/code&gt; method to get your data ready for batch training. If you are disgusted by padding, you will get to know how to train with &lt;code class=&quot;highlighter-rouge&quot;&gt;batchsize=1&lt;/code&gt; without padding at the end of this blog.&lt;/p&gt;
@@ -99,7 +99,11 @@ To enable bi-directional RNN is quite simple. Just initialize with &lt;code clas
 &lt;span class=&quot;n&quot;&gt;states&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;squeeze&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;states&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;last_output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;outputs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;states&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;So now we can see that keras did not reverse the output sequence.&lt;/p&gt;
+&lt;p&gt;So now we can see that keras did not reverse the output sequence. As suggest by https://github.com/fchollet/keras/issues/3448, we need to add reverse layer manually.
+Alternatively, we can stack two &lt;code class=&quot;highlighter-rouge&quot;&gt;go_backwards&lt;/code&gt; together…
+Adding &lt;code class=&quot;highlighter-rouge&quot;&gt;go_backwards&lt;/code&gt; or not does not affect the computational efficiency, since this operation is simply a twist of input! For deep RNNs, they always complete a whole layer’s computation before they progress into deeper ones. Gradient computation is similar to this. As a result, the training speed of both versions is almost the same, which I have confirmed on TIMIT dataset.&lt;/p&gt;
+
+&lt;p&gt;In addition, I have to say that this version of deep bi-directional RNN is not a popuplar one. Rather I would like to call it bi-directional deep RNN. Most DBRNN combine their output after one layer, which mixes forward information and backward information quickly. While I propose that stacking deeper before forward and backward information mixes is prone to improve representational power of uniform direction. And we just need to combine forward and backward feature with a shallow architecture. In this way, the network has a clearer structure.&lt;/p&gt;
 </description>
         <pubDate>Thu, 18 Aug 2016 16:03:23 +0800</pubDate>
         <link>http://atlantix.com/jekyll/update/2016/08/18/Keras-Note.html</link>
@@ -113,18 +117,18 @@ To enable bi-directional RNN is quite simple. Just initialize with &lt;code clas
       </item>
     
       <item>
-        <title>Speech Recognition: Connectionist Temporal Classification</title>
+        <title>Speech Recognition: Connectionist Temporal Classification (Unfinished)</title>
         <description>&lt;h2 id=&quot;man-dont-be-frightened-by-ctc&quot;&gt;Man, don’t be frightened by CTC!&lt;/h2&gt;
 
 &lt;p&gt;If you are just diving into Speech Recognition and scan through recent awesome papers, you will find yourself facing a disgusting word &lt;code class=&quot;highlighter-rouge&quot;&gt;CTC&lt;/code&gt;. You know that it stands for &lt;code class=&quot;highlighter-rouge&quot;&gt;Connectionist Temporal Classification&lt;/code&gt; but this phrase disgusts you again. The papers just state that ‘ run forward and backward and sum over’ which means nothing to you and you even don’t know what this thing is for. ( If you are familiar with HMM, you may understand &lt;code class=&quot;highlighter-rouge&quot;&gt;CTC&lt;/code&gt; easier.  This article is aimed at people with zero fundamentals. )&lt;/p&gt;
 
-&lt;p&gt;Well, before you stuck into Graves’ origin paper &lt;img src=&quot;/assets/icml2006_GravesFGS06.pdf&quot; alt=&quot;`Connectionist Temporal Classification: Labelling Unsegmented Sequence Data with Recurrent Neural Networks`&quot; /&gt; , I would like to give you a brief picture of CTC, so you won’t result in wasting a lot of time like me. I suppose you are not beginners of Neural Networks in the following explaination.&lt;/p&gt;
+&lt;p&gt;Well, before you stuck into Graves’ origin paper &lt;img src=&quot;/assets/icml2006_GravesFGS06.pdf&quot; alt=&quot;`Connectionist Temporal Classification: Labelling Unsegmented Sequence Data with Recurrent Neural Networks`&quot; /&gt; , I would like to give you a brief picture of CTC, so you won’t result in wasting a lot of time like me. I suppose you are not beginners of Neural Networks in the following explanation.&lt;/p&gt;
 
 &lt;p&gt;Assume you have a RNN classifier which takes an audio file as input. To simplify, the audio file is transformed into spectrum, consisting of a series of framewise feature vectors (which are FFT coefficients). Your RNN then takes in a frame and it is supposed to output a label at a timestep, which is one of the 61 phonemes (plus a silence notation). If you have already trained the RNN, you can expect getting the right phoneme at the right time, i.e. , inside the phoneme segmentation label. And you may train the network using the segmentation label, too. Everything goes fine, isn’t it?&lt;/p&gt;
 
-&lt;p&gt;So now you may wonder how can one train a framewise classifier with big data? Since phoneme-labeled data is rather rare and effort-taking. Is there any technique that allow end-to-end training of framewise RNN without precisely segmented data? This problem sounds like producing a sequence-level prediction from framewise predictions, which can be handled by HMM, but it is actually quite different one. Well, you are actutally modifying the network objective function! In order to train RNN end-to-end with sequence-level labelings, it is essential to derive a differentiable loss function that can describe sequence-level error signal. This sounds much harder. (And you may feel even harder to implement its symbolic computation graph using Theano)&lt;/p&gt;
+&lt;p&gt;So now you may wonder how can one train a framewise classifier with big data? Since phoneme-labeled data is rather rare and effort-taking. Is there any technique that allow end-to-end training of framewise RNN without precisely segmented data? This problem sounds like producing a sequence-level prediction from framewise predictions. It is actually an ancient issue in HMM: Given an observation sequence and HMM model, find the most probable hidden state sequence. We have network output as observation (and a language model if needed) and every frame’s final decision as hidden state and a transition matrix as HMM parameter. This part is just a forward recursion and quite easy to understand. Just google &lt;code class=&quot;highlighter-rouge&quot;&gt;HMM&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;viterbi&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;Actually this is not a newly emerged issue.&lt;/p&gt;
+&lt;p&gt;But it is actually quite different one. Well, you are actually modifying the network objective function! In order to train RNN end-to-end with sequence-level labelings, it is essential to derive a differentiable loss function that can describe sequence-level error signal. This sounds much harder. (And you may feel even harder to implement its symbolic computation graph using Theano).&lt;/p&gt;
 </description>
         <pubDate>Wed, 17 Aug 2016 17:03:23 +0800</pubDate>
         <link>http://atlantix.com/jekyll/update/2016/08/17/Speech-Recognition-CTC.html</link>

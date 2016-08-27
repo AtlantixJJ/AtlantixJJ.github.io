@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Keras Learning Note: Framewise RNN Usage and CTC Setup</title>
+  <title>Keras Learning Note: Framewise RNN Usage and CTC Setup (Unfinished)</title>
   <meta name="description" content="Step-by-step introduction of Framewise RNN in Keras">
 
   <link rel="stylesheet" href="/css/main.css">
@@ -57,7 +57,7 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Keras Learning Note: Framewise RNN Usage and CTC Setup</h1>
+    <h1 class="post-title" itemprop="name headline">Keras Learning Note: Framewise RNN Usage and CTC Setup (Unfinished)</h1>
     <p class="post-meta"><time datetime="2016-08-18T16:03:23+08:00" itemprop="datePublished">Aug 18, 2016</time></p>
   </header>
 
@@ -149,7 +149,11 @@ To enable bi-directional RNN is quite simple. Just initialize with <code class="
 <span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="n">T</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">]</span>
 <span class="k">return</span> <span class="n">last_output</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">states</span></code></pre></figure>
 
-<p>So now we can see that keras did not reverse the output sequence.</p>
+<p>So now we can see that keras did not reverse the output sequence. As suggest by https://github.com/fchollet/keras/issues/3448, we need to add reverse layer manually.
+Alternatively, we can stack two <code class="highlighter-rouge">go_backwards</code> together…
+Adding <code class="highlighter-rouge">go_backwards</code> or not does not affect the computational efficiency, since this operation is simply a twist of input! For deep RNNs, they always complete a whole layer’s computation before they progress into deeper ones. Gradient computation is similar to this. As a result, the training speed of both versions is almost the same, which I have confirmed on TIMIT dataset.</p>
+
+<p>In addition, I have to say that this version of deep bi-directional RNN is not a popuplar one. Rather I would like to call it bi-directional deep RNN. Most DBRNN combine their output after one layer, which mixes forward information and backward information quickly. While I propose that stacking deeper before forward and backward information mixes is prone to improve representational power of uniform direction. And we just need to combine forward and backward feature with a shallow architecture. In this way, the network has a clearer structure.</p>
 
   </div>
 

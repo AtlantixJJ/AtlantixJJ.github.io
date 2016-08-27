@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Keras Learning Note: Framewise RNN Usage and CTC Setup"
+title:  "Keras Learning Note: Framewise RNN Usage and CTC Setup (Unfinished)"
 date:   2016-08-18 16:03:23 +0800
 categories: jekyll update
 ---
