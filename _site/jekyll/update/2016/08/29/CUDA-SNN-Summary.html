@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Jianjing Xu's Blog</title>
-  <meta name="description" content="Some day my AI will help me write the blogs...
-">
+  <title>CUDA Programming Tips (Unfinished)</title>
+  <meta name="description" content="Using cuda-gdb, you are able to know where the code crashed and see the related variables. But it does not mean that you just need to examine the code around...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://atlantix.com/">
+  <link rel="canonical" href="http://atlantix.com/jekyll/update/2016/08/29/CUDA-SNN-Summary.html">
   <link rel="alternate" type="application/rss+xml" title="Jianjing Xu's Blog" href="http://atlantix.com/feed.xml">
 </head>
 
@@ -55,41 +54,35 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">CUDA Programming Tips (Unfinished)</h1>
+    <p class="post-meta"><time datetime="2016-08-29T22:26:44+08:00" itemprop="datePublished">Aug 29, 2016</time></p>
+  </header>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Aug 29, 2016</span>
+  <div class="post-content" itemprop="articleBody">
+    <p>Using <code class="highlighter-rouge">cuda-gdb</code>, you are able to know where the code crashed and see the related variables. But it does not mean that you just need to examine the code around the incident area. Instead, look at how you allocate this variable. Are you calling the right pointer? Did you allocate it with the right size and type? Did you call <code class="highlighter-rouge">cudaDeviceSynchronize()</code> properly if you are using <code class="highlighter-rouge">cudaMallocManged</code> ? Did you call <code class="highlighter-rouge">__syncthreads()</code> if there are any concurrent operation on the same address (which you should use Atomic Functions)</p>
 
-        <h2>
-          <a class="post-link" href="/jekyll/update/2016/08/29/CUDA-SNN-Summary.html">CUDA Programming Tips (Unfinished)</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 18, 2016</span>
+<h3 id="problem-1-you-find-your-arrays-value-is-not-what-you-want-or-is-chaotic">Problem 1: You find your array’s value is not what you want or is chaotic.</h3>
+<p>Check if your memory allocation or initialization is correct.</p>
 
-        <h2>
-          <a class="post-link" href="/jekyll/update/2016/08/18/Keras-Note.html">Keras Learning Note: Framewise RNN Setup and Convolution integration</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Aug 17, 2016</span>
+<h3 id="problem-8-your-array-seems-to-fail-right-in-the-middle">Problem 8: Your array seems to fail right in the middle.</h3>
+<p>If you call your <code class="highlighter-rouge">cuda-gdb</code> and find your code crashed right in the middle stage. E.g. you are visiting a array and right in the middle <code class="highlighter-rouge">cuda-gdb</code> told you that the array address is illegal. No boundary problems. No initialization problems. You may suspect that previous operations have modified here illegally. But the first thing to do is check whether it is really the middle. CUDA execute in a rather unreasonably parallel way. Thread in a warp execute at the same time while different warps execute in approximately concurrent time but differ stochastically. It is straightforward but ignorable to notice that threads with quite-non-zero indices are the first to execute (say «&lt;(1,0,0),(92,0,0)»&gt; warp 2 in one of my failures).
+So my advice to this situation is to change you configuration from multiple threads to single threads.
+If your program fail at the first thread, then it is probable that you initialization or parameter passing or something like that is problematic.</p>
 
-        <h2>
-          <a class="post-link" href="/jekyll/update/2016/08/17/Speech-Recognition-CTC.html">Speech Recognition: Connectionist Temporal Classification (Unfinished)</a>
-        </h2>
-      </li>
-    
-  </ul>
+<h3 id="problem-9-using-cuda-gdb-set-cuda-memcheck-on-getting-a-different-result">Problem 9: Using cuda-gdb <code class="highlighter-rouge">set cuda memcheck on</code> getting a different result</h3>
+<p>I once encountered a situation that when I turn on this option and figured out bugs but the program fails again when running normally. Later I found that running normal cuda-gdb will not cover the bug, though it cannot dive into kernel functions. Based on my experience, I examined  <code class="highlighter-rouge">cudaDeviceSynchronize()</code> and find one missing. Then the bug was fixed. So I guess using this option result in automatic memory synchronization.</p>
 
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+<p>But later, I faced the problem again. cuda-gdb said <code class="highlighter-rouge">Invalid Managed Memory Access</code>. Well, it may be a synchronization problem again. But this time, <code class="highlighter-rouge">cudaDeviceSynchronize</code> does not help any more.</p>
 
-</div>
+<h3 id="tip-1-using-class">Tip 1: Using class</h3>
+<p>CUDA does not support</p>
+
+  </div>
+
+</article>
 
       </div>
     </div>

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Keras Learning Note: Framewise RNN Usage and CTC Setup (Unfinished)</title>
+  <title>Keras Learning Note: Framewise RNN Setup and Convolution integration</title>
   <meta name="description" content="Step-by-step introduction of Framewise RNN in Keras">
 
   <link rel="stylesheet" href="/css/main.css">
@@ -57,7 +57,7 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Keras Learning Note: Framewise RNN Usage and CTC Setup (Unfinished)</h1>
+    <h1 class="post-title" itemprop="name headline">Keras Learning Note: Framewise RNN Setup and Convolution integration</h1>
     <p class="post-meta"><time datetime="2016-08-18T16:03:23+08:00" itemprop="datePublished">Aug 18, 2016</time></p>
   </header>
 
@@ -121,12 +121,12 @@ To enable bi-directional RNN is quite simple. Just initialize with <code class="
 
 <p>If you dive into keras’ code, you will find the related core source code is in <code class="highlighter-rouge">theano_backend.py</code>. Let’s take a close look at the the backwards related part. Notice that this part contains some duplicated code for different situations like mask or unroll, which is surely identical in terms of backwards computation.</p>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="err">\</span><span class="nf">_step</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> \<span class="o">*</span><span class="n">states</span><span class="p">):</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">_step</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="o">*</span><span class="n">states</span><span class="p">):</span>
     <span class="n">output</span><span class="p">,</span> <span class="n">new_states</span> <span class="o">=</span> <span class="n">step_function</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">states</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">output</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_states</span>
 
 <span class="n">results</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span>
-    \<span class="n">_step</span><span class="p">,</span>
+    <span class="n">_step</span><span class="p">,</span>
     <span class="n">sequences</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
     <span class="n">outputs_info</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">initial_states</span><span class="p">,</span>
     <span class="n">non_sequences</span><span class="o">=</span><span class="n">constants</span><span class="p">,</span>
@@ -154,6 +154,61 @@ Alternatively, we can stack two <code class="highlighter-rouge">go_backwards</co
 Adding <code class="highlighter-rouge">go_backwards</code> or not does not affect the computational efficiency, since this operation is simply a twist of input! For deep RNNs, they always complete a whole layer’s computation before they progress into deeper ones. Gradient computation is similar to this. As a result, the training speed of both versions is almost the same, which I have confirmed on TIMIT dataset.</p>
 
 <p>In addition, I have to say that this version of deep bi-directional RNN is not a popuplar one. Rather I would like to call it bi-directional deep RNN. Most DBRNN combine their output after one layer, which mixes forward information and backward information quickly. While I propose that stacking deeper before forward and backward information mixes is prone to improve representational power of uniform direction. And we just need to combine forward and backward feature with a shallow architecture. In this way, the network has a clearer structure.</p>
+
+<h2 id="incorporate-convolution-with-lstm">Incorporate Convolution with LSTM</h2>
+<p>Using RNN only is rather simple as it is like utilizing a standard model. But adding a convolution layer requires more techniques and tries.
+To achieve this, you have a bunch of tips to know in priority (which takes tens of tries for me to realize them):
+Convolution assumes a 3D input shape setting. ( Maybe 4D actually). So input shape is fixed in any way.
+Though input shape is fixed, parameters can be loaded (finetuned) for different input shape. This make it possible for changing length.
+Between convolution and LSTM, you need to <code class="highlighter-rouge">reshape</code> and <code class="highlighter-rouge">permute</code>.
+Be really careful about output shapes. You have to compute reshape’s shape, convolution’s input and output shape manually.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="s">"""
+@param maxif the max length of input frame
+@param convf_num Convolution filter number of the first layer. But I set each deeper layer is double the size of the previous one
+@param conv_t time axis' expand of convolution
+@param conv_f frequency axis' expand of convolution
+"""</span>
+<span class="n">FrameInput</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">maxif</span><span class="p">,</span><span class="n">featuresize</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">'float32'</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"Framewise_Input"</span><span class="p">)</span>
+
+<span class="n">Conv1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Convolution2D</span><span class="p">(</span><span class="n">conv_fnum</span><span class="p">,</span><span class="n">conv_t</span><span class="p">,</span><span class="n">conv_f</span><span class="p">,</span> <span class="n">border_mode</span><span class="o">=</span><span class="s">'valid'</span><span class="p">,</span>
+<span class="n">activation</span><span class="o">=</span><span class="s">"tanh"</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">maxif</span><span class="p">,</span><span class="n">featuresize</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">'conv1'</span><span class="p">)(</span><span class="n">FrameInput</span><span class="p">)</span>
+<span class="n">len2</span> <span class="o">=</span> <span class="n">maxif</span> <span class="o">-</span> <span class="n">conv_t</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">h2</span> <span class="o">=</span> <span class="n">featuresize</span> <span class="o">-</span> <span class="n">conv_f</span> <span class="o">+</span><span class="mi">1</span>
+<span class="n">Conv2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Convolution2D</span><span class="p">(</span><span class="n">conv_fnum</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span><span class="n">conv_t</span><span class="p">,</span><span class="n">h2</span><span class="p">,</span><span class="n">border_mode</span><span class="o">=</span><span class="s">'valid'</span><span class="p">,</span>
+<span class="n">activation</span><span class="o">=</span><span class="s">'tanh'</span><span class="p">,</span><span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">conv_fnum</span><span class="p">,</span><span class="n">len2</span><span class="p">,</span><span class="n">h2</span><span class="p">),</span><span class="n">name</span><span class="o">=</span><span class="s">'conv2'</span><span class="p">)(</span><span class="n">Conv1</span><span class="p">)</span>
+<span class="c"># output shape: (samples,conv_fnum * 2, len2 -conv_t+1 ,1)</span>
+
+<span class="n">rnn_shape</span> <span class="o">=</span> <span class="p">(</span> <span class="n">conv_fnum</span> <span class="o">*</span> <span class="mi">2</span> <span class="p">,</span> <span class="n">len2</span> <span class="o">-</span> <span class="n">conv_t</span> <span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="c"># input_len is the input length of CTC, i.e.</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">input_len</span> <span class="o">=</span> <span class="n">rnn_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="c"># The main role of reshape is to change 3D output into 2D input</span>
+<span class="n">Reshape_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(</span><span class="n">target_shape</span><span class="o">=</span><span class="n">rnn_shape</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"Reshape_1"</span><span class="p">)(</span><span class="n">Conv2</span><span class="p">)</span>
+<span class="c"># Permute is used to switch axis.</span>
+<span class="n">Permute_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Permute</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">name</span><span class="o">=</span><span class="s">"Permute_1"</span><span class="p">)(</span><span class="n">Reshape_1</span><span class="p">)</span>
+<span class="n">DenseToRNN</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">TimeDistributed</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">conv_fnum</span><span class="o">*</span><span class="mi">4</span><span class="p">))(</span><span class="n">Permute_1</span><span class="p">)</span>
+
+<span class="n">FLSTM_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="n">conv_fnum</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span><span class="n">return_sequences</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">'Forward_LSTM_1'</span><span class="p">)(</span><span class="n">DenseToRNN</span><span class="p">)</span>
+<span class="n">FLSTM_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="n">conv_fnum</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span><span class="n">return_sequences</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">'Forward_LSTM_2'</span><span class="p">)(</span><span class="n">FLSTM_1</span><span class="p">)</span>
+<span class="n">BLSTM_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="n">conv_fnum</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span><span class="n">go_backwards</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">return_sequences</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"Backward_LSTM_1"</span><span class="p">)(</span><span class="n">DenseToRNN</span><span class="p">)</span>
+<span class="n">BLSTM_2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="n">conv_fnum</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span><span class="n">go_backwards</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">return_sequences</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"Backward_LSTM_2"</span><span class="p">)(</span><span class="n">BLSTM_1</span><span class="p">)</span>
+<span class="n">merge1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">merge</span><span class="p">([</span><span class="n">FLSTM_2</span><span class="p">,</span><span class="n">BLSTM_2</span><span class="p">],</span><span class="n">mode</span><span class="o">=</span><span class="s">'concat'</span><span class="p">)</span>
+<span class="n">dense</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">TimeDistributed</span><span class="p">(</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">n_phonemes</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">)(</span><span class="n">merge1</span><span class="p">)</span>
+
+<span class="n">FramePred</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">'softmax'</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">'Softmax'</span><span class="p">)(</span><span class="n">dense</span><span class="p">)</span></code></pre></figure>
+
+<p>Well, I think I make it quite clear in the comments. In summary, the main difficulties for new beginners is just the four points mentioned above.
+I have trained my neural network on TIMIT, but it seemed quite strange that it overfits heavily. On training set, I achieved frame accuracy of 95% but on core test set it was only 45%. Even if I cut down the network to 32 convolution filters ( 128 for LSTMs), the result was almost the same. Well, for overfitting problems, one is expected to add weight regularization terms and enlarge training set. So I applied the following enhancement:
+<img src="/assets/TIMIT_concate.png" alt="Concatenated Input data" />
+Enlarged the dataset for almost one time larger by downsampling the wav files (from 16000K to 8000K). For human ears, the downsampled voice become a little bit vague but it is recognizable.
+stochastically concatenated utterances.
+The code is running on GPUs right now. And a few days later you can see the report.</p>
+
+<p>To sum up, this is how I setup a framewise RNN integrated with CNN. In those days, I really had a hard time figuring out problems which seems nothing to me right now. If I have any mistake, please point it out for me, as I am no more than a new learner.  Hope this blog can help you save the time that I once wasted.</p>
+
+<p>Jianjing, Xu.
+Atlantix.
+Department of Computer Science, Tsinghua University.</p>
 
   </div>
 
