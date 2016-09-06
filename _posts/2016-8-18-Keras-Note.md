@@ -111,10 +111,10 @@ In addition, I have to say that this version of deep bi-directional RNN is not a
 ## Incorporate Convolution with LSTM
 Using RNN only is rather simple as it is like utilizing a standard model. But adding a convolution layer requires more techniques and tries.
 To achieve this, you have a bunch of tips to know in priority (which takes tens of tries for me to realize them):
-Convolution assumes a 3D input shape setting. ( Maybe 4D actually). So input shape is fixed in any way.
-Though input shape is fixed, parameters can be loaded (finetuned) for different input shape. This make it possible for changing length.
-Between convolution and LSTM, you need to `reshape` and `permute`.
-Be really careful about output shapes. You have to compute reshape's shape, convolution's input and output shape manually.
++ Convolution assumes a 3D input shape setting. ( Maybe 4D actually). So input shape is fixed in any way.
++ Though input shape is fixed, parameters can be loaded (finetuned) for different input shape. This make it possible for changing length.
++ Between convolution output and LSTM input, you need to `reshape` and `permute`.
++ Be really careful about output shapes. You have to compute reshape's shape, convolution's input and output shape manually.
 
 {% highlight python %}
 """
@@ -155,11 +155,13 @@ FramePred = layers.Activation('softmax',name='Softmax')(dense)
 Well, I think I make it quite clear in the comments. In summary, the main difficulties for new beginners is just the four points mentioned above.
 I have trained my neural network on TIMIT, but it seemed quite strange that it overfits heavily. On training set, I achieved frame accuracy of 95% but on core test set it was only 45%. Even if I cut down the network to 32 convolution filters ( 128 for LSTMs), the result was almost the same. Well, for overfitting problems, one is expected to add weight regularization terms and enlarge training set. So I applied the following enhancement:
 ![Concatenated Input data]({{site.baseurl}}/assets/TIMIT_concate.png)
-Enlarged the dataset for almost one time larger by downsampling the wav files (from 16000K to 8000K). For human ears, the downsampled voice become a little bit vague but it is recognizable.
-stochastically concatenated utterances.
++ Enlarged the dataset for almost one time larger by downsampling the wav files (from 16000K to 8000K). For human ears, the downsampled voice become a little bit vague but it is recognizable.
++ Stochastically concatenated utterances.
 The code is running on GPUs right now. And a few days later you can see the report.
 
 To sum up, this is how I setup a framewise RNN integrated with CNN. In those days, I really had a hard time figuring out problems which seems nothing to me right now. If I have any mistake, please point it out for me, as I am no more than a new learner.  Hope this blog can help you save the time that I once wasted.
+
+Please give the credit to the original author if you use it elsewhere.
 
 Jianjing, Xu.
 Atlantix.
