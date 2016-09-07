@@ -1,11 +1,19 @@
 ---
 layout: post
-title:  "CUDA Programming Tips (Unfinished)"
+title:  "CUDA Programming Summary (Unfinished)"
 date:   2016-08-29 22:26:44 +0800
 categories: jekyll update
 ---
 
-Using `cuda-gdb`, you are able to know where the code crashed and see the related variables. But it does not mean that you just need to examine the code around the incident area. Instead, look at how you allocate this variable. Are you calling the right pointer? Did you allocate it with the right size and type? Did you call `cudaDeviceSynchronize()` properly if you are using `cudaMallocManged` ? Did you call `__syncthreads()` if there are any concurrent operation on the same address (which you should use Atomic Functions)
+
+
+This summer I have been working on GPU parallelized SNN computation. Frankly speaking, the pure code work is not heavy, but this project is really tough for a CUDA-new-beginner. In the blog, I will first show my understanding of CUDA programming and then the problems I encountered and my solution  with you.
+
+# Introduction to CUDA Programming
+CUDA is a programming platform for GPU computation ( of course on NVIDIA GPUs). By coding on CUDA, we can use GPU for general purpose computation. In some aspects, GPU is much faster than CPU (such as graphical computation) for GPU is a highly parallel device. Take NVIDIA GPU as example, it consists mainly of an array of Streaming Processors (SM), and every SM is capable of executing multiple threads (and thread blocks) at the same time.
+
+
+Using `cuda-gdb`, you are able to know where the code crashed and see the related variables. But it does not mean that you just need to examine the code around the incident area. Instead, look at how you allocate this variable. Are you calling the right pointer? Did you allocate it with the right size and `type`? Did you call `cudaDeviceSynchronize()` properly if you are using `cudaMallocManged` ? Did you call `__syncthreads()` if there are any concurrent operation on the same address (which you should use Atomic Functions)
 
 ### Problem 1: You find your array's value is not what you want or is chaotic.
 Check if your memory allocation or initialization is correct.
@@ -17,8 +25,6 @@ If your program fail at the first thread, then it is probable that you initializ
 
 ### Problem 9: Using cuda-gdb `set cuda memcheck on` getting a different result
 I once encountered a situation that when I turn on this option and figured out bugs but the program fails again when running normally. Later I found that running normal cuda-gdb will not cover the bug, though it cannot dive into kernel functions. Based on my experience, I examined  `cudaDeviceSynchronize()` and find one missing. Then the bug was fixed. So I guess using this option result in automatic memory synchronization.
-
-But later, I faced the problem again. cuda-gdb said `Invalid Managed Memory Access`. Well, it may be a synchronization problem again. But this time, `cudaDeviceSynchronize` does not help any more.
 
 ### Tip 1: Using class
 CUDA does not support

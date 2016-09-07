@@ -10,7 +10,7 @@ Keras has just merged a request containing batch CTC loss function. Although it 
 
 Network definition: ( You can read the code beginning from `FrameInput`, and you most essential part starts from `ctc_loss_out`)
 
-{% highlight python %}
+{%highlight python%}
 def ctc_lambda_func(args):
     y_pred, labels, input_length, label_length = args
     # the 2 is critical here since the first couple outputs of the RNN

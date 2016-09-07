@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>CUDA Programming Tips (Unfinished)</title>
-  <meta name="description" content="Using cuda-gdb, you are able to know where the code crashed and see the related variables. But it does not mean that you just need to examine the code around...">
+  <title>CUDA Programming Summary (Unfinished)</title>
+  <meta name="description" content="This summer I have been working on GPU parallelized SNN computation. Frankly speaking, the pure code work is not heavy, but this project is really tough for ...">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="http://atlantix.com/jekyll/update/2016/08/29/CUDA-SNN-Summary.html">
@@ -57,12 +57,17 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">CUDA Programming Tips (Unfinished)</h1>
+    <h1 class="post-title" itemprop="name headline">CUDA Programming Summary (Unfinished)</h1>
     <p class="post-meta"><time datetime="2016-08-29T22:26:44+08:00" itemprop="datePublished">Aug 29, 2016</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>Using <code class="highlighter-rouge">cuda-gdb</code>, you are able to know where the code crashed and see the related variables. But it does not mean that you just need to examine the code around the incident area. Instead, look at how you allocate this variable. Are you calling the right pointer? Did you allocate it with the right size and type? Did you call <code class="highlighter-rouge">cudaDeviceSynchronize()</code> properly if you are using <code class="highlighter-rouge">cudaMallocManged</code> ? Did you call <code class="highlighter-rouge">__syncthreads()</code> if there are any concurrent operation on the same address (which you should use Atomic Functions)</p>
+    <p>This summer I have been working on GPU parallelized SNN computation. Frankly speaking, the pure code work is not heavy, but this project is really tough for a CUDA-new-beginner. In the blog, I will first show my understanding of CUDA programming and then the problems I encountered and my solution  with you.</p>
+
+<h1 id="introduction-to-cuda-programming">Introduction to CUDA Programming</h1>
+<p>CUDA is a programming platform for GPU computation ( of course on NVIDIA GPUs). By coding on CUDA, we can use GPU for general purpose computation. In some aspects, GPU is much faster than CPU (such as graphical computation) for GPU is a highly parallel device. Take NVIDIA GPU as example, it consists mainly of an array of Streaming Processors (SM), and every SM is capable of executing multiple threads (and thread blocks) at the same time.</p>
+
+<p>Using <code class="highlighter-rouge">cuda-gdb</code>, you are able to know where the code crashed and see the related variables. But it does not mean that you just need to examine the code around the incident area. Instead, look at how you allocate this variable. Are you calling the right pointer? Did you allocate it with the right size and <code class="highlighter-rouge">type</code>? Did you call <code class="highlighter-rouge">cudaDeviceSynchronize()</code> properly if you are using <code class="highlighter-rouge">cudaMallocManged</code> ? Did you call <code class="highlighter-rouge">__syncthreads()</code> if there are any concurrent operation on the same address (which you should use Atomic Functions)</p>
 
 <h3 id="problem-1-you-find-your-arrays-value-is-not-what-you-want-or-is-chaotic">Problem 1: You find your array’s value is not what you want or is chaotic.</h3>
 <p>Check if your memory allocation or initialization is correct.</p>
@@ -74,8 +79,6 @@ If your program fail at the first thread, then it is probable that you initializ
 
 <h3 id="problem-9-using-cuda-gdb-set-cuda-memcheck-on-getting-a-different-result">Problem 9: Using cuda-gdb <code class="highlighter-rouge">set cuda memcheck on</code> getting a different result</h3>
 <p>I once encountered a situation that when I turn on this option and figured out bugs but the program fails again when running normally. Later I found that running normal cuda-gdb will not cover the bug, though it cannot dive into kernel functions. Based on my experience, I examined  <code class="highlighter-rouge">cudaDeviceSynchronize()</code> and find one missing. Then the bug was fixed. So I guess using this option result in automatic memory synchronization.</p>
-
-<p>But later, I faced the problem again. cuda-gdb said <code class="highlighter-rouge">Invalid Managed Memory Access</code>. Well, it may be a synchronization problem again. But this time, <code class="highlighter-rouge">cudaDeviceSynchronize</code> does not help any more.</p>
 
 <h3 id="tip-1-using-class">Tip 1: Using class</h3>
 <p>CUDA does not support</p>
