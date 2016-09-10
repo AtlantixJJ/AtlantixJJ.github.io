@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Build a CTC Network on Theano for Speech Recognition from Scratch (Unfinished) </title>
-  <meta name="description" content="Build a CNN for Speech RecognitionTo build a CNN for speech recognition have two difficulties:+ How to adapt to different input length.+ How to transform net...">
+  <meta name="description" content="In this blog, I will tell you the process of my setup of a CTC enabled CNN-LSTM hybrid neural network on the top of Theano. I will show you the essential par...">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="http://atlantix.com/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html">
@@ -62,16 +62,34 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <h2 id="build-a-cnn-for-speech-recognition">Build a CNN for Speech Recognition</h2>
-<p>To build a CNN for speech recognition have two difficulties:
-+ How to adapt to different input length.
-+ How to transform network output to framewise prediction.
-I don’t know if I should or should not assume a fixed-length input. Most RNN-based sequence processor use input of the same length, otherwise batch training is impossible . They make it possible by padding input sequence to the same length while using <code class="highlighter-rouge">mask</code> to block padded information. Well, I know I am going to put recurrent layers on the top of CNN, so I don’t know if enabling non-fixed input length is useful in training. But in practical application, I think I should provide an elegant solution for varying input by enabling network with arbitrary input length.
-So the first problem I want to solve is to build a CNN capable of arbitrary input length.</p>
+    <p>In this blog, I will tell you the process of my setup of a CTC enabled CNN-LSTM hybrid neural network on the top of Theano. I will show you the essential part of implementation, skipping some data-relevant code. Full code may be available on my repository later.</p>
+
+<h2 id="build-a-cnn-for-speech-recognition">Build a CNN for Speech Recognition</h2>
+<p>To build a CNN for speech recognition have two difficulties:</p>
+
+<ul>
+  <li>How to adapt to different input length.</li>
+  <li>How to transform network output to framewise prediction.</li>
+</ul>
+
+<p>I don’t know if I should or should not assume a fixed-length input. Most RNN-based sequence processor use input of the same length, otherwise batch training is impossible . They make it possible by padding input sequence to the same length while using <code class="highlighter-rouge">mask</code> to block padded information. Well, I know I am going to put recurrent layers on the top of CNN, so I don’t know if enabling non-fixed input length is useful in training. But in practical application, I think I should provide an elegant solution for varying input by enabling network with arbitrary input length.</p>
+
+<p>So the first problem I want to solve is to build a CNN capable of arbitrary input length.</p>
 
 <h3 id="a-forward-only-cnn">A forward-only CNN</h3>
 
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">MConv2D</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">MSoftmax</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">input</span><span class="p">,</span><span class="n">ifTimeDist</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ifTimeDist</span><span class="p">:</span>
+            <span class="c"># scan is for time distributed computation.</span>
+            <span class="c"># softmax and scan seems to ignore batch axis (0).</span>
+            <span class="c"># input shape: (batch_size,128,401)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">softmax_output</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">update</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">nnet</span><span class="o">.</span><span class="n">softmax</span><span class="p">,</span><span class="n">sequences</span><span class="o">=</span><span class="p">[</span><span class="nb">input</span><span class="o">.</span><span class="n">dimshuffle</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="c"># self.pred works. result (batch_size,401,128) [i,j,:] sums to 1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">softmax_output</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">nnet</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MConv2D</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="s">"""
     My 2D convolution layer. Responsible for forward building.
     """</span>
@@ -112,10 +130,13 @@ So the first problem I want to solve is to build a CNN capable of arbitrary inpu
         <span class="c"># final layer's shape:(batch_size,diminished_length,n_class,1)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">raw_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">out</span><span class="p">[:,:,:,</span><span class="mi">0</span><span class="p">]</span></code></pre></figure>
 
-<p>This code passed tests. If I build the network output as function and pass it some values, it will get a right-shaped output and some random number. Seems to be good : ).
-The next step is to enable CTC loss function. Well we can start framewise network building right now, but don’t forget out target is to enable CTC training.</p>
+<p>Personally, I don’t know how to produce a framewise probability distribution elegantly. Now the only way that I came up with is to scan through all time steps… Maybe doing softmax along time axis shouldn’t bother to use scan ? I would be appreciative if you can tell me how to do.</p>
 
-<p>Here I just use keras CTC loss function. And the added lines is shown below:</p>
+<p>Anyway, this code passed tests. If I build the network output as function and pass it some values, it will get a right-shaped output and some random number. Prediction layer will get each time step’s prediction for each example sums up to 1. Seems to be good : ).</p>
+
+<h3 id="enable-training">Enable Training</h3>
+
+<p>The next step is to enable CTC loss function. Here I just use keras CTC loss function. And the added lines is shown below:</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="bp">self</span><span class="o">.</span><span class="n">raw_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">out</span><span class="p">[:,:,:,</span><span class="mi">0</span><span class="p">]</span>
 <span class="c"># we start from here</span>
@@ -160,8 +181,9 @@ The next step is to enable CTC loss function. Well we can start framewise networ
     <span class="n">label_length</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">len_y</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
     <span class="n">input_length</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">len_pred</span><span class="p">,</span><span class="mi">1</span><span class="p">)})</span></code></pre></figure>
 
-<p>Well you may notice in the loss function testing part, you cannot do as I propose. Because I am experimenting on TIMIT dataset and transformed the dataset. So it is of no use even if I post the entire code : ).
- Now we are going to differentiate the network. In this step, I apply <code class="highlighter-rouge">Adadelta</code> and reuse <code class="highlighter-rouge">Deep Learning Tutorial's lstm.py</code>. I wrap the process of compilation into a class, to which I may add more optimizers. ( Am I going to write a ,eh.., something like keras in the future? )</p>
+<p>Well you may notice in the loss function testing part, you cannot do as I suggest. Because I am experimenting on TIMIT dataset and I have transformed the dataset. So it is of no use even if I post the entire code : ). Here I am just showing you the core implementation of a CTC network.</p>
+
+<p>Now we are going to differentiate the network. In this step, I apply <code class="highlighter-rouge">Adadelta</code> and reuse <code class="highlighter-rouge">Deep Learning Tutorial's lstm.py</code>. I wrap the process of compilation into a class, to which I may add more optimizers. ( Am I going to write a ,eh.., another keras in the future? )</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"> <span class="k">class</span> <span class="nc">NetworkCompiler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="s">"""
@@ -178,13 +200,12 @@ The next step is to enable CTC loss function. Well we can start framewise networ
                 <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">input_vars</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span></code></pre></figure>
 
-<p>Personally I am really confused with the original <code class="highlighter-rouge">Adadelta</code>code. Schematically, this function produces two functions:
-+ f_grad_shared: Takes in all inputs, produce an output, and prepare the update values.
-+ f_update: do updates (apply update values to parameters)</p>
+<p>Personally I am really confused with the original <code class="highlighter-rouge">Adadelta</code>code. Schematically, this function produces two functions:</p>
 
-<p>But I am rather confused in two ways:
-+ tparams is not theano variable but dictionary instead
-+ does lr has any effect? What’s more, I think <code class="highlighter-rouge">Adadelta</code> prefers lr to be set to 1, having nothing to do with learning rate scheduling.</p>
+<ul>
+  <li>f_grad_shared: Takes in all inputs, produce an output, and prepare the update values.</li>
+  <li>f_update: do updates (apply update values to parameters)</li>
+</ul>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">adadelta</span><span class="p">(</span><span class="n">lr</span><span class="p">,</span> <span class="n">tparams</span><span class="p">,</span> <span class="n">grads</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cost</span><span class="p">):</span>
     <span class="s">"""
@@ -235,10 +256,22 @@ The next step is to enable CTC loss function. Well we can start framewise networ
 
     <span class="k">return</span> <span class="n">f_grad_shared</span><span class="p">,</span> <span class="n">f_update</span></code></pre></figure>
 
-<p>Here is my modified version. My modification includes:
-+ Switch dictionary parameter to ordinary theano shared variable parameter.
-+ Enable multiple inputs by using a list of shared varibles.
-+ Removed <code class="highlighter-rouge">lr</code>.</p>
+<p>But I am rather confused in two ways:</p>
+
+<ul>
+  <li>tparams is not theano variable but dictionary instead</li>
+  <li>does lr has any effect? What’s more, I think <code class="highlighter-rouge">Adadelta</code> prefers lr to be set to 1, having nothing to do with learning rate scheduling.</li>
+</ul>
+
+<p>Again, please tell me if you know why : ) .</p>
+
+<p>Here is my modified version. Modification includes:</p>
+
+<ul>
+  <li>Switch dictionary parameter to ordinary theano shared variable parameter.</li>
+  <li>Enable multiple inputs by using a list of shared varibles.</li>
+  <li>Removed <code class="highlighter-rouge">lr</code>.</li>
+</ul>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">adadelta</span><span class="p">(</span><span class="n">tparams</span><span class="p">,</span><span class="n">inputs</span><span class="p">,</span> <span class="n">cost</span><span class="p">):</span>
     <span class="s">"""
@@ -277,7 +310,80 @@ The next step is to enable CTC loss function. Well we can start framewise networ
 
     <span class="k">return</span> <span class="n">f_grad_shared</span><span class="p">,</span> <span class="n">f_update</span></code></pre></figure>
 
-<p>Anyway, this compiles. Now it comes to train the network. To obtain a more tractable training procedure, I wrote a class <code class="highlighter-rouge">BatchTrainingScheduler</code>, responsible for preparing batch data, training and saving weights.</p>
+<p>Anyway, this compiles. Now it comes to train the network. To obtain a more tractable training procedure, I wrote a class <code class="highlighter-rouge">BatchTrainingScheduler</code>, responsible for preparing batch data, training and saving weights. Again, this evolves much unnecessary details, so I skip the implementation here.</p>
+
+<p>In addition, I added framewise loss for comparation. This requires a new layer implementation:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">MCrossEntropyFromSoftmax</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">softmax_output</span><span class="p">,</span><span class="n">label_prob</span><span class="p">,</span><span class="n">ifTimeDist</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ifTimeDist</span><span class="p">:</span>
+            <span class="c"># softmax_output is expect to be (batch,401,128)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frame_log</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">update</span> <span class="o">=</span> <span class="n">theano</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">log</span><span class="p">,</span><span class="n">sequences</span><span class="o">=</span><span class="p">[</span><span class="n">softmax_output</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frame_loss</span> <span class="o">=</span> <span class="o">-</span> <span class="n">T</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span> <span class="n">T</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span> <span class="n">T</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span> <span class="n">label_prob</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_log</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c"># loss shape : (401)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frame_loss</span> <span class="o">=</span> <span class="o">-</span> <span class="n">T</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">label_prob</span> <span class="o">*</span> <span class="n">T</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">softmax_output</span><span class="p">))</span></code></pre></figure>
+
+<p>Now the CTC-CNN runs.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">Using</span> <span class="n">gpu</span> <span class="n">device</span> <span class="mi">2</span><span class="p">:</span> <span class="n">GeForce</span> <span class="n">GTX</span> <span class="n">TITAN</span> <span class="n">X</span> <span class="p">(</span><span class="n">CNMeM</span> <span class="ow">is</span> <span class="n">disabled</span><span class="p">,</span> <span class="n">cuDNN</span> <span class="ow">not</span> <span class="n">available</span><span class="p">)</span>
+<span class="n">Using</span> <span class="n">Theano</span> <span class="n">backend</span><span class="o">.</span>
+<span class="n">Loading</span> <span class="n">Training</span> <span class="n">Data</span><span class="p">:</span>
+<span class="p">(</span><span class="s">'./data/CoreTest_Audio_3.npy'</span><span class="p">,</span> <span class="s">'./data/CoreTest_Label_3.npy'</span><span class="p">,</span> <span class="s">'./data/CoreTest_Sentence_3.npy'</span><span class="p">)</span>
+<span class="n">Dataset</span> <span class="n">loading</span> <span class="n">compelte</span><span class="o">.</span>
+<span class="n">Max</span> <span class="n">Frame</span><span class="p">:</span> <span class="mi">405</span> 	 <span class="n">Max</span> <span class="n">Sequence</span> <span class="n">Length</span><span class="p">:</span> <span class="mi">67</span>
+<span class="n">Label</span> <span class="n">length</span><span class="p">:</span> <span class="mi">399</span>
+<span class="n">Building</span> <span class="n">Model</span>
+<span class="n">Using</span> <span class="n">base</span> <span class="n">convolution</span> <span class="nb">filter</span><span class="p">:</span> <span class="bp">None</span>
+<span class="n">Model</span> <span class="n">name</span><span class="p">:</span> <span class="n">THEANO</span>
+<span class="n">Building</span> <span class="n">model</span><span class="o">...</span>
+<span class="n">Compiling</span> <span class="k">for</span> <span class="n">CTC</span><span class="o">...</span>
+<span class="p">[</span><span class="n">audio_input</span><span class="p">,</span> <span class="n">CTC_Labels</span><span class="p">,</span> <span class="n">CTC_Input_Length</span><span class="p">,</span> <span class="n">Label_Length</span><span class="p">]</span>
+<span class="n">Compiling</span> <span class="k">for</span> <span class="n">Framewise</span> <span class="n">Prediction</span><span class="o">...</span>
+<span class="p">[</span><span class="n">audio_input</span><span class="p">,</span> <span class="n">audio_label</span><span class="p">]</span>
+<span class="n">Checking</span> <span class="n">Network</span> <span class="n">Output</span><span class="o">...</span>
+<span class="p">(</span><span class="mi">399</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">Checking</span> <span class="n">Frame</span> <span class="n">Loss</span><span class="o">...</span>
+<span class="mf">3.68886995316</span>
+<span class="n">Checking</span> <span class="n">CTC</span> <span class="n">Loss</span><span class="o">...</span>
+<span class="n">Train</span> <span class="n">using</span> <span class="n">CTC</span> <span class="n">loss</span> <span class="o">...</span>
+<span class="mf">1266.20937281</span>
+<span class="mf">1266.20937281</span>
+<span class="mf">1280.3120997</span>
+<span class="mf">1084.664638</span>
+<span class="mf">786.608295334</span>
+<span class="mf">712.46418894</span>
+<span class="mf">708.009468547</span>
+<span class="mf">709.193808295</span>
+<span class="mf">699.881733037</span>
+<span class="mf">683.349069459</span>
+<span class="mf">678.93139635</span>
+<span class="mf">679.363749416</span>
+<span class="mf">679.713211679</span>
+<span class="n">Train</span> <span class="n">using</span> <span class="n">Framewise</span> <span class="n">Loss</span><span class="o">...</span>
+<span class="mf">3.82449817657</span>
+<span class="mf">3.77304577827</span>
+<span class="mf">3.27461051941</span>
+<span class="mf">2.84103941917</span>
+<span class="mf">2.87398314476</span>
+<span class="mf">2.90601921082</span>
+<span class="mf">2.94813394547</span>
+<span class="mf">2.85982584953</span>
+<span class="mf">2.88489484787</span>
+<span class="mf">2.98423242569</span>
+<span class="mf">2.90129828453</span>
+<span class="mf">2.98246645927</span>
+<span class="n">Train</span> <span class="n">using</span> <span class="n">CTC</span> <span class="n">Loss</span><span class="o">...</span>
+<span class="mf">696.61584301</span>
+<span class="mf">695.274994058</span>
+<span class="mf">695.945729375</span>
+<span class="mf">701.028371696</span>
+<span class="mf">698.802302323</span>
+<span class="o">...</span></code></pre></figure>
+
+<p>Aha, things goes fine. Em.. Don’t you think training with two loss function is great?</p>
+
+<h2 id="adding-lstm-">Adding LSTM !</h2>
 
   </div>
 

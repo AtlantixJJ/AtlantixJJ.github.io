@@ -65,22 +65,28 @@
     <p>This summer I have been working on GPU parallelized SNN computation. Frankly speaking, the pure code work is not heavy, but this project is really tough for a CUDA-new-beginner. In the blog, I will first show my understanding of CUDA programming and then the problems I encountered and my solution  with you.</p>
 
 <h1 id="introduction-to-cuda-programming">Introduction to CUDA Programming</h1>
+
 <p>CUDA is a programming platform for GPU computation ( of course on NVIDIA GPUs). By coding on CUDA, we can use GPU for general purpose computation. In some aspects, GPU is much faster than CPU (such as graphical computation) for GPU is a highly parallel device. Take NVIDIA GPU as example, it consists mainly of an array of Streaming Processors (SM), and every SM is capable of executing multiple threads (and thread blocks) at the same time.</p>
 
 <p>Using <code class="highlighter-rouge">cuda-gdb</code>, you are able to know where the code crashed and see the related variables. But it does not mean that you just need to examine the code around the incident area. Instead, look at how you allocate this variable. Are you calling the right pointer? Did you allocate it with the right size and <code class="highlighter-rouge">type</code>? Did you call <code class="highlighter-rouge">cudaDeviceSynchronize()</code> properly if you are using <code class="highlighter-rouge">cudaMallocManged</code> ? Did you call <code class="highlighter-rouge">__syncthreads()</code> if there are any concurrent operation on the same address (which you should use Atomic Functions)</p>
 
 <h3 id="problem-1-you-find-your-arrays-value-is-not-what-you-want-or-is-chaotic">Problem 1: You find your array’s value is not what you want or is chaotic.</h3>
+
 <p>Check if your memory allocation or initialization is correct.</p>
 
 <h3 id="problem-8-your-array-seems-to-fail-right-in-the-middle">Problem 8: Your array seems to fail right in the middle.</h3>
-<p>If you call your <code class="highlighter-rouge">cuda-gdb</code> and find your code crashed right in the middle stage. E.g. you are visiting a array and right in the middle <code class="highlighter-rouge">cuda-gdb</code> told you that the array address is illegal. No boundary problems. No initialization problems. You may suspect that previous operations have modified here illegally. But the first thing to do is check whether it is really the middle. CUDA execute in a rather unreasonably parallel way. Thread in a warp execute at the same time while different warps execute in approximately concurrent time but differ stochastically. It is straightforward but ignorable to notice that threads with quite-non-zero indices are the first to execute (say «&lt;(1,0,0),(92,0,0)»&gt; warp 2 in one of my failures).
-So my advice to this situation is to change you configuration from multiple threads to single threads.
+
+<p>If you call your <code class="highlighter-rouge">cuda-gdb</code> and find your code crashed right in the middle stage. E.g. you are visiting a array and right in the middle <code class="highlighter-rouge">cuda-gdb</code> told you that the array address is illegal. No boundary problems. No initialization problems. You may suspect that previous operations have modified here illegally. But the first thing to do is check whether it is really the middle. CUDA execute in a rather unreasonably parallel way. Thread in a warp execute at the same time while different warps execute in approximately concurrent time but differ stochastically. It is straightforward but ignorable to notice that threads with quite-non-zero indices are the first to execute (say «&lt;(1,0,0),(92,0,0)»&gt; warp 2 in one of my failures).</p>
+
+<p>So my advice to this situation is to change you configuration from multiple threads to single threads.
 If your program fail at the first thread, then it is probable that you initialization or parameter passing or something like that is problematic.</p>
 
 <h3 id="problem-9-using-cuda-gdb-set-cuda-memcheck-on-getting-a-different-result">Problem 9: Using cuda-gdb <code class="highlighter-rouge">set cuda memcheck on</code> getting a different result</h3>
+
 <p>I once encountered a situation that when I turn on this option and figured out bugs but the program fails again when running normally. Later I found that running normal cuda-gdb will not cover the bug, though it cannot dive into kernel functions. Based on my experience, I examined  <code class="highlighter-rouge">cudaDeviceSynchronize()</code> and find one missing. Then the bug was fixed. So I guess using this option result in automatic memory synchronization.</p>
 
 <h3 id="tip-1-using-class">Tip 1: Using class</h3>
+
 <p>CUDA does not support</p>
 
   </div>

@@ -1,19 +1,32 @@
----
-layout: post
-title:  "Build a CTC Network on Theano for Speech Recognition from Scratch (Unfinished) "
-date:   2016-09-07 17:03:23 +0800
-categories: jekyll update
----
+
+
+In this blog, I will tell you the process of my setup of a CTC enabled CNN-LSTM hybrid neural network on the top of Theano. I will show you the essential part of implementation, skipping some data-relevant code. Full code may be available on my repository later.
 
 ## Build a CNN for Speech Recognition
 To build a CNN for speech recognition have two difficulties:
+
 + How to adapt to different input length.
 + How to transform network output to framewise prediction.
+
 I don't know if I should or should not assume a fixed-length input. Most RNN-based sequence processor use input of the same length, otherwise batch training is impossible . They make it possible by padding input sequence to the same length while using `mask` to block padded information. Well, I know I am going to put recurrent layers on the top of CNN, so I don't know if enabling non-fixed input length is useful in training. But in practical application, I think I should provide an elegant solution for varying input by enabling network with arbitrary input length.
+
 So the first problem I want to solve is to build a CNN capable of arbitrary input length.
 
 ### A forward-only CNN
+
 {%highlight python%}
+
+class MSoftmax(object):
+    def __init__(self,input,ifTimeDist=False):
+        if ifTimeDist:
+            # scan is for time distributed computation.
+            # softmax and scan seems to ignore batch axis (0).
+            # input shape: (batch_size,128,401)
+            self.softmax_output,self.update = theano.scan(T.nnet.softmax,sequences=[input.dimshuffle(0,2,1)])
+            # self.pred works. result (batch_size,401,128) [i,j,:] sums to 1
+        else:
+            self.softmax_output = T.nnet.softmax(input)
+
 class MConv2D(object):
     """
     My 2D convolution layer. Responsible for forward building.
@@ -56,10 +69,13 @@ class MConvNet(object):
         self.raw_out = self.conv_layers[-1].out[:,:,:,0]
 {% endhighlight %}
 
-This code passed tests. If I build the network output as function and pass it some values, it will get a right-shaped output and some random number. Seems to be good : ).
-The next step is to enable CTC loss function. Well we can start framewise network building right now, but don't forget out target is to enable CTC training.
+Personally, I don't know how to produce a framewise probability distribution elegantly. Now the only way that I came up with is to scan through all time steps... Maybe doing softmax along time axis shouldn't bother to use scan ? I would be appreciative if you can tell me how to do.
 
-Here I just use keras CTC loss function. And the added lines is shown below:
+Anyway, this code passed tests. If I build the network output as function and pass it some values, it will get a right-shaped output and some random number. Prediction layer will get each time step's prediction for each example sums up to 1. Seems to be good : ).
+
+### Enable Training
+
+The next step is to enable CTC loss function. Here I just use keras CTC loss function. And the added lines is shown below:
 
 {%highlight python%}
 
@@ -109,8 +125,9 @@ res = Net.loss.eval( {train_x:train_data,
 
 {% endhighlight %}
 
- Well you may notice in the loss function testing part, you cannot do as I propose. Because I am experimenting on TIMIT dataset and transformed the dataset. So it is of no use even if I post the entire code : ).
- Now we are going to differentiate the network. In this step, I apply `Adadelta` and reuse `Deep Learning Tutorial's lstm.py`. I wrap the process of compilation into a class, to which I may add more optimizers. ( Am I going to write a ,eh.., something like keras in the future? )
+ Well you may notice in the loss function testing part, you cannot do as I suggest. Because I am experimenting on TIMIT dataset and I have transformed the dataset. So it is of no use even if I post the entire code : ). Here I am just showing you the core implementation of a CTC network.
+
+ Now we are going to differentiate the network. In this step, I apply `Adadelta` and reuse `Deep Learning Tutorial's lstm.py`. I wrap the process of compilation into a class, to which I may add more optimizers. ( Am I going to write a ,eh.., another keras in the future? )
 
 {%highlight python%}
  class NetworkCompiler(object):
@@ -130,12 +147,9 @@ res = Net.loss.eval( {train_x:train_data,
 {% endhighlight %}
 
 Personally I am really confused with the original `Adadelta`code. Schematically, this function produces two functions:
+
 + f_grad_shared: Takes in all inputs, produce an output, and prepare the update values.
 + f_update: do updates (apply update values to parameters)
-
-But I am rather confused in two ways:
-+ tparams is not theano variable but dictionary instead
-+ does lr has any effect? What's more, I think `Adadelta` prefers lr to be set to 1, having nothing to do with learning rate scheduling.
 
 {%highlight python%}
 def adadelta(lr, tparams, grads, x, mask, y, cost):
@@ -188,7 +202,15 @@ def adadelta(lr, tparams, grads, x, mask, y, cost):
     return f_grad_shared, f_update
 {% endhighlight %}
 
-Here is my modified version. My modification includes:
+But I am rather confused in two ways:
+
++ tparams is not theano variable but dictionary instead
++ does lr has any effect? What's more, I think `Adadelta` prefers lr to be set to 1, having nothing to do with learning rate scheduling.
+
+Again, please tell me if you know why : ) .
+
+Here is my modified version. Modification includes:
+
 + Switch dictionary parameter to ordinary theano shared variable parameter.
 + Enable multiple inputs by using a list of shared varibles.
 + Removed `lr`.
@@ -232,4 +254,90 @@ def adadelta(tparams,inputs, cost):
     return f_grad_shared, f_update
 {% endhighlight %}
 
-Anyway, this compiles. Now it comes to train the network. To obtain a more tractable training procedure, I wrote a class `BatchTrainingScheduler`, responsible for preparing batch data, training and saving weights.
+Anyway, this compiles. Now it comes to train the network. To obtain a more tractable training procedure, I wrote a class `BatchTrainingScheduler`, responsible for preparing batch data, training and saving weights. Again, this evolves much unnecessary details, so I skip the implementation here.
+
+In addition, I added framewise loss for comparation. This requires a new layer implementation:
+
+{%highlight python%}
+class MCrossEntropyFromSoftmax(object):
+    def __init__(self,softmax_output,label_prob,ifTimeDist=False):
+        if ifTimeDist:
+            # softmax_output is expect to be (batch,401,128)
+            self.frame_log,self.update = theano.scan(T.log,sequences=[softmax_output])
+            self.frame_loss = - T.mean( T.mean( T.sum( label_prob * self.frame_log,axis=2) ,axis=0) ,axis=0)
+            # loss shape : (401)
+        else:
+            self.frame_loss = - T.mean(label_prob * T.log(softmax_output))
+{% endhighlight %}
+
+Now the CTC-CNN runs.
+
+{%highlight python%}
+Using gpu device 2: GeForce GTX TITAN X (CNMeM is disabled, cuDNN not available)
+Using Theano backend.
+Loading Training Data:
+('./data/CoreTest_Audio_3.npy', './data/CoreTest_Label_3.npy', './data/CoreTest_Sentence_3.npy')
+Dataset loading compelte.
+Max Frame: 405 	 Max Sequence Length: 67
+Label length: 399
+Building Model
+Using base convolution filter: None
+Model name: THEANO
+Building model...
+Compiling for CTC...
+[audio_input, CTC_Labels, CTC_Input_Length, Label_Length]
+Compiling for Framewise Prediction...
+[audio_input, audio_label]
+Checking Network Output...
+(399, 40)
+Checking Frame Loss...
+3.68886995316
+Checking CTC Loss...
+Train using CTC loss ...
+1266.20937281
+1266.20937281
+1280.3120997
+1084.664638
+786.608295334
+712.46418894
+708.009468547
+709.193808295
+699.881733037
+683.349069459
+678.93139635
+679.363749416
+679.713211679
+Train using Framewise Loss...
+3.82449817657
+3.77304577827
+3.27461051941
+2.84103941917
+2.87398314476
+2.90601921082
+2.94813394547
+2.85982584953
+2.88489484787
+2.98423242569
+2.90129828453
+2.98246645927
+Train using CTC Loss...
+696.61584301
+695.274994058
+695.945729375
+701.028371696
+698.802302323
+...
+{%endhighlight%}
+
+Aha, things goes fine. Em.. Don't you think training with two loss function is great?
+
+
+## Adding LSTM !
+
+
+---
+layout: post
+title:  "Build a CTC Network on Theano for Speech Recognition from Scratch (Unfinished) "
+date:   2016-09-07 17:03:23 +0800
+categories: jekyll update
+---

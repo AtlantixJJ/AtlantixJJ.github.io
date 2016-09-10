@@ -6,22 +6,40 @@
 </description>
     <link>http://atlantix.com/</link>
     <atom:link href="http://atlantix.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 07 Sep 2016 23:18:13 +0800</pubDate>
-    <lastBuildDate>Wed, 07 Sep 2016 23:18:13 +0800</lastBuildDate>
+    <pubDate>Fri, 09 Sep 2016 11:45:24 +0800</pubDate>
+    <lastBuildDate>Fri, 09 Sep 2016 11:45:24 +0800</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
         <title>Build a CTC Network on Theano for Speech Recognition from Scratch (Unfinished) </title>
-        <description>&lt;h2 id=&quot;build-a-cnn-for-speech-recognition&quot;&gt;Build a CNN for Speech Recognition&lt;/h2&gt;
-&lt;p&gt;To build a CNN for speech recognition have two difficulties:
-+ How to adapt to different input length.
-+ How to transform network output to framewise prediction.
-I don’t know if I should or should not assume a fixed-length input. Most RNN-based sequence processor use input of the same length, otherwise batch training is impossible . They make it possible by padding input sequence to the same length while using &lt;code class=&quot;highlighter-rouge&quot;&gt;mask&lt;/code&gt; to block padded information. Well, I know I am going to put recurrent layers on the top of CNN, so I don’t know if enabling non-fixed input length is useful in training. But in practical application, I think I should provide an elegant solution for varying input by enabling network with arbitrary input length.
-So the first problem I want to solve is to build a CNN capable of arbitrary input length.&lt;/p&gt;
+        <description>&lt;p&gt;In this blog, I will tell you the process of my setup of a CTC enabled CNN-LSTM hybrid neural network on the top of Theano. I will show you the essential part of implementation, skipping some data-relevant code. Full code may be available on my repository later.&lt;/p&gt;
+
+&lt;h2 id=&quot;build-a-cnn-for-speech-recognition&quot;&gt;Build a CNN for Speech Recognition&lt;/h2&gt;
+&lt;p&gt;To build a CNN for speech recognition have two difficulties:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;How to adapt to different input length.&lt;/li&gt;
+  &lt;li&gt;How to transform network output to framewise prediction.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I don’t know if I should or should not assume a fixed-length input. Most RNN-based sequence processor use input of the same length, otherwise batch training is impossible . They make it possible by padding input sequence to the same length while using &lt;code class=&quot;highlighter-rouge&quot;&gt;mask&lt;/code&gt; to block padded information. Well, I know I am going to put recurrent layers on the top of CNN, so I don’t know if enabling non-fixed input length is useful in training. But in practical application, I think I should provide an elegant solution for varying input by enabling network with arbitrary input length.&lt;/p&gt;
+
+&lt;p&gt;So the first problem I want to solve is to build a CNN capable of arbitrary input length.&lt;/p&gt;
 
 &lt;h3 id=&quot;a-forward-only-cnn&quot;&gt;A forward-only CNN&lt;/h3&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MConv2D&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MSoftmax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ifTimeDist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ifTimeDist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;# scan is for time distributed computation.&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;# softmax and scan seems to ignore batch axis (0).&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;# input shape: (batch_size,128,401)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;softmax_output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;theano&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nnet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;softmax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sequences&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dimshuffle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)])&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;# self.pred works. result (batch_size,401,128) [i,j,:] sums to 1&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;softmax_output&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nnet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;softmax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MConv2D&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
     My 2D convolution layer. Responsible for forward building.
     &quot;&quot;&quot;&lt;/span&gt;
@@ -62,10 +80,13 @@ So the first problem I want to solve is to build a CNN capable of arbitrary inpu
         &lt;span class=&quot;c&quot;&gt;# final layer's shape:(batch_size,diminished_length,n_class,1)&lt;/span&gt;
         &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;raw_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conv_layers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,:,:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;This code passed tests. If I build the network output as function and pass it some values, it will get a right-shaped output and some random number. Seems to be good : ).
-The next step is to enable CTC loss function. Well we can start framewise network building right now, but don’t forget out target is to enable CTC training.&lt;/p&gt;
+&lt;p&gt;Personally, I don’t know how to produce a framewise probability distribution elegantly. Now the only way that I came up with is to scan through all time steps… Maybe doing softmax along time axis shouldn’t bother to use scan ? I would be appreciative if you can tell me how to do.&lt;/p&gt;
 
-&lt;p&gt;Here I just use keras CTC loss function. And the added lines is shown below:&lt;/p&gt;
+&lt;p&gt;Anyway, this code passed tests. If I build the network output as function and pass it some values, it will get a right-shaped output and some random number. Prediction layer will get each time step’s prediction for each example sums up to 1. Seems to be good : ).&lt;/p&gt;
+
+&lt;h3 id=&quot;enable-training&quot;&gt;Enable Training&lt;/h3&gt;
+
+&lt;p&gt;The next step is to enable CTC loss function. Here I just use keras CTC loss function. And the added lines is shown below:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;raw_out&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conv_layers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:,:,:,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# we start from here&lt;/span&gt;
@@ -110,8 +131,9 @@ The next step is to enable CTC loss function. Well we can start framewise networ
     &lt;span class=&quot;n&quot;&gt;label_length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_dims&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;input_length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expand_dims&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;len_pred&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)})&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Well you may notice in the loss function testing part, you cannot do as I propose. Because I am experimenting on TIMIT dataset and transformed the dataset. So it is of no use even if I post the entire code : ).
- Now we are going to differentiate the network. In this step, I apply &lt;code class=&quot;highlighter-rouge&quot;&gt;Adadelta&lt;/code&gt; and reuse &lt;code class=&quot;highlighter-rouge&quot;&gt;Deep Learning Tutorial's lstm.py&lt;/code&gt;. I wrap the process of compilation into a class, to which I may add more optimizers. ( Am I going to write a ,eh.., something like keras in the future? )&lt;/p&gt;
+&lt;p&gt;Well you may notice in the loss function testing part, you cannot do as I suggest. Because I am experimenting on TIMIT dataset and I have transformed the dataset. So it is of no use even if I post the entire code : ). Here I am just showing you the core implementation of a CTC network.&lt;/p&gt;
+
+&lt;p&gt;Now we are going to differentiate the network. In this step, I apply &lt;code class=&quot;highlighter-rouge&quot;&gt;Adadelta&lt;/code&gt; and reuse &lt;code class=&quot;highlighter-rouge&quot;&gt;Deep Learning Tutorial's lstm.py&lt;/code&gt;. I wrap the process of compilation into a class, to which I may add more optimizers. ( Am I going to write a ,eh.., another keras in the future? )&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;NetworkCompiler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
@@ -128,13 +150,12 @@ The next step is to enable CTC loss function. Well we can start framewise networ
                 &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input_vars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
                 &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loss&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Personally I am really confused with the original &lt;code class=&quot;highlighter-rouge&quot;&gt;Adadelta&lt;/code&gt;code. Schematically, this function produces two functions:
-+ f_grad_shared: Takes in all inputs, produce an output, and prepare the update values.
-+ f_update: do updates (apply update values to parameters)&lt;/p&gt;
+&lt;p&gt;Personally I am really confused with the original &lt;code class=&quot;highlighter-rouge&quot;&gt;Adadelta&lt;/code&gt;code. Schematically, this function produces two functions:&lt;/p&gt;
 
-&lt;p&gt;But I am rather confused in two ways:
-+ tparams is not theano variable but dictionary instead
-+ does lr has any effect? What’s more, I think &lt;code class=&quot;highlighter-rouge&quot;&gt;Adadelta&lt;/code&gt; prefers lr to be set to 1, having nothing to do with learning rate scheduling.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;f_grad_shared: Takes in all inputs, produce an output, and prepare the update values.&lt;/li&gt;
+  &lt;li&gt;f_update: do updates (apply update values to parameters)&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;adadelta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tparams&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grads&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mask&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
@@ -185,10 +206,22 @@ The next step is to enable CTC loss function. Well we can start framewise networ
 
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f_grad_shared&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f_update&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Here is my modified version. My modification includes:
-+ Switch dictionary parameter to ordinary theano shared variable parameter.
-+ Enable multiple inputs by using a list of shared varibles.
-+ Removed &lt;code class=&quot;highlighter-rouge&quot;&gt;lr&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;But I am rather confused in two ways:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;tparams is not theano variable but dictionary instead&lt;/li&gt;
+  &lt;li&gt;does lr has any effect? What’s more, I think &lt;code class=&quot;highlighter-rouge&quot;&gt;Adadelta&lt;/code&gt; prefers lr to be set to 1, having nothing to do with learning rate scheduling.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Again, please tell me if you know why : ) .&lt;/p&gt;
+
+&lt;p&gt;Here is my modified version. Modification includes:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Switch dictionary parameter to ordinary theano shared variable parameter.&lt;/li&gt;
+  &lt;li&gt;Enable multiple inputs by using a list of shared varibles.&lt;/li&gt;
+  &lt;li&gt;Removed &lt;code class=&quot;highlighter-rouge&quot;&gt;lr&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;adadelta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tparams&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inputs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cost&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
@@ -227,7 +260,80 @@ The next step is to enable CTC loss function. Well we can start framewise networ
 
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f_grad_shared&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f_update&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Anyway, this compiles. Now it comes to train the network. To obtain a more tractable training procedure, I wrote a class &lt;code class=&quot;highlighter-rouge&quot;&gt;BatchTrainingScheduler&lt;/code&gt;, responsible for preparing batch data, training and saving weights.&lt;/p&gt;
+&lt;p&gt;Anyway, this compiles. Now it comes to train the network. To obtain a more tractable training procedure, I wrote a class &lt;code class=&quot;highlighter-rouge&quot;&gt;BatchTrainingScheduler&lt;/code&gt;, responsible for preparing batch data, training and saving weights. Again, this evolves much unnecessary details, so I skip the implementation here.&lt;/p&gt;
+
+&lt;p&gt;In addition, I added framewise loss for comparation. This requires a new layer implementation:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MCrossEntropyFromSoftmax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;softmax_output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label_prob&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ifTimeDist&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ifTimeDist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;# softmax_output is expect to be (batch,401,128)&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame_log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;theano&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sequences&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;softmax_output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame_loss&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;label_prob&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame_log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;# loss shape : (401)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;frame_loss&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mean&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label_prob&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;softmax_output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Now the CTC-CNN runs.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;Using&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gpu&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;device&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GeForce&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GTX&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TITAN&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;X&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CNMeM&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;disabled&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cuDNN&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;available&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Using&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Theano&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;backend&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Loading&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Training&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'./data/CoreTest_Audio_3.npy'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'./data/CoreTest_Label_3.npy'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'./data/CoreTest_Sentence_3.npy'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Dataset&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loading&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;compelte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Max&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Frame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;405&lt;/span&gt; 	 &lt;span class=&quot;n&quot;&gt;Max&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Sequence&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;67&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Label&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;399&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Building&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Model&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Using&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;base&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;convolution&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Model&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;THEANO&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Building&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Compiling&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CTC&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;audio_input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CTC_Labels&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CTC_Input_Length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Label_Length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Compiling&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Framewise&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Prediction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;audio_input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;audio_label&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Checking&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Network&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Output&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;399&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;40&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Checking&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Frame&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Loss&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;3.68886995316&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Checking&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CTC&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Loss&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Train&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CTC&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loss&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;1266.20937281&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;1266.20937281&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;1280.3120997&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;1084.664638&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;786.608295334&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;712.46418894&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;708.009468547&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;709.193808295&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;699.881733037&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;683.349069459&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;678.93139635&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;679.363749416&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;679.713211679&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Train&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Framewise&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Loss&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;3.82449817657&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;3.77304577827&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;3.27461051941&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;2.84103941917&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;2.87398314476&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;2.90601921082&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;2.94813394547&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;2.85982584953&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;2.88489484787&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;2.98423242569&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;2.90129828453&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;2.98246645927&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Train&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CTC&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Loss&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;696.61584301&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;695.274994058&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;695.945729375&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;701.028371696&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;698.802302323&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Aha, things goes fine. Em.. Don’t you think training with two loss function is great?&lt;/p&gt;
+
+&lt;h2 id=&quot;adding-lstm-&quot;&gt;Adding LSTM !&lt;/h2&gt;
 </description>
         <pubDate>Wed, 07 Sep 2016 17:03:23 +0800</pubDate>
         <link>http://atlantix.com/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</link>
@@ -243,6 +349,7 @@ The next step is to enable CTC loss function. Well we can start framewise networ
       <item>
         <title>Keras Learning Note: Speech Recognition CTC Setup</title>
         <description>&lt;h2 id=&quot;running-ctc-network-using-keras&quot;&gt;Running CTC Network using keras&lt;/h2&gt;
+
 &lt;p&gt;Keras has just merged a request containing batch CTC loss function. Although it contains an example code, but it is an image OCR program, and it is quite hard to read… This new coming functionality does not have a good documentation and code example, having costed me nearly two week before get my CTC network to working. Well now I will not bother to mention those unhappy days.&lt;/p&gt;
 
 &lt;p&gt;Network definition: ( You can read the code beginning from &lt;code class=&quot;highlighter-rouge&quot;&gt;FrameInput&lt;/code&gt;, and you most essential part starts from &lt;code class=&quot;highlighter-rouge&quot;&gt;ctc_loss_out&lt;/code&gt;)&lt;/p&gt;
@@ -323,11 +430,15 @@ The next step is to enable CTC loss function. Well we can start framewise networ
 &lt;p&gt;As you can see if you have already read example code &lt;code class=&quot;highlighter-rouge&quot;&gt;image_ocr.py&lt;/code&gt;, the core code is almost the same. Well, I have to confess that I waste a lot of time on using &lt;code class=&quot;highlighter-rouge&quot;&gt;K.ctc_cost&lt;/code&gt; rather than batch cost. Because the glimpse of the example code gave me the impression that I have to pad the sequence. As CTC it self contains the combination of repeating predictions, it is quite unacceptable to interpret a single block of silence into a few continuous label sequence. But later I came to realize that in batch cost, the program managed to mask out padded sequence using &lt;code class=&quot;highlighter-rouge&quot;&gt;label_length&lt;/code&gt;, so I returned to use batch cost.
 But even though the code is almost the same as example, there are still few more traps if you start from the example code. Well, I will tell you about this later, let’s get back onto the correct one now.&lt;/p&gt;
 
-&lt;p&gt;The motivation of the core code can be summed up as followings:
-+ Giving framewise prediction and label sequence as well as their corresponding length to &lt;code class=&quot;highlighter-rouge&quot;&gt;ctc_batch_cost&lt;/code&gt; function.
-+ Incorporate the theano function into keras network by &lt;code class=&quot;highlighter-rouge&quot;&gt;Lambda&lt;/code&gt; layer.
-+ Compile the model using dummy loss.
-In fact, I am not aware of how the loss is calculated, so I don’t know why I have to set the loss in this way. Maybe I have to go through &lt;code class=&quot;highlighter-rouge&quot;&gt;compile&lt;/code&gt; in keras. As stated by the original author, the actual loss calculation happens elsewhere and this loss is for completion.&lt;br /&gt;
+&lt;p&gt;The motivation of the core code can be summed up as followings:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Giving framewise prediction and label sequence as well as their corresponding length to &lt;code class=&quot;highlighter-rouge&quot;&gt;ctc_batch_cost&lt;/code&gt; function.&lt;/li&gt;
+  &lt;li&gt;Incorporate the theano function into keras network by &lt;code class=&quot;highlighter-rouge&quot;&gt;Lambda&lt;/code&gt; layer.&lt;/li&gt;
+  &lt;li&gt;Compile the model using dummy loss.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In fact, I am not aware of how the loss is calculated, so I don’t know why I have to set the loss in this way. Maybe I have to go through &lt;code class=&quot;highlighter-rouge&quot;&gt;compile&lt;/code&gt; in keras. As stated by the original author, the actual loss calculation happens elsewhere and this loss is for completion.&lt;br /&gt;
 So we just need to pass the data as required.&lt;/p&gt;
 
 &lt;p&gt;Data preprocessing and training configuation:&lt;/p&gt;
@@ -390,20 +501,27 @@ So we just need to pass the data as required.&lt;/p&gt;
             &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Shuffling data...&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
             &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ph_Y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shuffle_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ph_Y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;And here comes the most tricky step, which trapped me for nearly one week:
-## export THEANO_FLAGS=optimizer=fast_compile
-Well,it may not be a indispensible one. After I experimented on more machines, I found the need for this flag vary with machine and even model scale. For example, constructing a 2-layer bi-directional LSTM will require this flag in one machine while 1-layer will not. And in my personal laptop (which is CPU-only) all the model require settting this flag.&lt;/p&gt;
+&lt;p&gt;And here comes the most tricky step, which trapped me for nearly one week:&lt;/p&gt;
 
-&lt;p&gt;It is quite an unbelievable setting. Maybe I have not really cleared the bugs. Setting the &lt;code class=&quot;highlighter-rouge&quot;&gt;optimizer&lt;/code&gt; configuration involved with Theano graph optimization. This configuration is &lt;code class=&quot;highlighter-rouge&quot;&gt;fast_run&lt;/code&gt; by default. Setting this flag to fast_compile or None both works. If you try to compile the model normally, you will face the following bugs:
-+ The model cannot compile in stacking the second layer of LSTM.
-+ (If you reduce the model to one layer of BiLSTM) Theano will report &lt;code class=&quot;highlighter-rouge&quot;&gt;scan&lt;/code&gt; using regative index (perhaps -37)
-Unbelievable. You may imagine the how a Theano and Keras beginner feels when he tried for tens of times and confirmed this issue. Please help me if you have any idea. I’d better write my code for another time before I assume it is a bug of Theano :) .
+&lt;h2 id=&quot;export-theanoflagsoptimizerfastcompile&quot;&gt;export THEANO_FLAGS=optimizer=fast_compile&lt;/h2&gt;
+
+&lt;p&gt;Well,it may not be a indispensible one. After I experimented on more machines, I found the need for this flag vary with machine and even model scale. For example, constructing a 2-layer bi-directional LSTM will require this flag in one machine while 1-layer will not. And in my personal laptop (which is CPU-only) all the model require settting this flag.&lt;/p&gt;
+
+&lt;p&gt;It is quite an unbelievable setting. Maybe I have not really cleared the bugs. Setting the &lt;code class=&quot;highlighter-rouge&quot;&gt;optimizer&lt;/code&gt; configuration involved with Theano graph optimization. This configuration is &lt;code class=&quot;highlighter-rouge&quot;&gt;fast_run&lt;/code&gt; by default. Setting this flag to fast_compile or None both works. If you try to compile the model normally, you will face the following bugs:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The model cannot compile in stacking the second layer of LSTM.&lt;/li&gt;
+  &lt;li&gt;(If you reduce the model to one layer of BiLSTM) Theano will report &lt;code class=&quot;highlighter-rouge&quot;&gt;scan&lt;/code&gt; using regative index (perhaps -37)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Unbelievable. You may imagine the how a Theano and Keras beginner feels when he tried for tens of times and confirmed this issue. Please help me if you have any idea. I’d better write my code for another time before I assume it is a bug of Theano :) .
 ## But, it works.
 ### And I would be grateful if you can tell me why.&lt;/p&gt;
 
 &lt;p&gt;Any way, using the following configuration, it is expected to setup CTC training.
-But there is still one problem: Training tend to produce &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt; after a few iteration. And it is quite stochastic. If you use SGD with learning rate&lt;code class=&quot;highlighter-rouge&quot;&gt;0.001&lt;/code&gt;, you will get &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt; after about 15 iterations. If you use &lt;code class=&quot;highlighter-rouge&quot;&gt;0.0001&lt;/code&gt; SGD, &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt; will appear  in 100 iteration. If you use &lt;code class=&quot;highlighter-rouge&quot;&gt;Adadelta&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;Adam&lt;/code&gt;, loss will quickly go down to about 800 but then become &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt;.
-Currently, if you are training a model similar to my model shown above, you should set learning rate to &lt;code class=&quot;highlighter-rouge&quot;&gt;10-6&lt;/code&gt; (for about 64 convolution filters). If you use single layer BLSTM, then &lt;code class=&quot;highlighter-rouge&quot;&gt;10-5&lt;/code&gt; is ok.&lt;/p&gt;
+But there is still one problem: Training tend to produce &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt; after a few iteration. And it is quite stochastic. If you use SGD with learning rate&lt;code class=&quot;highlighter-rouge&quot;&gt;0.001&lt;/code&gt;, you will get &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt; after about 15 iterations. If you use &lt;code class=&quot;highlighter-rouge&quot;&gt;0.0001&lt;/code&gt; SGD, &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt; will appear  in 100 iteration. If you use &lt;code class=&quot;highlighter-rouge&quot;&gt;Adadelta&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;Adam&lt;/code&gt;, loss will quickly go down to about 800 but then become &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Currently, if you are training a model similar to my model shown above, you should set learning rate to &lt;code class=&quot;highlighter-rouge&quot;&gt;10-6&lt;/code&gt; (for about 64 convolution filters). If you use single layer BLSTM, then &lt;code class=&quot;highlighter-rouge&quot;&gt;10-5&lt;/code&gt; is ok.&lt;/p&gt;
 
 &lt;p&gt;To sum up, though keras provide a convenient solution for regular network configuration, we have to use more fundamental toolkits such as Theano if we need to train unusual networks. For the next few days, I will dive into using &lt;code class=&quot;highlighter-rouge&quot;&gt;raw&lt;/code&gt; theano to build a CTC network.&lt;/p&gt;
 
@@ -425,22 +543,28 @@ Currently, if you are training a model similar to my model shown above, you shou
         <description>&lt;p&gt;This summer I have been working on GPU parallelized SNN computation. Frankly speaking, the pure code work is not heavy, but this project is really tough for a CUDA-new-beginner. In the blog, I will first show my understanding of CUDA programming and then the problems I encountered and my solution  with you.&lt;/p&gt;
 
 &lt;h1 id=&quot;introduction-to-cuda-programming&quot;&gt;Introduction to CUDA Programming&lt;/h1&gt;
+
 &lt;p&gt;CUDA is a programming platform for GPU computation ( of course on NVIDIA GPUs). By coding on CUDA, we can use GPU for general purpose computation. In some aspects, GPU is much faster than CPU (such as graphical computation) for GPU is a highly parallel device. Take NVIDIA GPU as example, it consists mainly of an array of Streaming Processors (SM), and every SM is capable of executing multiple threads (and thread blocks) at the same time.&lt;/p&gt;
 
 &lt;p&gt;Using &lt;code class=&quot;highlighter-rouge&quot;&gt;cuda-gdb&lt;/code&gt;, you are able to know where the code crashed and see the related variables. But it does not mean that you just need to examine the code around the incident area. Instead, look at how you allocate this variable. Are you calling the right pointer? Did you allocate it with the right size and &lt;code class=&quot;highlighter-rouge&quot;&gt;type&lt;/code&gt;? Did you call &lt;code class=&quot;highlighter-rouge&quot;&gt;cudaDeviceSynchronize()&lt;/code&gt; properly if you are using &lt;code class=&quot;highlighter-rouge&quot;&gt;cudaMallocManged&lt;/code&gt; ? Did you call &lt;code class=&quot;highlighter-rouge&quot;&gt;__syncthreads()&lt;/code&gt; if there are any concurrent operation on the same address (which you should use Atomic Functions)&lt;/p&gt;
 
 &lt;h3 id=&quot;problem-1-you-find-your-arrays-value-is-not-what-you-want-or-is-chaotic&quot;&gt;Problem 1: You find your array’s value is not what you want or is chaotic.&lt;/h3&gt;
+
 &lt;p&gt;Check if your memory allocation or initialization is correct.&lt;/p&gt;
 
 &lt;h3 id=&quot;problem-8-your-array-seems-to-fail-right-in-the-middle&quot;&gt;Problem 8: Your array seems to fail right in the middle.&lt;/h3&gt;
-&lt;p&gt;If you call your &lt;code class=&quot;highlighter-rouge&quot;&gt;cuda-gdb&lt;/code&gt; and find your code crashed right in the middle stage. E.g. you are visiting a array and right in the middle &lt;code class=&quot;highlighter-rouge&quot;&gt;cuda-gdb&lt;/code&gt; told you that the array address is illegal. No boundary problems. No initialization problems. You may suspect that previous operations have modified here illegally. But the first thing to do is check whether it is really the middle. CUDA execute in a rather unreasonably parallel way. Thread in a warp execute at the same time while different warps execute in approximately concurrent time but differ stochastically. It is straightforward but ignorable to notice that threads with quite-non-zero indices are the first to execute (say «&amp;lt;(1,0,0),(92,0,0)»&amp;gt; warp 2 in one of my failures).
-So my advice to this situation is to change you configuration from multiple threads to single threads.
+
+&lt;p&gt;If you call your &lt;code class=&quot;highlighter-rouge&quot;&gt;cuda-gdb&lt;/code&gt; and find your code crashed right in the middle stage. E.g. you are visiting a array and right in the middle &lt;code class=&quot;highlighter-rouge&quot;&gt;cuda-gdb&lt;/code&gt; told you that the array address is illegal. No boundary problems. No initialization problems. You may suspect that previous operations have modified here illegally. But the first thing to do is check whether it is really the middle. CUDA execute in a rather unreasonably parallel way. Thread in a warp execute at the same time while different warps execute in approximately concurrent time but differ stochastically. It is straightforward but ignorable to notice that threads with quite-non-zero indices are the first to execute (say «&amp;lt;(1,0,0),(92,0,0)»&amp;gt; warp 2 in one of my failures).&lt;/p&gt;
+
+&lt;p&gt;So my advice to this situation is to change you configuration from multiple threads to single threads.
 If your program fail at the first thread, then it is probable that you initialization or parameter passing or something like that is problematic.&lt;/p&gt;
 
 &lt;h3 id=&quot;problem-9-using-cuda-gdb-set-cuda-memcheck-on-getting-a-different-result&quot;&gt;Problem 9: Using cuda-gdb &lt;code class=&quot;highlighter-rouge&quot;&gt;set cuda memcheck on&lt;/code&gt; getting a different result&lt;/h3&gt;
+
 &lt;p&gt;I once encountered a situation that when I turn on this option and figured out bugs but the program fails again when running normally. Later I found that running normal cuda-gdb will not cover the bug, though it cannot dive into kernel functions. Based on my experience, I examined  &lt;code class=&quot;highlighter-rouge&quot;&gt;cudaDeviceSynchronize()&lt;/code&gt; and find one missing. Then the bug was fixed. So I guess using this option result in automatic memory synchronization.&lt;/p&gt;
 
 &lt;h3 id=&quot;tip-1-using-class&quot;&gt;Tip 1: Using class&lt;/h3&gt;
+
 &lt;p&gt;CUDA does not support&lt;/p&gt;
 </description>
         <pubDate>Mon, 29 Aug 2016 22:26:44 +0800</pubDate>

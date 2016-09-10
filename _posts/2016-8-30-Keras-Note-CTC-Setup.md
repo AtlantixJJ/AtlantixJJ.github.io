@@ -6,6 +6,7 @@ categories: jekyll update
 ---
 
 ## Running CTC Network using keras
+
 Keras has just merged a request containing batch CTC loss function. Although it contains an example code, but it is an image OCR program, and it is quite hard to read... This new coming functionality does not have a good documentation and code example, having costed me nearly two week before get my CTC network to working. Well now I will not bother to mention those unhappy days.
 
 Network definition: ( You can read the code beginning from `FrameInput`, and you most essential part starts from `ctc_loss_out`)
@@ -89,9 +90,11 @@ As you can see if you have already read example code `image_ocr.py`, the core co
 But even though the code is almost the same as example, there are still few more traps if you start from the example code. Well, I will tell you about this later, let's get back onto the correct one now.
 
 The motivation of the core code can be summed up as followings:
+
 + Giving framewise prediction and label sequence as well as their corresponding length to `ctc_batch_cost` function.
 + Incorporate the theano function into keras network by `Lambda` layer.
 + Compile the model using dummy loss.
+
 In fact, I am not aware of how the loss is calculated, so I don't know why I have to set the loss in this way. Maybe I have to go through `compile` in keras. As stated by the original author, the actual loss calculation happens elsewhere and this loss is for completion.  
 So we just need to pass the data as required.
 
@@ -157,18 +160,23 @@ class BatchTrainingScheduler(object):
 {% endhighlight %}
 
 And here comes the most tricky step, which trapped me for nearly one week:
+
 ## export THEANO_FLAGS=optimizer=fast_compile
+
 Well,it may not be a indispensible one. After I experimented on more machines, I found the need for this flag vary with machine and even model scale. For example, constructing a 2-layer bi-directional LSTM will require this flag in one machine while 1-layer will not. And in my personal laptop (which is CPU-only) all the model require settting this flag.
 
 It is quite an unbelievable setting. Maybe I have not really cleared the bugs. Setting the `optimizer` configuration involved with Theano graph optimization. This configuration is `fast_run` by default. Setting this flag to fast_compile or None both works. If you try to compile the model normally, you will face the following bugs:
+
 + The model cannot compile in stacking the second layer of LSTM.
 + (If you reduce the model to one layer of BiLSTM) Theano will report `scan` using regative index (perhaps -37)
+
 Unbelievable. You may imagine the how a Theano and Keras beginner feels when he tried for tens of times and confirmed this issue. Please help me if you have any idea. I'd better write my code for another time before I assume it is a bug of Theano :) .
 ## But, it works.
 ### And I would be grateful if you can tell me why.
 
 Any way, using the following configuration, it is expected to setup CTC training.
 But there is still one problem: Training tend to produce `nan` after a few iteration. And it is quite stochastic. If you use SGD with learning rate`0.001`, you will get `nan` after about 15 iterations. If you use `0.0001` SGD, `nan` will appear  in 100 iteration. If you use `Adadelta` or `Adam`, loss will quickly go down to about 800 but then become `nan`.
+
 Currently, if you are training a model similar to my model shown above, you should set learning rate to `10-6` (for about 64 convolution filters). If you use single layer BLSTM, then `10-5` is ok.
 
 To sum up, though keras provide a convenient solution for regular network configuration, we have to use more fundamental toolkits such as Theano if we need to train unusual networks. For the next few days, I will dive into using `raw` theano to build a CTC network.
