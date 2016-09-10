@@ -1,3 +1,9 @@
+---
+layout: post
+title:  "CUDA Programming Summary (Unfinished)"
+date:   2016-08-29 22:26:44 +0800
+categories: jekyll update
+---
 
 
 
@@ -28,11 +34,3 @@ I once encountered a situation that when I turn on this option and figured out b
 ### Tip 1: Using class
 
 CUDA does not support
-
-
----
-layout: post
-title:  "CUDA Programming Summary (Unfinished)"
-date:   2016-08-29 22:26:44 +0800
-categories: jekyll update
----

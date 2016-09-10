@@ -1,3 +1,9 @@
+---
+layout: post
+title:  "Build a CTC Network on Theano for Speech Recognition from Scratch (Unfinished) "
+date:   2016-09-07 17:03:23 +0800
+categories: jekyll update
+---
 
 
 In this blog, I will tell you the process of my setup of a CTC enabled CNN-LSTM hybrid neural network on the top of Theano. I will show you the essential part of implementation, skipping some data-relevant code. Full code may be available on my repository later.
@@ -333,11 +339,3 @@ Aha, things goes fine. Em.. Don't you think training with two loss function is g
 
 
 ## Adding LSTM !
-
-
----
-layout: post
-title:  "Build a CTC Network on Theano for Speech Recognition from Scratch (Unfinished) "
-date:   2016-09-07 17:03:23 +0800
-categories: jekyll update
----
