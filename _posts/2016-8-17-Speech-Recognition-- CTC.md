@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Speech Recognition: Connectionist Temporal Classification (Unfinished)"
+title:  "Speech Recognition: Connectionist Temporal Classification"
 date:   2016-08-17 17:03:23 +0800
 categories: jekyll update
 ---

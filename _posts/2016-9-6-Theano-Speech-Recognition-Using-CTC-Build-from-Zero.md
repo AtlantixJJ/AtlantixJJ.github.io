@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Build a CTC Network on Theano for Speech Recognition from Scratch (Unfinished) "
+title:  "Build a CTC Network on Theano for Speech Recognition from Scratch "
 date:   2016-09-07 17:03:23 +0800
 categories: jekyll update
 ---

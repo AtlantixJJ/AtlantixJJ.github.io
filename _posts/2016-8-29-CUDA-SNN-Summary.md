@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "CUDA Programming Summary (Unfinished)"
+title:  "CUDA Programming Summary"
 date:   2016-08-29 22:26:44 +0800
 categories: jekyll update
 ---
