@@ -117,3 +117,29 @@ In this experiment, I forgot to stretch the learning rate schedule, and it faile
 #### Expr 2
 
 All the settings are done properly. But the training takes totally 4 days on 2 GPUs.
+
+result:
+
+```
+Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.294
+Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.505
+Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.304
+Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.116
+Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.308
+Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.427
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.266
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.411
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.430
+Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.234
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.466
+Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.573
+INFO json_dataset_evaluator.py: 122: Wrote json eval results to: ./log/detectron-mye2e_2/test/coco_my_val/generalized_rcnn/segmentation_results.pkl
+INFO task_evaluation.py:  66: Evaluating segmentations is done!
+INFO task_evaluation.py: 181: copypaste: Dataset: coco_my_val
+INFO task_evaluation.py: 183: copypaste: Task: box
+INFO task_evaluation.py: 186: copypaste: AP,AP50,AP75,APs,APm,APl
+INFO task_evaluation.py: 187: copypaste: 0.3222,0.5410,0.3403,0.1729,0.3419,0.4060
+INFO task_evaluation.py: 183: copypaste: Task: mask
+INFO task_evaluation.py: 186: copypaste: AP,AP50,AP75,APs,APm,APl
+INFO task_evaluation.py: 187: copypaste: 0.2940,0.5049,0.3039,0.1163,0.3080,0.4274
+```
