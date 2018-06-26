@@ -22,6 +22,16 @@ Configure options:
     --enable-fail-if-missing
 ```
 
+./configure --prefix=/home/jianjin/home/usr/local/ \
+    --with-features=huge \
+    --enable-pythoninterp \
+    --with-python-config-dir=/home/jianjin/home/anaconda2/lib/python2.7/config \
+    --enable-gui=gtk2 \
+    --enable-cscope \
+    --enable-luainterp \
+    --with-lua-prefix=/home/jianjin/home/torch/install/ \
+    --enable-fail-if-missing
+
 Need to make sure lua perl ruby is installed.
 
 ```
@@ -101,17 +111,32 @@ Sometimes proxy may cause several issues. Disable them make things work.
 
 Native configuration failed for me. run `./install.py --all` will result in a HASH error. Because the program failed to download a specific clang prebuilt libraries. So here I try to build YCM manually.
 
+Download clang and llvm from official site and extract the prebuilt binary:
+
+http://releases.llvm.org/download.html
+
 Follow the instructions: 
 
 ```
+cd ~ && mkdir ycm_build && cd ycm_build
 cmake -G "Unix Makefiles" -DPATH_TO_LLVM_ROOT=/home/atlantix/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/clang_archives/clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.04 . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/cpp
+cmake --build . --target ycm_core --config Release
+```
+
+or this for Ubuntu 16.04
+
+```
+cd ~ && mkdir ycm_build && cd ycm_build
+cmake -G "Unix Makefiles" -DPATH_TO_LLVM_ROOT=~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/clang_archives/clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-16.04 . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/cpp
 cmake --build . --target ycm_core --config Release
 ```
 
 Optional:
 
+cd into this directory
+
 ```
-cmake -G "Unix Makefiles" . /home/atlantix/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/third_party/cregex
+cmake -G "Unix Makefiles" . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/third_party/cregex
 cmake --build . --target _regex --config Release
 ```
 
