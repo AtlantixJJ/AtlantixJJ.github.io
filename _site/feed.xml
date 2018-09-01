@@ -6,9 +6,24 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 01 Sep 2018 15:26:59 +0800</pubDate>
-    <lastBuildDate>Sat, 01 Sep 2018 15:26:59 +0800</lastBuildDate>
+    <pubDate>Sat, 01 Sep 2018 15:38:43 +0800</pubDate>
+    <lastBuildDate>Sat, 01 Sep 2018 15:38:43 +0800</lastBuildDate>
     <generator>Jekyll v3.8.1</generator>
+    
+      <item>
+        <title>Neural Painter Demo</title>
+        <description>&lt;iframe width=&quot;960&quot; height=&quot;540&quot; src=&quot;https://www.youtube.com/embed/Il596wgjUc8&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+</description>
+        <pubDate>Sat, 01 Sep 2018 08:00:00 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2018/09/01/NeuralPainter.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/09/01/NeuralPainter.html</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
     
       <item>
         <title>Configure Vim</title>
@@ -206,21 +221,6 @@ cmake --build . --target _regex --config Release
         <link>http://localhost:4000/2018/06/21/configure-windows.html</link>
         <guid isPermaLink="true">http://localhost:4000/2018/06/21/configure-windows.html</guid>
         
-        
-      </item>
-    
-      <item>
-        <title>Neural Painter Demo</title>
-        <description>&lt;iframe width=&quot;960&quot; height=&quot;540&quot; src=&quot;http://www.youtube.com/embed/Il596wgjUc8&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
-</description>
-        <pubDate>Tue, 05 Jun 2018 17:03:23 +0800</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/06/05/NeuralPainter.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/06/05/NeuralPainter.html</guid>
-        
-        
-        <category>jekyll</category>
-        
-        <category>update</category>
         
       </item>
     
