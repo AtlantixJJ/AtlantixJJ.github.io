@@ -10,8 +10,8 @@
   <meta name="description" content="Running CTC Network using keras">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://atlantix.com/jekyll/update/2016/08/30/Keras-Note-CTC-Setup.html">
-  <link rel="alternate" type="application/rss+xml" title="Jianjing Xu's Blog" href="http://atlantix.com/feed.xml">
+  <link rel="canonical" href="http://localhost:4000/jekyll/update/2016/08/30/Keras-Note-CTC-Setup.html">
+  <link rel="alternate" type="application/rss+xml" title="Jianjing Xu's Blog" href="http://localhost:4000/feed.xml">
 </head>
 
 
@@ -217,7 +217,7 @@ So we just need to pass the data as required.</p>
 
 <p>And here comes the most tricky step, which trapped me for nearly one week:</p>
 
-<h2 id="export-theanoflagsoptimizerfastcompile">export THEANO_FLAGS=optimizer=fast_compile</h2>
+<h2 id="export-theano_flagsoptimizerfast_compile">export THEANO_FLAGS=optimizer=fast_compile</h2>
 
 <p>Well,it may not be a indispensible one. After I experimented on more machines, I found the need for this flag vary with machine and even model scale. For example, constructing a 2-layer bi-directional LSTM will require this flag in one machine while 1-layer will not. And in my personal laptop (which is CPU-only) all the model require settting this flag.</p>
 
@@ -228,9 +228,9 @@ So we just need to pass the data as required.</p>
   <li>(If you reduce the model to one layer of BiLSTM) Theano will report <code class="highlighter-rouge">scan</code> using regative index (perhaps -37)</li>
 </ul>
 
-<p>Unbelievable. You may imagine the how a Theano and Keras beginner feels when he tried for tens of times and confirmed this issue. Please help me if you have any idea. I’d better write my code for another time before I assume it is a bug of Theano :) .
-## But, it works.
-### And I would be grateful if you can tell me why.</p>
+<p>Unbelievable. You may imagine the how a Theano and Keras beginner feels when he tried for tens of times and confirmed this issue. Please help me if you have any idea. I’d better write my code for another time before I assume it is a bug of Theano :) .</p>
+<h2 id="but-it-works">But, it works.</h2>
+<h3 id="and-i-would-be-grateful-if-you-can-tell-me-why">And I would be grateful if you can tell me why.</h3>
 
 <p>Any way, using the following configuration, it is expected to setup CTC training.
 But there is still one problem: Training tend to produce <code class="highlighter-rouge">nan</code> after a few iteration. And it is quite stochastic. If you use SGD with learning rate<code class="highlighter-rouge">0.001</code>, you will get <code class="highlighter-rouge">nan</code> after about 15 iterations. If you use <code class="highlighter-rouge">0.0001</code> SGD, <code class="highlighter-rouge">nan</code> will appear  in 100 iteration. If you use <code class="highlighter-rouge">Adadelta</code> or <code class="highlighter-rouge">Adam</code>, loss will quickly go down to about 800 but then become <code class="highlighter-rouge">nan</code>.</p>

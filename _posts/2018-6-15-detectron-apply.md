@@ -1,3 +1,10 @@
+---
+layout: post
+title:  "Detectron In a Day"
+date:   2018-06-05 17:03:23 +0800
+categories: jekyll update
+---
+
 # Detectron In a Day
 
 By Atlantix, 2018/5/29.
