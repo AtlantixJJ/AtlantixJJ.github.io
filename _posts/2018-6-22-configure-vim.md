@@ -22,16 +22,15 @@ Configure options:
     --enable-fail-if-missing
 ```
 
-./configure --prefix=/home/jianjin/home/usr/local/ \
+./configure --prefix=/home/atlantix/usr/local/ \
     --with-features=huge \
     --enable-pythoninterp \
-    --with-python-config-dir=/home/jianjin/home/anaconda2/lib/python2.7/config \
     --enable-gui=gtk2 \
     --enable-cscope \
     --enable-luainterp \
-    --with-lua-prefix=/home/jianjin/home/torch/install/ \
+    --with-lua-prefix=/home/atlantix/torch/install/ \
     --enable-fail-if-missing
-
+    --with-python-config-dir=/home/atlantix/anaconda2/lib/python2.7/config \
 Need to make sure lua perl ruby is installed.
 
 ```

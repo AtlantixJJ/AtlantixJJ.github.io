@@ -4,14 +4,414 @@
     <title>Jianjing Xu's Blog</title>
     <description>Some day my AI will help me write the blogs...
 </description>
-    <link>http://atlantix.com/</link>
-    <atom:link href="http://atlantix.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 09 Sep 2016 11:45:24 +0800</pubDate>
-    <lastBuildDate>Fri, 09 Sep 2016 11:45:24 +0800</lastBuildDate>
-    <generator>Jekyll v3.2.1</generator>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sat, 01 Sep 2018 15:38:43 +0800</pubDate>
+    <lastBuildDate>Sat, 01 Sep 2018 15:38:43 +0800</lastBuildDate>
+    <generator>Jekyll v3.8.1</generator>
     
       <item>
-        <title>Build a CTC Network on Theano for Speech Recognition from Scratch (Unfinished) </title>
+        <title>Neural Painter Demo</title>
+        <description>&lt;iframe width=&quot;960&quot; height=&quot;540&quot; src=&quot;https://www.youtube.com/embed/Il596wgjUc8&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+</description>
+        <pubDate>Sat, 01 Sep 2018 08:00:00 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2018/09/01/NeuralPainter.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/09/01/NeuralPainter.html</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>Configure Vim</title>
+        <description>&lt;h1 id=&quot;configure-vim-to-use-ycm&quot;&gt;Configure VIM to use YCM&lt;/h1&gt;
+
+&lt;p&gt;clone vim from github.&lt;/p&gt;
+
+&lt;h2 id=&quot;build-from-source&quot;&gt;Build from Source&lt;/h2&gt;
+
+&lt;p&gt;Configure options:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./configure --prefix=/home/atlantix/usr/local/ \
+    --with-features=huge \
+    --enable-rubyinterp \
+    --enable-python3interp \
+    --with-python3-config-dir=/usr/lib/python3.5/config-3.5m-x86_64-linux-gnu \
+    --enable-pythoninterp \
+    --with-python-config-dir=/home/atlantix/anaconda2/lib/python2.7/config \
+    --enable-perlinterp \
+    --enable-gui=gtk2 \
+    --enable-cscope \
+    --enable-luainterp \
+    --with-lua-prefix=/home/atlantix/torch/install/ \
+    --enable-fail-if-missing
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;./configure –prefix=/home/atlantix/usr/local/ \
+    –with-features=huge \
+    –enable-pythoninterp \
+    –enable-gui=gtk2 \
+    –enable-cscope \
+    –enable-luainterp \
+    –with-lua-prefix=/home/atlantix/torch/install/ \
+    –enable-fail-if-missing
+    –with-python-config-dir=/home/atlantix/anaconda2/lib/python2.7/config \
+Need to make sure lua perl ruby is installed.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;make &amp;amp;&amp;amp; make install
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then vim is installed locally. Make sure that the local bin directory is in the path.&lt;/p&gt;
+
+&lt;h2 id=&quot;configure-vimrc&quot;&gt;Configure vimrc&lt;/h2&gt;
+
+&lt;p&gt;I select the &lt;a href=&quot;https://github.com/amix/vimrc&quot;&gt;Ultimate vimrc&lt;/a&gt; from github. First install this configuration.&lt;/p&gt;
+
+&lt;p&gt;Then add &lt;a href=&quot;https://github.com/Valloric/YouCompleteMe&quot;&gt;YouCompleteMe&lt;/a&gt; to this configuration.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/Valloric/YouCompleteMe
+cd YouCompleteMe
+git submodule update --init --recursive
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Clone YCM to the ~/.vim_runtime/my_plugins directory.&lt;/p&gt;
+
+&lt;p&gt;Install all the complete feature of YCM: make sure xbuild, go, tsserver, node, npm, rustc, and cargo tools are installed.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Go. Pass.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Install tsserver: &lt;code class=&quot;highlighter-rouge&quot;&gt;npm i typescript -g&lt;/code&gt;. This is the typescript server. If you need to use proxy, then do&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ npm config set proxy http://server:port
+$ npm config set https-proxy https://server:port
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;node. Pass.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;npm. Pass.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;rustc. To install this, it is recommended to install rustup as a whole.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt; curl https://sh.rustup.rs -sSf | sh&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Welcome to Rust!
+
+This will download and install the official compiler for the Rust programming
+language, and its package manager, Cargo.
+
+It will add the cargo, rustc, rustup and other commands to Cargo's bin
+directory, located at:
+
+  /home/atlantix/.cargo/bin
+
+This path will then be added to your PATH environment variable by modifying the
+profile files located at:
+
+  /home/atlantix/.profile
+  /home/atlantix/.zprofile
+  /home/atlantix/.bash_profile
+
+You can uninstall at any time with rustup self uninstall and these changes will
+be reverted.
+
+Current installation options:
+
+   default host triple: x86_64-unknown-linux-gnu
+     default toolchain: stable
+  modify PATH variable: yes
+
+1) Proceed with installation (default)
+2) Customize installation
+3) Cancel installation
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Sometimes proxy may cause several issues. Disable them make things work.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;cargo. Installed together with rustup.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Native configuration failed for me. run &lt;code class=&quot;highlighter-rouge&quot;&gt;./install.py --all&lt;/code&gt; will result in a HASH error. Because the program failed to download a specific clang prebuilt libraries. So here I try to build YCM manually.&lt;/p&gt;
+
+&lt;p&gt;Download clang and llvm from official site and extract the prebuilt binary:&lt;/p&gt;
+
+&lt;p&gt;http://releases.llvm.org/download.html&lt;/p&gt;
+
+&lt;p&gt;Follow the instructions:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd ~ &amp;amp;&amp;amp; mkdir ycm_build &amp;amp;&amp;amp; cd ycm_build
+cmake -G &quot;Unix Makefiles&quot; -DPATH_TO_LLVM_ROOT=/home/atlantix/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/clang_archives/clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.04 . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/cpp
+cmake --build . --target ycm_core --config Release
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;or this for Ubuntu 16.04&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd ~ &amp;amp;&amp;amp; mkdir ycm_build &amp;amp;&amp;amp; cd ycm_build
+cmake -G &quot;Unix Makefiles&quot; -DPATH_TO_LLVM_ROOT=~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/clang_archives/clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-16.04 . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/cpp
+cmake --build . --target ycm_core --config Release
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Optional:&lt;/p&gt;
+
+&lt;p&gt;cd into this directory&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cmake -G &quot;Unix Makefiles&quot; . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/third_party/cregex
+cmake --build . --target _regex --config Release
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And build support for other languages as instructed in full installation guide.&lt;/p&gt;
+
+&lt;p&gt;To enable completion in C language project, you need to add a few step to your project. If you are using CMake, then add a line &lt;code class=&quot;highlighter-rouge&quot;&gt;set(CMAKE_EXPORT_COMPILE_COMMANDS ON)&lt;/code&gt; to cmake and build it. This will generate a json named compile_commands.json. Make sure this file is at the root of your project.&lt;/p&gt;
+
+&lt;p&gt;As for other methods, I would recommend using &lt;code class=&quot;highlighter-rouge&quot;&gt;.ycm_extra_conf.py&lt;/code&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 22 Jun 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/06/22/configure-vim.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/06/22/configure-vim.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Configure Windows</title>
+        <description>&lt;h1 id=&quot;configure&quot;&gt;Configure&lt;/h1&gt;
+
+&lt;p&gt;Configure windows to meet the habit of Ubuntu user.&lt;/p&gt;
+
+&lt;h2 id=&quot;neccessary-softwares&quot;&gt;Neccessary softwares&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;VS Code.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;git for Windows.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Ubuntu bash for Windows.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Anaconda2 and Anaconda3.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;python-softwares&quot;&gt;Python softwares&lt;/h2&gt;
+
+&lt;p&gt;tensorflow: use conda install tensorflow-gpu is more convenient&lt;/p&gt;
+
+&lt;p&gt;pytorch:&lt;/p&gt;
+
+&lt;p&gt;torch: provide lua&lt;/p&gt;
+</description>
+        <pubDate>Thu, 21 Jun 2018 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/06/21/configure-windows.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/06/21/configure-windows.html</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Vehicle ReID Demo</title>
+        <description>
+</description>
+        <pubDate>Tue, 05 Jun 2018 17:03:23 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2018/06/05/VeRi.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/06/05/VeRi.html</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>Detectron In a Day</title>
+        <description>&lt;h1 id=&quot;detectron-in-a-day&quot;&gt;Detectron In a Day&lt;/h1&gt;
+
+&lt;p&gt;By Atlantix, 2018/5/29.&lt;/p&gt;
+
+&lt;h2 id=&quot;environment-configuration&quot;&gt;Environment Configuration&lt;/h2&gt;
+
+&lt;p&gt;MSCOCO dataset is already prepared in the server.&lt;/p&gt;
+
+&lt;h3 id=&quot;coco-api&quot;&gt;COCO API&lt;/h3&gt;
+
+&lt;p&gt;Clone from its github page and build as requested.&lt;/p&gt;
+
+&lt;p&gt;Obstacle 1: &lt;code class=&quot;highlighter-rouge&quot;&gt;X display&lt;/code&gt; not set properly.&lt;/p&gt;
+
+&lt;p&gt;Solution: Reinstall &lt;code class=&quot;highlighter-rouge&quot;&gt;xorg&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Obstacle 2: &lt;code class=&quot;highlighter-rouge&quot;&gt;undefined symbol: PyFPE_jbuf&lt;/code&gt;. A rare issue, when you compile it before you change the python library this will happen. For example, switching from anaconda3 to anaconda2. The solution is to clean all the build and make again.&lt;/p&gt;
+
+&lt;h3 id=&quot;caffe2-installation-from-source&quot;&gt;Caffe2 Installation (From Source)&lt;/h3&gt;
+
+&lt;p&gt;Do as the official website suggest:&lt;/p&gt;
+
+&lt;p&gt;https://caffe2.ai/docs/getting-started.html?platform=ubuntu&amp;amp;configuration=compile&lt;/p&gt;
+
+&lt;p&gt;But there are many problems that force me to switch to anaconda.&lt;/p&gt;
+
+&lt;p&gt;Part of the issues are the followings:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;cmake failure: &lt;code class=&quot;highlighter-rouge&quot;&gt;string does not recognize sub-command APPEND&lt;/code&gt;. Probably caused by low version of CMake. To deal with it, you need to install the latest CMake from source.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;make failure。&lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/bin/ld: cannot find -lnvrtc&lt;/code&gt;. After examing its code, I found &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo&lt;/code&gt; to be part of the failure. Use user permission to build the source will eliminate this failure.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;opencv linking failure。&lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/lib/libopencv_core.so.3.4: undefined reference to dgeqrf_&lt;/code&gt;。It is probably the problem with opencv pre-built binaries. To solve it, you need to build opencv from source.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Well, I stop at the 3rd step. It is too annoying.&lt;/p&gt;
+
+&lt;h3 id=&quot;caffe2-installation-by-anaconda&quot;&gt;Caffe2 Installation (By Anaconda)&lt;/h3&gt;
+
+&lt;p&gt;It seems that &lt;code class=&quot;highlighter-rouge&quot;&gt;detectron&lt;/code&gt; only support python2. So unfortunate for Anaconda3 users.&lt;/p&gt;
+
+&lt;p&gt;There is no problem installing anaconda2, and install Caffe2 is one line:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;conda install -c caffe2 caffe2-cuda8.0-cudnn7
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I notice that the official instruction suggest to add &lt;code class=&quot;highlighter-rouge&quot;&gt;gcc4.8&lt;/code&gt; subfix if the GCC version is lower than 5. But if you do that, the package cannot be found. And Continue without subfix seems to be fine. Anyway.&lt;/p&gt;
+
+&lt;p&gt;But later, there is other issues with CUDA library. Lots of version problem:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;CuDNN need to be 7.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;NCCL need to be 2.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Download from NVIDIA and install to local directory solve the problem. I suppose you do not have sudo permission, in this case fake a &lt;code class=&quot;highlighter-rouge&quot;&gt;usr/local/&lt;/code&gt; in your local directory will help.&lt;/p&gt;
+
+&lt;p&gt;Then I verified the installation. Successful!&lt;/p&gt;
+
+&lt;h3 id=&quot;compile-detectron&quot;&gt;Compile Detectron&lt;/h3&gt;
+
+&lt;p&gt;The instruction is very simple:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pip install -r ./requirements.txt --user
+make
+python2 detectron/tests/test_spatial_narrow_as_op.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;However &lt;code class=&quot;highlighter-rouge&quot;&gt;pip install -r ./requirements.txt --user&lt;/code&gt; cause serious problem in my case. It seems that pip fails to recognize conda, and the libraries are installed twice. As a result, the whole python environment breaks. It is more convenient reinstalling anaconda than repairing it.&lt;/p&gt;
+
+&lt;p&gt;After this, I continue without error.&lt;/p&gt;
+
+&lt;h3 id=&quot;train-maskrcnn-with-detectron&quot;&gt;Train MaskRCNN with Detectron&lt;/h3&gt;
+
+&lt;p&gt;Inference:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python2 tools/infer_simple.py \
+    --cfg configs/12_2017_baselines/e2e_mask_rcnn_R-101-FPN_2x.yaml \
+    --output-dir ./log/detectron-visualizations \
+    --image-ext jpg \
+    --wts ../model/model_final.pkl \
+    demo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Train (End to End):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python2 tools/train_net.py \
+    --cfg configs/my/e2e_mask_rcnn_R-50-FPN_1x.yaml \
+    OUTPUT_DIR ./log/detectron-mye2e_2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Modifications needed are:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Reduce NUM_GPU to suit your machine.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Add dataset in &lt;code class=&quot;highlighter-rouge&quot;&gt;dataset_catalog.py&lt;/code&gt; if your dataset is not at the particular position.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Modify dataset name too.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Learning rate schedule modification. If you are not using 8 GPUs, then you should do a linear learning rate schedule stretch according to &lt;code class=&quot;highlighter-rouge&quot;&gt;getting_started&lt;/code&gt; section.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;experiment-log&quot;&gt;Experiment Log&lt;/h3&gt;
+
+&lt;h4 id=&quot;expr-1&quot;&gt;Expr 1&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python2 tools/train_net.py \
+    --multi-gpu-testing \
+    --cfg configs/my/e2e_mask_rcnn_R-50-FPN_1x.yaml \
+    OUTPUT_DIR ./log/detectron-mye2e_2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In this experiment, I forgot to stretch the learning rate schedule, and it failed with learning, resulting in &lt;code class=&quot;highlighter-rouge&quot;&gt;Negative Area&lt;/code&gt; fault.&lt;/p&gt;
+
+&lt;h4 id=&quot;expr-2&quot;&gt;Expr 2&lt;/h4&gt;
+
+&lt;p&gt;All the settings are done properly. But the training takes totally 4 days on 2 GPUs.&lt;/p&gt;
+
+&lt;p&gt;result:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.294
+Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.505
+Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.304
+Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.116
+Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.308
+Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.427
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=  1 ] = 0.266
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 10 ] = 0.411
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.430
+Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.234
+Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=100 ] = 0.466
+Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=100 ] = 0.573
+INFO json_dataset_evaluator.py: 122: Wrote json eval results to: ./log/detectron-mye2e_2/test/coco_my_val/generalized_rcnn/segmentation_results.pkl
+INFO task_evaluation.py:  66: Evaluating segmentations is done!
+INFO task_evaluation.py: 181: copypaste: Dataset: coco_my_val
+INFO task_evaluation.py: 183: copypaste: Task: box
+INFO task_evaluation.py: 186: copypaste: AP,AP50,AP75,APs,APm,APl
+INFO task_evaluation.py: 187: copypaste: 0.3222,0.5410,0.3403,0.1729,0.3419,0.4060
+INFO task_evaluation.py: 183: copypaste: Task: mask
+INFO task_evaluation.py: 186: copypaste: AP,AP50,AP75,APs,APm,APl
+INFO task_evaluation.py: 187: copypaste: 0.2940,0.5049,0.3039,0.1163,0.3080,0.4274
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Tue, 05 Jun 2018 17:03:23 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2018/06/05/detectron-apply.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/06/05/detectron-apply.html</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>Build a CTC Network on Theano for Speech Recognition from Scratch </title>
         <description>&lt;p&gt;In this blog, I will tell you the process of my setup of a CTC enabled CNN-LSTM hybrid neural network on the top of Theano. I will show you the essential part of implementation, skipping some data-relevant code. Full code may be available on my repository later.&lt;/p&gt;
 
 &lt;h2 id=&quot;build-a-cnn-for-speech-recognition&quot;&gt;Build a CNN for Speech Recognition&lt;/h2&gt;
@@ -336,8 +736,8 @@
 &lt;h2 id=&quot;adding-lstm-&quot;&gt;Adding LSTM !&lt;/h2&gt;
 </description>
         <pubDate>Wed, 07 Sep 2016 17:03:23 +0800</pubDate>
-        <link>http://atlantix.com/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</link>
-        <guid isPermaLink="true">http://atlantix.com/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</guid>
+        <link>http://localhost:4000/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</guid>
         
         
         <category>jekyll</category>
@@ -503,7 +903,7 @@ So we just need to pass the data as required.&lt;/p&gt;
 
 &lt;p&gt;And here comes the most tricky step, which trapped me for nearly one week:&lt;/p&gt;
 
-&lt;h2 id=&quot;export-theanoflagsoptimizerfastcompile&quot;&gt;export THEANO_FLAGS=optimizer=fast_compile&lt;/h2&gt;
+&lt;h2 id=&quot;export-theano_flagsoptimizerfast_compile&quot;&gt;export THEANO_FLAGS=optimizer=fast_compile&lt;/h2&gt;
 
 &lt;p&gt;Well,it may not be a indispensible one. After I experimented on more machines, I found the need for this flag vary with machine and even model scale. For example, constructing a 2-layer bi-directional LSTM will require this flag in one machine while 1-layer will not. And in my personal laptop (which is CPU-only) all the model require settting this flag.&lt;/p&gt;
 
@@ -514,9 +914,9 @@ So we just need to pass the data as required.&lt;/p&gt;
   &lt;li&gt;(If you reduce the model to one layer of BiLSTM) Theano will report &lt;code class=&quot;highlighter-rouge&quot;&gt;scan&lt;/code&gt; using regative index (perhaps -37)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Unbelievable. You may imagine the how a Theano and Keras beginner feels when he tried for tens of times and confirmed this issue. Please help me if you have any idea. I’d better write my code for another time before I assume it is a bug of Theano :) .
-## But, it works.
-### And I would be grateful if you can tell me why.&lt;/p&gt;
+&lt;p&gt;Unbelievable. You may imagine the how a Theano and Keras beginner feels when he tried for tens of times and confirmed this issue. Please help me if you have any idea. I’d better write my code for another time before I assume it is a bug of Theano :) .&lt;/p&gt;
+&lt;h2 id=&quot;but-it-works&quot;&gt;But, it works.&lt;/h2&gt;
+&lt;h3 id=&quot;and-i-would-be-grateful-if-you-can-tell-me-why&quot;&gt;And I would be grateful if you can tell me why.&lt;/h3&gt;
 
 &lt;p&gt;Any way, using the following configuration, it is expected to setup CTC training.
 But there is still one problem: Training tend to produce &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt; after a few iteration. And it is quite stochastic. If you use SGD with learning rate&lt;code class=&quot;highlighter-rouge&quot;&gt;0.001&lt;/code&gt;, you will get &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt; after about 15 iterations. If you use &lt;code class=&quot;highlighter-rouge&quot;&gt;0.0001&lt;/code&gt; SGD, &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt; will appear  in 100 iteration. If you use &lt;code class=&quot;highlighter-rouge&quot;&gt;Adadelta&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;Adam&lt;/code&gt;, loss will quickly go down to about 800 but then become &lt;code class=&quot;highlighter-rouge&quot;&gt;nan&lt;/code&gt;.&lt;/p&gt;
@@ -528,8 +928,8 @@ But there is still one problem: Training tend to produce &lt;code class=&quot;hi
 &lt;p&gt;If you use the code or this post elsewhere, please show the credit :)&lt;/p&gt;
 </description>
         <pubDate>Tue, 30 Aug 2016 16:03:23 +0800</pubDate>
-        <link>http://atlantix.com/jekyll/update/2016/08/30/Keras-Note-CTC-Setup.html</link>
-        <guid isPermaLink="true">http://atlantix.com/jekyll/update/2016/08/30/Keras-Note-CTC-Setup.html</guid>
+        <link>http://localhost:4000/jekyll/update/2016/08/30/Keras-Note-CTC-Setup.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2016/08/30/Keras-Note-CTC-Setup.html</guid>
         
         
         <category>jekyll</category>
@@ -539,7 +939,7 @@ But there is still one problem: Training tend to produce &lt;code class=&quot;hi
       </item>
     
       <item>
-        <title>CUDA Programming Summary (Unfinished)</title>
+        <title>CUDA Programming Summary</title>
         <description>&lt;p&gt;This summer I have been working on GPU parallelized SNN computation. Frankly speaking, the pure code work is not heavy, but this project is really tough for a CUDA-new-beginner. In the blog, I will first show my understanding of CUDA programming and then the problems I encountered and my solution  with you.&lt;/p&gt;
 
 &lt;h1 id=&quot;introduction-to-cuda-programming&quot;&gt;Introduction to CUDA Programming&lt;/h1&gt;
@@ -568,8 +968,8 @@ If your program fail at the first thread, then it is probable that you initializ
 &lt;p&gt;CUDA does not support&lt;/p&gt;
 </description>
         <pubDate>Mon, 29 Aug 2016 22:26:44 +0800</pubDate>
-        <link>http://atlantix.com/jekyll/update/2016/08/29/CUDA-SNN-Summary.html</link>
-        <guid isPermaLink="true">http://atlantix.com/jekyll/update/2016/08/29/CUDA-SNN-Summary.html</guid>
+        <link>http://localhost:4000/jekyll/update/2016/08/29/CUDA-SNN-Summary.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2016/08/29/CUDA-SNN-Summary.html</guid>
         
         
         <category>jekyll</category>
@@ -675,11 +1075,13 @@ Adding &lt;code class=&quot;highlighter-rouge&quot;&gt;go_backwards&lt;/code&gt;
 
 &lt;h2 id=&quot;incorporate-convolution-with-lstm&quot;&gt;Incorporate Convolution with LSTM&lt;/h2&gt;
 &lt;p&gt;Using RNN only is rather simple as it is like utilizing a standard model. But adding a convolution layer requires more techniques and tries.
-To achieve this, you have a bunch of tips to know in priority (which takes tens of tries for me to realize them):
-+ Convolution assumes a 3D input shape setting. ( Maybe 4D actually). So input shape is fixed in any way.
-+ Though input shape is fixed, parameters can be loaded (finetuned) for different input shape. This make it possible for changing length.
-+ Between convolution output and LSTM input, you need to &lt;code class=&quot;highlighter-rouge&quot;&gt;reshape&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;permute&lt;/code&gt;.
-+ Be really careful about output shapes. You have to compute reshape’s shape, convolution’s input and output shape manually.&lt;/p&gt;
+To achieve this, you have a bunch of tips to know in priority (which takes tens of tries for me to realize them):&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Convolution assumes a 3D input shape setting. ( Maybe 4D actually). So input shape is fixed in any way.&lt;/li&gt;
+  &lt;li&gt;Though input shape is fixed, parameters can be loaded (finetuned) for different input shape. This make it possible for changing length.&lt;/li&gt;
+  &lt;li&gt;Between convolution output and LSTM input, you need to &lt;code class=&quot;highlighter-rouge&quot;&gt;reshape&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;permute&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Be really careful about output shapes. You have to compute reshape’s shape, convolution’s input and output shape manually.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
 @param maxif the max length of input frame
@@ -717,10 +1119,12 @@ To achieve this, you have a bunch of tips to know in priority (which takes tens 
 
 &lt;p&gt;Well, I think I make it quite clear in the comments. In summary, the main difficulties for new beginners is just the four points mentioned above.
 I have trained my neural network on TIMIT, but it seemed quite strange that it overfits heavily. On training set, I achieved frame accuracy of 95% but on core test set it was only 45%. Even if I cut down the network to 32 convolution filters ( 128 for LSTMs), the result was almost the same. Well, for overfitting problems, one is expected to add weight regularization terms and enlarge training set. So I applied the following enhancement:
-&lt;img src=&quot;/assets/TIMIT_concate.png&quot; alt=&quot;Concatenated Input data&quot; /&gt;
-+ Enlarged the dataset for almost one time larger by downsampling the wav files (from 16000K to 8000K). For human ears, the downsampled voice become a little bit vague but it is recognizable.
-+ Stochastically concatenated utterances.
-The code is running on GPUs right now. And a few days later you can see the report.&lt;/p&gt;
+&lt;img src=&quot;/assets/TIMIT_concate.png&quot; alt=&quot;Concatenated Input data&quot; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Enlarged the dataset for almost one time larger by downsampling the wav files (from 16000K to 8000K). For human ears, the downsampled voice become a little bit vague but it is recognizable.&lt;/li&gt;
+  &lt;li&gt;Stochastically concatenated utterances.
+The code is running on GPUs right now. And a few days later you can see the report.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;To sum up, this is how I setup a framewise RNN integrated with CNN. In those days, I really had a hard time figuring out problems which seems nothing to me right now. If I have any mistake, please point it out for me, as I am no more than a new learner.  Hope this blog can help you save the time that I once wasted.&lt;/p&gt;
 
@@ -731,8 +1135,8 @@ Atlantix.
 Department of Computer Science, Tsinghua University.&lt;/p&gt;
 </description>
         <pubDate>Thu, 18 Aug 2016 16:03:23 +0800</pubDate>
-        <link>http://atlantix.com/jekyll/update/2016/08/18/Keras-Note.html</link>
-        <guid isPermaLink="true">http://atlantix.com/jekyll/update/2016/08/18/Keras-Note.html</guid>
+        <link>http://localhost:4000/jekyll/update/2016/08/18/Keras-Note.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2016/08/18/Keras-Note.html</guid>
         
         
         <category>jekyll</category>
@@ -742,7 +1146,7 @@ Department of Computer Science, Tsinghua University.&lt;/p&gt;
       </item>
     
       <item>
-        <title>Speech Recognition: Connectionist Temporal Classification (Unfinished)</title>
+        <title>Speech Recognition: Connectionist Temporal Classification</title>
         <description>&lt;h2 id=&quot;man-dont-be-frightened-by-ctc&quot;&gt;Man, don’t be frightened by CTC!&lt;/h2&gt;
 
 &lt;p&gt;If you are just diving into Speech Recognition and scan through recent awesome papers, you will find yourself facing a disgusting word &lt;code class=&quot;highlighter-rouge&quot;&gt;CTC&lt;/code&gt;. You know that it stands for &lt;code class=&quot;highlighter-rouge&quot;&gt;Connectionist Temporal Classification&lt;/code&gt; but this phrase disgusts you again. The papers just state that ‘ run forward and backward and sum over’ which means nothing to you and you even don’t know what this thing is for. ( If you are familiar with HMM, you may understand &lt;code class=&quot;highlighter-rouge&quot;&gt;CTC&lt;/code&gt; easier.  This article is aimed at people with zero fundamentals. )&lt;/p&gt;
@@ -756,8 +1160,8 @@ Department of Computer Science, Tsinghua University.&lt;/p&gt;
 &lt;p&gt;But it is actually quite different one. Well, you are actually modifying the network objective function! In order to train RNN end-to-end with sequence-level labelings, it is essential to derive a differentiable loss function that can describe sequence-level error signal. This sounds much harder. (And you may feel even harder to implement its symbolic computation graph using Theano).&lt;/p&gt;
 </description>
         <pubDate>Wed, 17 Aug 2016 17:03:23 +0800</pubDate>
-        <link>http://atlantix.com/jekyll/update/2016/08/17/Speech-Recognition-CTC.html</link>
-        <guid isPermaLink="true">http://atlantix.com/jekyll/update/2016/08/17/Speech-Recognition-CTC.html</guid>
+        <link>http://localhost:4000/jekyll/update/2016/08/17/Speech-Recognition-CTC.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2016/08/17/Speech-Recognition-CTC.html</guid>
         
         
         <category>jekyll</category>

@@ -1,0 +1,151 @@
+<h1 id="configure-vim-to-use-ycm">Configure VIM to use YCM</h1>
+
+<p>clone vim from github.</p>
+
+<h2 id="build-from-source">Build from Source</h2>
+
+<p>Configure options:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure --prefix=/home/atlantix/usr/local/ \
+    --with-features=huge \
+    --enable-rubyinterp \
+    --enable-python3interp \
+    --with-python3-config-dir=/usr/lib/python3.5/config-3.5m-x86_64-linux-gnu \
+    --enable-pythoninterp \
+    --with-python-config-dir=/home/atlantix/anaconda2/lib/python2.7/config \
+    --enable-perlinterp \
+    --enable-gui=gtk2 \
+    --enable-cscope \
+    --enable-luainterp \
+    --with-lua-prefix=/home/atlantix/torch/install/ \
+    --enable-fail-if-missing
+</code></pre></div></div>
+
+<p>./configure –prefix=/home/atlantix/usr/local/ \
+    –with-features=huge \
+    –enable-pythoninterp \
+    –enable-gui=gtk2 \
+    –enable-cscope \
+    –enable-luainterp \
+    –with-lua-prefix=/home/atlantix/torch/install/ \
+    –enable-fail-if-missing
+    –with-python-config-dir=/home/atlantix/anaconda2/lib/python2.7/config \
+Need to make sure lua perl ruby is installed.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make &amp;&amp; make install
+</code></pre></div></div>
+
+<p>Then vim is installed locally. Make sure that the local bin directory is in the path.</p>
+
+<h2 id="configure-vimrc">Configure vimrc</h2>
+
+<p>I select the <a href="https://github.com/amix/vimrc">Ultimate vimrc</a> from github. First install this configuration.</p>
+
+<p>Then add <a href="https://github.com/Valloric/YouCompleteMe">YouCompleteMe</a> to this configuration.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/Valloric/YouCompleteMe
+cd YouCompleteMe
+git submodule update --init --recursive
+</code></pre></div></div>
+
+<p>Clone YCM to the ~/.vim_runtime/my_plugins directory.</p>
+
+<p>Install all the complete feature of YCM: make sure xbuild, go, tsserver, node, npm, rustc, and cargo tools are installed.</p>
+
+<ol>
+  <li>
+    <p>Go. Pass.</p>
+  </li>
+  <li>
+    <p>Install tsserver: <code class="highlighter-rouge">npm i typescript -g</code>. This is the typescript server. If you need to use proxy, then do</p>
+  </li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ npm config set proxy http://server:port
+$ npm config set https-proxy https://server:port
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>node. Pass.</p>
+  </li>
+  <li>
+    <p>npm. Pass.</p>
+  </li>
+  <li>
+    <p>rustc. To install this, it is recommended to install rustup as a whole.</p>
+  </li>
+</ol>
+
+<p><code class="highlighter-rouge"> curl https://sh.rustup.rs -sSf | sh</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Welcome to Rust!
+
+This will download and install the official compiler for the Rust programming
+language, and its package manager, Cargo.
+
+It will add the cargo, rustc, rustup and other commands to Cargo's bin
+directory, located at:
+
+  /home/atlantix/.cargo/bin
+
+This path will then be added to your PATH environment variable by modifying the
+profile files located at:
+
+  /home/atlantix/.profile
+  /home/atlantix/.zprofile
+  /home/atlantix/.bash_profile
+
+You can uninstall at any time with rustup self uninstall and these changes will
+be reverted.
+
+Current installation options:
+
+   default host triple: x86_64-unknown-linux-gnu
+     default toolchain: stable
+  modify PATH variable: yes
+
+1) Proceed with installation (default)
+2) Customize installation
+3) Cancel installation
+</code></pre></div></div>
+
+<p>Sometimes proxy may cause several issues. Disable them make things work.</p>
+
+<ol>
+  <li>cargo. Installed together with rustup.</li>
+</ol>
+
+<p>Native configuration failed for me. run <code class="highlighter-rouge">./install.py --all</code> will result in a HASH error. Because the program failed to download a specific clang prebuilt libraries. So here I try to build YCM manually.</p>
+
+<p>Download clang and llvm from official site and extract the prebuilt binary:</p>
+
+<p>http://releases.llvm.org/download.html</p>
+
+<p>Follow the instructions:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~ &amp;&amp; mkdir ycm_build &amp;&amp; cd ycm_build
+cmake -G "Unix Makefiles" -DPATH_TO_LLVM_ROOT=/home/atlantix/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/clang_archives/clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.04 . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/cpp
+cmake --build . --target ycm_core --config Release
+</code></pre></div></div>
+
+<p>or this for Ubuntu 16.04</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~ &amp;&amp; mkdir ycm_build &amp;&amp; cd ycm_build
+cmake -G "Unix Makefiles" -DPATH_TO_LLVM_ROOT=~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/clang_archives/clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-16.04 . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/cpp
+cmake --build . --target ycm_core --config Release
+</code></pre></div></div>
+
+<p>Optional:</p>
+
+<p>cd into this directory</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cmake -G "Unix Makefiles" . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/third_party/cregex
+cmake --build . --target _regex --config Release
+</code></pre></div></div>
+
+<p>And build support for other languages as instructed in full installation guide.</p>
+
+<p>To enable completion in C language project, you need to add a few step to your project. If you are using CMake, then add a line <code class="highlighter-rouge">set(CMAKE_EXPORT_COMPILE_COMMANDS ON)</code> to cmake and build it. This will generate a json named compile_commands.json. Make sure this file is at the root of your project.</p>
+
+<p>As for other methods, I would recommend using <code class="highlighter-rouge">.ycm_extra_conf.py</code>.</p>
