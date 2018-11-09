@@ -164,5 +164,4 @@ To sum up, this is how I setup a framewise RNN integrated with CNN. In those day
 Please give the credit to the original author if you use it elsewhere.
 
 Jianjing, Xu.
-Atlantix.
 Department of Computer Science, Tsinghua University.

@@ -30,7 +30,3 @@ If your program fail at the first thread, then it is probable that you initializ
 ### Problem 9: Using cuda-gdb `set cuda memcheck on` getting a different result
 
 I once encountered a situation that when I turn on this option and figured out bugs but the program fails again when running normally. Later I found that running normal cuda-gdb will not cover the bug, though it cannot dive into kernel functions. Based on my experience, I examined  `cudaDeviceSynchronize()` and find one missing. Then the bug was fixed. So I guess using this option result in automatic memory synchronization.
-
-### Tip 1: Using class
-
-CUDA does not support

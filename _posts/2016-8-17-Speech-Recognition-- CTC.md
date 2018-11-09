@@ -4,6 +4,7 @@ title:  "Speech Recognition: Connectionist Temporal Classification"
 date:   2016-08-17 17:03:23 +0800
 categories: jekyll update
 ---
+
 ## Man, don't be frightened by CTC!
 
 If you are just diving into Speech Recognition and scan through recent awesome papers, you will find yourself facing a disgusting word `CTC`. You know that it stands for `Connectionist Temporal Classification` but this phrase disgusts you again. The papers just state that ' run forward and backward and sum over' which means nothing to you and you even don't know what this thing is for. ( If you are familiar with HMM, you may understand `CTC` easier.  This article is aimed at people with zero fundamentals. )

@@ -334,8 +334,3 @@ Train using CTC Loss...
 698.802302323
 ...
 {%endhighlight%}
-
-Aha, things goes fine. Em.. Don't you think training with two loss function is great?
-
-
-## Adding LSTM !

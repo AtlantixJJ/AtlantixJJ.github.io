@@ -180,6 +180,3 @@ But there is still one problem: Training tend to produce `nan` after a few itera
 Currently, if you are training a model similar to my model shown above, you should set learning rate to `10-6` (for about 64 convolution filters). If you use single layer BLSTM, then `10-5` is ok.
 
 To sum up, though keras provide a convenient solution for regular network configuration, we have to use more fundamental toolkits such as Theano if we need to train unusual networks. For the next few days, I will dive into using `raw` theano to build a CTC network.
-
-
-If you use the code or this post elsewhere, please show the credit :)
