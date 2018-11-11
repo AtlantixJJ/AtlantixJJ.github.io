@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 11 Nov 2018 14:26:03 +0800</pubDate>
-    <lastBuildDate>Sun, 11 Nov 2018 14:26:03 +0800</lastBuildDate>
+    <pubDate>Sun, 11 Nov 2018 15:21:28 +0800</pubDate>
+    <lastBuildDate>Sun, 11 Nov 2018 15:21:28 +0800</lastBuildDate>
     <generator>Jekyll v3.8.1</generator>
     
       <item>
@@ -36,16 +36,56 @@
     
       <item>
         <title>Vehicle Re-Identification in Unrestricted Scenario</title>
-        <description>&lt;p&gt;Vehicle ReId by deep learning is still a new practice, with only limited data provided, like VeRi-776, VID, and CompCars. Current research bases on these two datasets, now reaching the accuracy of around 90% CMC@1 in VeRi and around 70% CMC@1 in VID. However, in CVPR 2018 workshop, NVIDIA held an AI city challenge containing a track of vehicle retrieval, and the results were really poor, which was approximately 30%. The main reason for low performance is that the dataset is under unrestricted practical scene. The challenge’s dataset is several 90 minute long raw video of traffic monitors, as compared to those cropped and cleaned images of vehicles in those dataset.&lt;/p&gt;
+        <description>&lt;h1 id=&quot;introduction&quot;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;Vehicle ReId by deep learning is still a new practice, with only limited data provided, like VeRi-776, VID, and CompCars. Current research bases on these two datasets, now reaching the accuracy of around 90% CMC@1 in VeRi and around 70% CMC@1 in VID. However, in CVPR 2018 workshop, NVIDIA held an AI city challenge containing a track of vehicle retrieval, and the results were really poor, which was approximately 30%. The main reason for low performance is that the dataset is under unrestricted practical scene. The challenge’s dataset is several 90 minute long raw video of traffic monitors, as compared to those cropped and cleaned images of vehicles in those dataset.&lt;/p&gt;
 
 &lt;p&gt;Possible cause of performance degradation is not simply cross dataset generalization, but also the complicated syndrome emerged with the combination of detection, tracking, matching and enormous problems in practice. In this article I describe my work on vehicle re-id under unrestricted scenrario during internship at MSRA. It’s pitiful that I did not make any novel breakthrough in only 3-months internship, but I managed to set up a well-developed framework for unrestricted vehicle re-id, and tried some methods to improve the performance.&lt;/p&gt;
 
-&lt;p&gt;My work looks like the follows:&lt;/p&gt;
+&lt;p&gt;My system is simple in framework. For each vehicle, it first detects, and then tracks within the same camera. When vehicles disappear in the video, it then try to match the vehicle to already identified vehicle (retrieved) or become a new item in database. Detection is done basically by faster RCNN, implemented in Caffe2/Detectron. In camera tracking and cross camera matching all rely on a learned deep metric.&lt;/p&gt;
 
-&lt;video controls=&quot;controls&quot; height=&quot;1080&quot; width=&quot;1920&quot; loop=&quot;loop&quot;&gt;
+&lt;p&gt;The system looks like the following:&lt;/p&gt;
+
+&lt;video controls=&quot;controls&quot; height=&quot;540&quot; width=&quot;960&quot; loop=&quot;loop&quot; autoplay=&quot;autoplay&quot;&gt;
+    &lt;source src=&quot;https://github.com/AtlantixJJ/atlantixjj.github.io/blob/master/assets/vere/veri_b2_ex2.mp4?raw=true&quot; type=&quot;video/mp4&quot; /&gt;
+    Your browser does not support the video element.
+&lt;/video&gt;
+
+&lt;p&gt;This is a segment of re-id system demo. (Watch in full screen is recommended.)&lt;/p&gt;
+
+&lt;p&gt;The left part of video is from two monitors. Next to them are two round queue displaying the vehicle detected and tracked independently at each camera. And the rightmost part is the retrieval window, with a retrieval distance indicating their similarity (the lower the better).&lt;/p&gt;
+
+&lt;p&gt;Actually the monitors are set on two sides of a bridge. As vehicles pass by, they first enter surveillance region from cam 0 and then exit from cam 1. The upper one is cam 0 and the lower one is cam 1, which are regarded as retrieval source and query source respectively. So I expect the system to retrieve every vehicle in cam 1 from cam 0, because there is no other side way for vehicles to disappear. However, this task is very difficult because vehicles in cam 0 is from a front view and there are only back view in cam 1.&lt;/p&gt;
+
+&lt;p&gt;As demonstrated in the video, the yellow vehicle came along in upper video screen, and stay tracked in the orange box. An sequentially assigned id indicates a tracklet identified in the same camera. You may observe that the detection box is flickering. This means that at some frame our detector fails to detect this vehicle, and in this case my tracking algorithm keeps the vehicle tracked. After the yellow vehicle left cam 0, it immediately appear in the round queue display of cam 0. A few seconds later, it appears in cam 1. When it disappears, it is added to the display round queue of cam 1 and a matching successfully retrieved itself in cam 0. Another taxi is also successfully retrieved.&lt;/p&gt;
+
+&lt;p&gt;Notice that, our system is completely based on appearance, and is irrelevant with time. Therefore, although the cameras are set very near, there is no much difference with cameras set far away.&lt;/p&gt;
+
+&lt;h1 id=&quot;core-implementation&quot;&gt;Core implementation&lt;/h1&gt;
+
+&lt;p&gt;The core part of this system is a learned deep metric. My work is based on Deep Relative Distance Learning, a simple method to learn vehicle distance. It is rather tricky that the largest improvement of this baseline model is to substitude ResNet for original VGG. This is enough to obtain a state of the art performance (at July. 2018), well, because this field is really underdeveloped.&lt;/p&gt;
+
+&lt;p&gt;I am keen on analysis. Through statistics and some visualization, I identified a bottleneck of current method, that vehicle from similar view is likely to confuse neural network, even if they are so different in human perception. I alleviate this problem by improving sampling proportion in triplet loss and do something like hard example mining.&lt;/p&gt;
+
+&lt;p&gt;Next I confirmed by visualization and analysis that detail part is what the model fails to utilize. There is a strong phenomena that human is able confident to assert two cars to be the same, especially when the view is different. Quite oppositely, deep learning model is able to assert two cars to be the same, but fails to identify rather easy mismatches.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/vere/analysis.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;more-demo&quot;&gt;More demo&lt;/h1&gt;
+
+&lt;p&gt;Here is another demo video, where the situation is much more complicate:&lt;/p&gt;
+
+&lt;video controls=&quot;controls&quot; height=&quot;540&quot; width=&quot;960&quot; loop=&quot;loop&quot; autoplay=&quot;autoplay&quot;&gt;
     &lt;source src=&quot;https://github.com/AtlantixJJ/atlantixjj.github.io/blob/master/assets/vere/veri_b2_ex1.mp4?raw=true&quot; type=&quot;video/mp4&quot; /&gt;
     Your browser does not support the video element.
 &lt;/video&gt;
+
+&lt;p&gt;I also conduct an experiment in same view vehicle retrieval.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/vere/veri_b3_1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/vere/veri_b3_4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
 </description>
         <pubDate>Thu, 08 Nov 2018 17:03:23 +0800</pubDate>
         <link>http://localhost:4000/jekyll/update/2018/11/08/VeRi.html</link>
