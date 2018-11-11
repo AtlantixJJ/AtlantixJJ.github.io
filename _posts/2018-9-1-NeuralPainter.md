@@ -5,7 +5,7 @@ date:   2018-09-01 08:00:00 +0800
 categories: jekyll update
 ---
 
-The online demo is available at [neuralpainter.club:2333](neuralpainter.club:2333). And you can watch a short demo video at the bottom of this page.
+The online demo is available at [neuralpainter.club:2333](neuralpainter.club:2333). (Update: currently this server is down for maintainence, online demo is temporarily unavailable.) And you can watch a short demo video at the bottom of this page.
 
 Visual language is an important part of human communication, however most of people are not skilled at expressing themselves visually. This project aims to bridge the expertise gap of drawing by Interactive Generative Adversarial Network (iGAN). iGAN is proposed by Junyan Zhu in 2015, in their paper a fundamental optimization based image edit framework is proposed and since widely adapted, e.g. Neural Photo Editor in 2016. We base our image editor on this framework while build a more power Generator and Discriminator architecture.
 
