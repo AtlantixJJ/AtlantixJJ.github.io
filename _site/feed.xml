@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 12 Nov 2018 22:27:47 +0800</pubDate>
-    <lastBuildDate>Mon, 12 Nov 2018 22:27:47 +0800</lastBuildDate>
+    <pubDate>Mon, 12 Nov 2018 22:49:06 +0800</pubDate>
+    <lastBuildDate>Mon, 12 Nov 2018 22:49:06 +0800</lastBuildDate>
     <generator>Jekyll v3.8.1</generator>
     
       <item>
@@ -24,14 +24,41 @@ var video_url = [], cur_url = [];
 var video_A, video_B;
 
 var text;
-function onUpper(event) {
-    event.preventDefault();
-    upper_cnt += 1;
+
+function get_label_from_url(url) {
+    if (url.search(&quot;comb&quot;) &gt; -1) {
+        return &quot;Combined FDB&quot;;
+    } else if (url.search(&quot;diff&quot;) &gt; -1) {
+        return &quot;Pixel FDB&quot;;
+    } else if (url.search(&quot;none&quot;) &gt; -1) {
+        return &quot;No Temporal Loss&quot;;
+    }
 }
 
-function onLower(event) {
-    event.preventDefault();
+function update() {
+    cur_url = video_url[total_cnt].split(&quot;,&quot;);
+    document.getElementById(&quot;label-A&quot;).textContent = get_label_from_url(cur_url[0]);
+    document.getElementById(&quot;label-B&quot;).textContent = get_label_from_url(cur_url[1]);
+    play_video();
+}
+
+function onUpper() {
+    upper_cnt += 1;
+    total_cnt += 1;
+    update();
+}
+
+function onLower() {
     lower_cnt += 1;
+    total_cnt += 1;
+    update();
+}
+
+function play_video() {
+    video_A.src = cur_url[0];
+    video_A.play().catch((error) =&gt; {console.log(&quot;Error: &quot; + error);});
+    video_B.src = cur_url[1];
+    video_B.play().catch((error) =&gt; {console.log(&quot;Error: &quot; + error);});
 }
 
 function httpGet(theUrl)
@@ -49,13 +76,7 @@ function httpGet(theUrl)
         if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200)
         {
             video_url = xmlhttp.responseText.split(&quot;\n&quot;).slice(1, -1);
-            cur_url = video_url[total_cnt].split(&quot;,&quot;);
-            video_A = document.getElementById(&quot;video-A&quot;);
-            video_A.src = cur_url[0];
-            video_A.play().catch((error) =&gt; {console.log(&quot;Error: &quot; + error);});
-            video_B = document.getElementById(&quot;video-B&quot;);
-            video_B.src = cur_url[1];
-            video_B.play().catch((error) =&gt; {console.log(&quot;Error: &quot; + error);});
+            update();
         }
     }
     xmlhttp.open(&quot;GET&quot;, theUrl, false);
@@ -65,8 +86,11 @@ function httpGet(theUrl)
 $(document).ready(function () {
     console.log(&quot;ready&quot;);
 
-    $('upper-btn').click(onUpper);
-    $('lower-btn').click(onLower);
+    $('#upper-btn').click(onUpper);
+    $('#lower-btn').click(onLower);
+
+    video_A = document.getElementById(&quot;video-A&quot;);
+    video_B = document.getElementById(&quot;video-B&quot;);
 
     var url = &quot;https://raw.githubusercontent.com/AtlantixJJ/atlantixjj.github.io/master/assets/compare_comb_none.csv&quot;;
     httpGet(url);
@@ -101,12 +125,20 @@ $(document).ready(function () {
         &lt;/ul&gt;
 
         &lt;div align=&quot;center&quot;&gt;
-            &lt;form method=&quot;post&quot;&gt;
-                &lt;a id=&quot;upper-btn&quot; href=&quot;###&quot; style=&quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Upper&lt;/a&gt;
-                &lt;a id=&quot;lower-btn&quot; href=&quot;###&quot; style=&quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Lower&lt;/a&gt;
-            &lt;/form&gt;
+            &lt;table border=&quot;0&quot;&gt;
+                &lt;tr&gt;
+                    &lt;!--&lt;th style = &quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Your choice&lt;/th&gt;--&gt;
+                    &lt;th&gt;&lt;a id=&quot;upper-btn&quot; href=&quot;###&quot; style=&quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Upper&lt;/a&gt;&lt;/th&gt;
+                    &lt;th&gt;&lt;a id=&quot;lower-btn&quot; href=&quot;###&quot; style=&quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Lower&lt;/a&gt;&lt;/th&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                    &lt;!--&lt;td&gt;&lt;span style = &quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Type&lt;/span&gt;&lt;/td&gt;--&gt;
+                    &lt;td&gt;&lt;span id=&quot;label-A&quot; style=&quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;&lt;/span&gt;&lt;/td&gt;
+                    &lt;td&gt;&lt;span id=&quot;label-B&quot; style=&quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;&lt;/span&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+            &lt;/table&gt;            
         &lt;/div&gt;
-
+    
     &lt;/div&gt;
 &lt;/div&gt;
 

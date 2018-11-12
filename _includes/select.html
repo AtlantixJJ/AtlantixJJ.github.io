@@ -11,14 +11,41 @@ var video_url = [], cur_url = [];
 var video_A, video_B;
 
 var text;
-function onUpper(event) {
-    event.preventDefault();
-    upper_cnt += 1;
+
+function get_label_from_url(url) {
+    if (url.search("comb") > -1) {
+        return "Combined FDB";
+    } else if (url.search("diff") > -1) {
+        return "Pixel FDB";
+    } else if (url.search("none") > -1) {
+        return "No Temporal Loss";
+    }
 }
 
-function onLower(event) {
-    event.preventDefault();
+function update() {
+    cur_url = video_url[total_cnt].split(",");
+    document.getElementById("label-A").textContent = get_label_from_url(cur_url[0]);
+    document.getElementById("label-B").textContent = get_label_from_url(cur_url[1]);
+    play_video();
+}
+
+function onUpper() {
+    upper_cnt += 1;
+    total_cnt += 1;
+    update();
+}
+
+function onLower() {
     lower_cnt += 1;
+    total_cnt += 1;
+    update();
+}
+
+function play_video() {
+    video_A.src = cur_url[0];
+    video_A.play().catch((error) => {console.log("Error: " + error);});
+    video_B.src = cur_url[1];
+    video_B.play().catch((error) => {console.log("Error: " + error);});
 }
 
 function httpGet(theUrl)
@@ -36,13 +63,7 @@ function httpGet(theUrl)
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
             video_url = xmlhttp.responseText.split("\n").slice(1, -1);
-            cur_url = video_url[total_cnt].split(",");
-            video_A = document.getElementById("video-A");
-            video_A.src = cur_url[0];
-            video_A.play().catch((error) => {console.log("Error: " + error);});
-            video_B = document.getElementById("video-B");
-            video_B.src = cur_url[1];
-            video_B.play().catch((error) => {console.log("Error: " + error);});
+            update();
         }
     }
     xmlhttp.open("GET", theUrl, false);
@@ -52,8 +73,11 @@ function httpGet(theUrl)
 $(document).ready(function () {
     console.log("ready");
 
-    $('upper-btn').click(onUpper);
-    $('lower-btn').click(onLower);
+    $('#upper-btn').click(onUpper);
+    $('#lower-btn').click(onLower);
+
+    video_A = document.getElementById("video-A");
+    video_B = document.getElementById("video-B");
 
     var url = "https://raw.githubusercontent.com/AtlantixJJ/atlantixjj.github.io/master/assets/compare_comb_none.csv";
     httpGet(url);
@@ -88,12 +112,20 @@ $(document).ready(function () {
         </ul>
 
         <div align="center">
-            <form method="post">
-                <a id = "upper-btn" href="###" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Upper</a>
-                <a id = "lower-btn" href="###" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Lower</a>
-            </form>
+            <table border="0">
+                <tr>
+                    <!--<th style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Your choice</th>-->
+                    <th><a id="upper-btn" href="###" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Upper</a></th>
+                    <th><a id="lower-btn" href="###" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Lower</a></th>
+                </tr>
+                <tr>
+                    <!--<td><span style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Type</span></td>-->
+                    <td><span id="label-A" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000"></span></td>
+                    <td><span id="label-B" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000"></span></td>
+                </tr>
+            </table>            
         </div>
-
+    
     </div>
 </div>
 
