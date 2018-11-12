@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 12 Nov 2018 21:59:11 +0800</pubDate>
-    <lastBuildDate>Mon, 12 Nov 2018 21:59:11 +0800</lastBuildDate>
+    <pubDate>Mon, 12 Nov 2018 22:27:47 +0800</pubDate>
+    <lastBuildDate>Mon, 12 Nov 2018 22:27:47 +0800</lastBuildDate>
     <generator>Jekyll v3.8.1</generator>
     
       <item>
@@ -19,6 +19,10 @@
 var upper_cnt = 0,
     lower_cnt = 0,
     total_cnt = 0;
+
+var video_url = [], cur_url = [];
+var video_A, video_B;
+
 var text;
 function onUpper(event) {
     event.preventDefault();
@@ -44,7 +48,14 @@ function httpGet(theUrl)
     {
         if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200)
         {
-            text = xmlhttp.responseText;
+            video_url = xmlhttp.responseText.split(&quot;\n&quot;).slice(1, -1);
+            cur_url = video_url[total_cnt].split(&quot;,&quot;);
+            video_A = document.getElementById(&quot;video-A&quot;);
+            video_A.src = cur_url[0];
+            video_A.play().catch((error) =&gt; {console.log(&quot;Error: &quot; + error);});
+            video_B = document.getElementById(&quot;video-B&quot;);
+            video_B.src = cur_url[1];
+            video_B.play().catch((error) =&gt; {console.log(&quot;Error: &quot; + error);});
         }
     }
     xmlhttp.open(&quot;GET&quot;, theUrl, false);
@@ -57,7 +68,7 @@ $(document).ready(function () {
     $('upper-btn').click(onUpper);
     $('lower-btn').click(onLower);
 
-    var url = &quot;https://atlantixjj.github.io/assets/compare_comb_none.csv&quot;;
+    var url = &quot;https://raw.githubusercontent.com/AtlantixJJ/atlantixjj.github.io/master/assets/compare_comb_none.csv&quot;;
     httpGet(url);
 
     document.getElementById(&quot;msg&quot;).textContent = &quot;&quot;;
@@ -74,8 +85,7 @@ $(document).ready(function () {
             
             &lt;div align=&quot;center&quot;&gt;
                 &lt;div style=&quot;display:inline-block&quot;&gt;
-                    &lt;video controls=&quot;controls&quot; height=&quot;300&quot; loop=&quot;loop&quot; autoplay=&quot;autoplay&quot;&gt;
-                        &lt;source src=&quot;&quot; type=&quot;video/mp4&quot; /&gt;
+                    &lt;video id=&quot;video-A&quot; controls=&quot;controls&quot; height=&quot;300&quot; loop=&quot;loop&quot; autoplay=&quot;autoplay&quot; src=&quot;&quot; type=&quot;video/mp4&quot;&gt;
                         Your browser does not support the video element.
                     &lt;/video&gt;
                 &lt;/div&gt;
@@ -83,8 +93,7 @@ $(document).ready(function () {
             
             &lt;div align=&quot;center&quot;&gt;
                 &lt;div style=&quot;display:inline-block&quot;&gt;
-                    &lt;video controls=&quot;controls&quot; height=&quot;300&quot; loop=&quot;loop&quot; autoplay=&quot;autoplay&quot;&gt;
-                        &lt;source src=&quot;&quot; type=&quot;video/mp4&quot; /&gt;
+                    &lt;video id=&quot;video-B&quot; controls=&quot;controls&quot; height=&quot;300&quot; loop=&quot;loop&quot; autoplay=&quot;autoplay&quot; src=&quot;&quot; type=&quot;video/mp4&quot;&gt;
                         Your browser does not support the video element.
                     &lt;/video&gt;
                 &lt;/div&gt;
