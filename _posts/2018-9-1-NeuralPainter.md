@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Neural Painter: A smart image editor by simple line drawings"
+title:  "[Demo] Neural Painter: A smart image editor by simple line drawings"
 date:   2018-09-01 08:00:00 +0800
 categories: jekyll update
 ---
