@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "[Demo] Frame-Difference Temporal Loss for Video Stylization"
-date:   2018-11-12 08:00:00 +0800
+date:   2018-11-19 08:00:00 +0800
 categories: jekyll update
 ---
 
