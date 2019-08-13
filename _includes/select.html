@@ -1022,17 +1022,17 @@ function httpGet(theUrl)
 }
 
 function onRestart() {
-    if (document.getElementById("radio-comb-none").checked) {
+    if (document.getElementById("radio-sfn-comb-none").checked) {
         compare_type = "comb_none";
         A_name = "Comb";
         B_name = "None";
-        var url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_comb_none.csv";
+        var url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_none.csv";
         httpGet(url);
-    } else if (document.getElementById("radio-comb-pixel").checked) {
+    } else if (document.getElementById("radio-sfn-comb-pixel").checked) {
         compare_type = "comb_pixel";
         A_name = "Comb";
         B_name = "Pixel";
-        var url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_comb_sfn.csv";
+        var url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv";
         httpGet(url);
     }
     A_cnt = B_cnt = total_cnt = 0;
@@ -1130,14 +1130,14 @@ $(document).ready(function () {
             
             <!-- Material unchecked -->
             <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio-comb-pixel" name="compare-type">
-                <label class="form-check-label" for="materialUnchecked">Compare Comb with Pixel</label>
+                <input type="radio" class="form-check-input" id="radio-sfn-comb-pixel" name="compare-type">
+                <label class="form-check-label" for="materialUnchecked">Compare Comb with Pixel FDB</label>
             </div>
             
             <!-- Material checked -->
             <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio-comb-none" name="compare-type" checked>
-                <label class="form-check-label" for="materialChecked">Compare Comb with None</label>
+                <input type="radio" class="form-check-input" id="radio-sfn-comb-none" name="compare-type" checked>
+                <label class="form-check-label" for="materialChecked">Compare Comb FDB with None</label>
             </div>
         </div>
 
