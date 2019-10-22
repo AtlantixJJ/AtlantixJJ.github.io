@@ -926,69 +926,106 @@ d.arcTo=function(){};d.createPattern=function(a,b){return new I(a,b)};w.prototyp
 
 <script>
 var label_upper = "",
-    label_lower = "",
-    total_cnt = 0;
+    label_lower = "";
 
-var A_cnt = 0,
-    B_cnt = 0,
-    A_name = "A",
-    B_name = "B";
+var all_methods = ["comb", "flow", "diff", "none"];
+var comp; // the compare data
 
-var video_url = [], cur_url = [];
+var total_number = 0,
+    video_url = [];
 var video_A, video_B;
 var compare_type;
 
-var chart;
+// current data
+var cur_method = [],
+    cur_url = [],
+    cur_comp = 0,
+    cur_number = 0;
 
+var show_name = true;
+
+var chart;
 var text;
 
-function get_label_from_url(url) {
+function set_current_compare_target() {
+    var ind = 0;
+    comp.forEach(function (item, index) {
+        if (item[2].indexOf(cur_method[0]) > -1 &&
+            item[2].indexOf(cur_method[1]) > -1)
+            ind = index;
+    });
+    return ind;
+}
+
+function get_option_name_from_url(url) {
     if (url.search("comb") > -1) {
         return "Combined FDB";
     } else if (url.search("diff") > -1) {
         return "Pixel FDB";
+    } else if (url.search("flow") > -1) {
+        return "OFB"
     } else if (url.search("none") > -1) {
         return "No Temporal Loss";
     }
 }
 
+function get_method_from_url(url) {
+    var ind = 0, result = [];
+    all_methods.forEach(function (item, index) {
+        ind = url.search(item);
+        if (ind > -1)
+            result = item;//[ind, item];
+    });
+    return result;
+}
+
 function update() {
-    cur_url = video_url[total_cnt].split(",");
-    document.getElementById("label-A").textContent = get_label_from_url(cur_url[0]);
-    document.getElementById("label-B").textContent = get_label_from_url(cur_url[1]);
+    if (cur_number >= total_number)
+        return;
+    cur_url = video_url[cur_number].split(",");
+    // current comparing method
+    cur_method = [get_method_from_url(cur_url[0]),
+                get_method_from_url(cur_url[1])];
+    // current comparing method belongs to which compare set
+    cur_comp = set_current_compare_target();
+    document.getElementById("label-A").textContent = get_option_name_from_url(cur_url[0]);
+    document.getElementById("label-B").textContent = get_option_name_from_url(cur_url[1]);
     play_video();
 }
 
 function update_chart() {
-    chart.options.data[0].dataPoints[0].label = A_name;
-    chart.options.data[0].dataPoints[1].label = B_name;
-    chart.options.data[0].dataPoints[0].y = A_cnt;
-    chart.options.data[0].dataPoints[1].y = B_cnt;
-    chart.render();
+    chart.forEach(function (chart_, index) {
+        console.log(comp[index])
+        chart_.options.data[0].dataPoints[0].label = comp[index][2][0];
+        chart_.options.data[0].dataPoints[1].label = comp[index][2][1];
+        chart_.options.data[0].dataPoints[0].y = comp[index][1][0];
+        chart_.options.data[0].dataPoints[1].y = comp[index][1][1];
+        chart_.render();
+    });
 }
 
 function count(t) {
-    if (cur_url[0].search("video_comb") > -1) {
-        // normal order
-        A_cnt += 1 - t;
-        B_cnt += t;
-    } else {
-        // shuffle order
-        A_cnt += t;
-        B_cnt += 1 - t;
+    if (cur_number >= total_number) {
+        document.getElementById("greeting").hidden = false;
+        document.getElementById("greeting").textContent = "Evaluation finished, thank you! You can restart and try another comparison.";
+        return;
     }
-    update_chart();
+    cur_number ++;
+    comp[cur_comp][0] ++;
+    var i = comp[cur_comp][2].indexOf(cur_method[t]);
+    comp[cur_comp][1][i] ++;
+    document.getElementById("process-bar").textContent = `process (${cur_number}/${total_number})`;
 }
 
 function onUpper() {
     count(0);
-    total_cnt += 1;
+    update_chart();
     update();
 }
 
 function onLower() {
     count(1);
-    total_cnt += 1;
+    update_chart();
     update();
 }
 
@@ -1022,20 +1059,74 @@ function httpGet(theUrl)
 }
 
 function onRestart() {
-    if (document.getElementById("radio-sfn-comb-none").checked) {
+    chart = null;
+    document.getElementById("greeting").hidden = true;
+    
+    if (document.getElementById("radio-adain-flow-comb-none").checked) {
+        compare_type = "adain_flow_comb_none";
+        // [total, [A_cnt, B_cnt], [A_name, B_name]]
+        comp = [
+            [0, [0, 0], ["flow", "comb"], "AdaIN Stability Flow v.s. Comb"],
+            [0, [0, 0], ["comb", "none"], "AdaIN Stability Comb v.s. None"]
+            ];
+        var url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_adain_flow_comb_none.csv";
+        httpGet(url);
+    } else if (document.getElementById("radio-sfn-comb-none").checked) {
         compare_type = "comb_none";
-        A_name = "Comb";
-        B_name = "None";
+        comp = [
+            [0, [0, 0], ["comb", "none"], "SFN Stability Comb v.s. None"]
+            ];
         var url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_none.csv";
         httpGet(url);
     } else if (document.getElementById("radio-sfn-comb-pixel").checked) {
         compare_type = "comb_pixel";
-        A_name = "Comb";
-        B_name = "Pixel";
+        comp = [
+            [0, [0, 0], ["comb", "diff"], "SFN Stability Comb v.s. Pixel"]
+            ];
         var url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv";
         httpGet(url);
     }
-    A_cnt = B_cnt = total_cnt = 0;
+    total_number = video_url.length;
+    document.getElementById("process-bar").textContent = `process (0/${total_number})`;
+    chart = [];
+    for (var i = 0; i < comp.length; i++) {
+        var _chart = new CanvasJS.Chart("chartContainer" + i.toString(), {
+            animationEnabled: true,
+            title:{
+                text: comp[i][3]
+            },
+            axisX:{
+                interval: 1
+            },
+            axisY2:{
+                interlacedColor: "rgba(1,77,101,.2)",
+                gridColor: "rgba(1,77,101,.1)",
+                title: "Your Vote"
+            },
+            data: [{
+                type: "bar",
+                name: "vote",
+                axisYType: "secondary",
+                color: "#014D65",
+                dataPoints: [
+                    { y: comp[i][1][0], label: comp[i][2][0] },
+                    { y: comp[i][1][1], label: comp[i][2][1] }
+                ]
+            }]
+        });
+        chart.push(_chart);
+        _chart.render();
+    }
+}
+
+function onShow() {
+    if (show_name)
+        document.getElementById('show-btn').textContent = "Show Name";
+    else
+        document.getElementById('show-btn').textContent = "Hide Name";
+    show_name = !show_name;
+    document.getElementById('method-box').hidden = !show_name;
+    
 }
 
 $(document).ready(function () {
@@ -1044,6 +1135,7 @@ $(document).ready(function () {
     $('#upper-btn').click(onUpper);
     $('#lower-btn').click(onLower);
     $('#restart-btn').click(onRestart);
+    $('#show-btn').click(onShow);
 
     video_A = document.getElementById("video-A");
     video_B = document.getElementById("video-B");
@@ -1051,39 +1143,12 @@ $(document).ready(function () {
     onRestart();
 
     document.getElementById("msg").textContent = "";
-
-    chart = new CanvasJS.Chart("chartContainer", {
-        animationEnabled: true,
-        
-        title:{
-            text:"Stability 2AFC"
-        },
-        axisX:{
-            interval: 1
-        },
-        axisY2:{
-            interlacedColor: "rgba(1,77,101,.2)",
-            gridColor: "rgba(1,77,101,.1)",
-            title: "Your Vote"
-        },
-        data: [{
-            type: "bar",
-            name: "vote",
-            axisYType: "secondary",
-            color: "#014D65",
-            dataPoints: [
-                { y: A_cnt, label: A_name },
-                { y: B_cnt, label: B_name },
-            ]
-        }]
-    });
-    chart.render();
 });
 </script>
 
 <div style=" margin-right: auto; margin-left: auto; ">
     <div align="center">
-        <li>process</li>
+        <li id="process-bar">process</li>
         <hr/>
         <h4 align='center'>  </h4>
         <ul align="center">
@@ -1113,39 +1178,58 @@ $(document).ready(function () {
                     <th><a id="upper-btn" href="###" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Upper</a></th>
                     <th><a id="lower-btn" href="###" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Lower</a></th>
                 </tr>
+            </table> 
+            <table id="method-box" border="0" hidden>
                 <tr>
                     <!--<td><span style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Type</span></td>-->
                     <td><span id="label-A" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000"></span></td>
                     <td><span id="label-B" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000"></span></td>
-                </tr>
-            </table>       
+                </tr> 
+            </table>
         </div>
     </div>
 
     <p></p>
 
     <div style="margin-left:100px;">
-        <div style="width: 250px;float: left">
-            <a id="restart-btn" href="###" style = "font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Restart</a>
+        <div style="width: 600px;">
+            <div style="height:50px" hidden>
+            <span id="greeting" style="float:left;font-family:'Times New Roman', Times, serif; font-size:20px;text-align:right;color: #000000"></span>
+            </div>
+            <div style="height:50px">
+                <a id="restart-btn" href="###" style="float:left;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Restart</a>
+                <a id="show-btn" href="###" style="float:right;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Show Name</a>
+            </div>
             
             <!-- Material unchecked -->
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-sfn-comb-pixel" name="compare-type">
-                <label class="form-check-label" for="materialUnchecked">Compare Comb with Pixel FDB</label>
+                <label class="form-check-label" for="materialUnchecked">Compare SFN (Comb v.s. Pixel)</label>
             </div>
             
             <!-- Material checked -->
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-sfn-comb-none" name="compare-type" checked>
-                <label class="form-check-label" for="materialChecked">Compare Comb FDB with None</label>
+                <label class="form-check-label" for="materialChecked">Compare SFN (Comb v.s. None)</label>
+            </div>
+
+            <!-- Material checked -->
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio-sfn-flow-comb-none" name="compare-type" checked>
+                <label class="form-check-label" for="materialChecked">Compare SFN (Flow v.s. Comb v.s. None)</label>
+            </div>
+
+            <!-- Material checked -->
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio-adain-flow-comb-none" name="compare-type" checked>
+                <label class="form-check-label" for="materialChecked">Compare AdaIN (Flow v.s. Comb v.s. None)</label>
             </div>
         </div>
 
-        <div style="width: 300px;float: right">
-            <span id="restart-btn" href="###" style = "font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Statistics</span>
-            <div style="height: 200px">
-                <div id="chartContainer" style="height: 200px; width: 100%;"></div>
-            </div>
+        <div style="width: 600px;">
+            <span style = "font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Statistics</span>
+            <div id="chartContainer0" style="height: 200px; width: 100%;float:left"></div>
+            <div id="chartContainer1" style="height: 200px; width: 100%;float:right"></div>
         </div>
     </div>
 

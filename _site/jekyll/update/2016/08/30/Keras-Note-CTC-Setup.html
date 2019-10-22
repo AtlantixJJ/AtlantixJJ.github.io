@@ -11,7 +11,7 @@
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="http://localhost:4000/jekyll/update/2016/08/30/Keras-Note-CTC-Setup.html">
-  <link rel="alternate" type="application/rss+xml" title="Jianjing Xu's Blog" href="http://localhost:4000/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Jianjin Xu's Blog" href="http://localhost:4000/feed.xml">
 </head>
 
 
@@ -21,7 +21,7 @@
 
   <div class="wrapper">
 
-    <a class="site-title" href="/">Jianjing Xu's Blog</a>
+    <a class="site-title" href="/">Jianjin Xu's Blog</a>
 
     <nav class="site-nav">
       <a href="#" class="menu-icon">
@@ -70,9 +70,9 @@
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">ctc_lambda_func</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
     <span class="n">y_pred</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">input_length</span><span class="p">,</span> <span class="n">label_length</span> <span class="o">=</span> <span class="n">args</span>
-    <span class="c"># the 2 is critical here since the first couple outputs of the RNN</span>
-    <span class="c"># tend to be garbage:</span>
-    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">y_pred</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:,</span> <span class="p">:]</span>
+    <span class="c1"># the 2 is critical here since the first couple outputs of the RNN
+</span>    <span class="c1"># tend to be garbage:
+</span>    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">y_pred</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:,</span> <span class="p">:]</span>
     <span class="k">return</span> <span class="n">K</span><span class="o">.</span><span class="n">ctc_batch_cost</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">input_length</span><span class="p">,</span> <span class="n">label_length</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">ConvCTCDiLSTM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -94,12 +94,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">maxil</span> <span class="o">=</span> <span class="n">maxil</span>
 
         <span class="n">labels</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">maxil</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="s">'float32'</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"CTC_Label"</span><span class="p">)</span>
-        <span class="c"># Input to CTC: the network's prediction length</span>
-        <span class="n">input_length</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="s">'int32'</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"input_length"</span><span class="p">)</span>
-        <span class="c"># Input to CTC: length of sequence.</span>
-        <span class="n">label_length</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="s">'int32'</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"label_length"</span><span class="p">)</span>
-        <span class="c"># Original structure</span>
-        <span class="n">FrameInput</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">maxif</span><span class="p">,</span><span class="n">featuresize</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">'float32'</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"Framewise_Input"</span><span class="p">)</span>
+        <span class="c1"># Input to CTC: the network's prediction length
+</span>        <span class="n">input_length</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="s">'int32'</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"input_length"</span><span class="p">)</span>
+        <span class="c1"># Input to CTC: length of sequence.
+</span>        <span class="n">label_length</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="s">'int32'</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"label_length"</span><span class="p">)</span>
+        <span class="c1"># Original structure
+</span>        <span class="n">FrameInput</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">maxif</span><span class="p">,</span><span class="n">featuresize</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="s">'float32'</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"Framewise_Input"</span><span class="p">)</span>
 
         <span class="n">Conv1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Convolution2D</span><span class="p">(</span><span class="n">conv_fnum</span><span class="p">,</span><span class="n">conv_t</span><span class="p">,</span><span class="n">conv_f</span><span class="p">,</span> <span class="n">border_mode</span><span class="o">=</span><span class="s">'valid'</span><span class="p">,</span>
         <span class="n">activation</span><span class="o">=</span><span class="s">"tanh"</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">maxif</span><span class="p">,</span><span class="n">featuresize</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">'conv1'</span><span class="p">)(</span><span class="n">FrameInput</span><span class="p">)</span>
@@ -107,15 +107,15 @@
         <span class="n">h2</span> <span class="o">=</span> <span class="n">featuresize</span> <span class="o">-</span> <span class="n">conv_f</span> <span class="o">+</span><span class="mi">1</span>
         <span class="n">Conv2</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Convolution2D</span><span class="p">(</span><span class="n">conv_fnum</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span><span class="n">conv_t</span><span class="p">,</span><span class="n">h2</span><span class="p">,</span><span class="n">border_mode</span><span class="o">=</span><span class="s">'valid'</span><span class="p">,</span>
         <span class="n">activation</span><span class="o">=</span><span class="s">'tanh'</span><span class="p">,</span><span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">conv_fnum</span><span class="p">,</span><span class="n">len2</span><span class="p">,</span><span class="n">h2</span><span class="p">),</span><span class="n">name</span><span class="o">=</span><span class="s">'conv2'</span><span class="p">)(</span><span class="n">Conv1</span><span class="p">)</span>
-        <span class="c"># output shape: (samples,conv_fnum * 2, len2 -conv_t+1 ,1)</span>
-
+        <span class="c1"># output shape: (samples,conv_fnum * 2, len2 -conv_t+1 ,1)
+</span>
         <span class="n">rnn_shape</span> <span class="o">=</span> <span class="p">(</span> <span class="n">conv_fnum</span> <span class="o">*</span> <span class="mi">2</span> <span class="p">,</span> <span class="n">len2</span> <span class="o">-</span> <span class="n">conv_t</span> <span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="c"># input_len is the input length of CTC, i.e.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">input_len</span> <span class="o">=</span> <span class="n">rnn_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="c"># The main role of reshape is to change 3D output into 2D input</span>
-        <span class="n">Reshape_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(</span><span class="n">target_shape</span><span class="o">=</span><span class="n">rnn_shape</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"Reshape_1"</span><span class="p">)(</span><span class="n">Conv2</span><span class="p">)</span>
-        <span class="c"># Permute is used to switch axis.</span>
-        <span class="n">Permute_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Permute</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">name</span><span class="o">=</span><span class="s">"Permute_1"</span><span class="p">)(</span><span class="n">Reshape_1</span><span class="p">)</span>
+        <span class="c1"># input_len is the input length of CTC, i.e.
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">input_len</span> <span class="o">=</span> <span class="n">rnn_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># The main role of reshape is to change 3D output into 2D input
+</span>        <span class="n">Reshape_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Reshape</span><span class="p">(</span><span class="n">target_shape</span><span class="o">=</span><span class="n">rnn_shape</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">"Reshape_1"</span><span class="p">)(</span><span class="n">Conv2</span><span class="p">)</span>
+        <span class="c1"># Permute is used to switch axis.
+</span>        <span class="n">Permute_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">Permute</span><span class="p">(</span><span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">name</span><span class="o">=</span><span class="s">"Permute_1"</span><span class="p">)(</span><span class="n">Reshape_1</span><span class="p">)</span>
         <span class="n">DenseToRNN</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">TimeDistributed</span><span class="p">(</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">conv_fnum</span><span class="o">*</span><span class="mi">4</span><span class="p">))(</span><span class="n">Permute_1</span><span class="p">)</span>
 
         <span class="n">FLSTM_1</span> <span class="o">=</span> <span class="n">layers</span><span class="o">.</span><span class="n">LSTM</span><span class="p">(</span><span class="n">conv_fnum</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span><span class="n">return_sequences</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s">'Forward_LSTM_1'</span><span class="p">)(</span><span class="n">DenseToRNN</span><span class="p">)</span>
@@ -162,8 +162,8 @@ So we just need to pass the data as required.</p>
     Schedule batch training of CTC network.
     Maybe more generally in the future
     """</span>
-    <span class="c">### model is a keras model</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">ph_Y</span><span class="p">,</span><span class="n">batch_size</span><span class="p">,</span><span class="n">epoch</span><span class="p">):</span>
+    <span class="c1">### model is a keras model
+</span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">model</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">ph_Y</span><span class="p">,</span><span class="n">batch_size</span><span class="p">,</span><span class="n">epoch</span><span class="p">):</span>
         <span class="s">"""
         Take in the full dataset and desired epoch number, schedule a batch-based training and evaluation.
         This class is optimized for keras' 4D training data.
@@ -181,12 +181,12 @@ So we just need to pass the data as required.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
-    <span class="c">### Train for one epoch</span>
-    <span class="k">def</span> <span class="nf">train_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c1">### Train for one epoch
+</span>    <span class="k">def</span> <span class="nf">train_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">bi</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">ei</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="c"># i is batch index</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_num</span><span class="p">):</span>
+        <span class="c1"># i is batch index
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_num</span><span class="p">):</span>
             <span class="n">bi</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
             <span class="n">ei</span> <span class="o">=</span> <span class="n">bi</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
             <span class="k">if</span> <span class="n">ei</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
@@ -198,11 +198,11 @@ So we just need to pass the data as required.</p>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">):</span>
                 <span class="n">train_y</span><span class="p">[</span><span class="n">j</span><span class="p">,:</span><span class="n">len_y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">[</span><span class="n">bi</span><span class="o">+</span><span class="n">j</span><span class="p">][:]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">"int32"</span><span class="p">)</span>
 
-            <span class="c">#print(len_pred)</span>
-            <span class="c">#print(len_y)</span>
-            <span class="c">#print(train_x.shape)</span>
-            <span class="c">#print(train_y.shape)</span>
-
+            <span class="c1">#print(len_pred)
+</span>            <span class="c1">#print(len_y)
+</span>            <span class="c1">#print(train_x.shape)
+</span>            <span class="c1">#print(train_y.shape)
+</span>
             <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Net</span><span class="o">.</span><span class="n">keras_model</span><span class="o">.</span><span class="n">train_on_batch</span><span class="p">({</span><span class="s">"CTC_Label"</span><span class="p">:</span><span class="n">train_y</span><span class="p">,</span><span class="s">"Framewise_Input"</span><span class="p">:</span><span class="n">train_x</span><span class="p">,</span><span class="s">"label_length"</span><span class="p">:</span><span class="n">len_y</span><span class="p">,</span><span class="s">"input_length"</span><span class="p">:</span><span class="n">len_pred</span><span class="p">},</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">train_y</span><span class="p">))</span>
             <span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 
@@ -250,13 +250,13 @@ But there is still one problem: Training tend to produce <code class="highlighte
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Jianjing Xu's Blog</h2>
+    <h2 class="footer-heading">Jianjin Xu's Blog</h2>
 
     <div class="footer-col-wrapper">
       <div class="footer-col footer-col-1">
         <ul class="contact-list">
-          <li>Jianjing Xu's Blog</li>
-          <li><a href="mailto:jx2386@columbia.edu">jx2386@columbia.edu</a></li>
+          <li>Jianjin Xu's Blog</li>
+          <li><a href="mailto:jx2386 at columbia dot edu">jx2386 at columbia dot edu</a></li>
         </ul>
       </div>
 
