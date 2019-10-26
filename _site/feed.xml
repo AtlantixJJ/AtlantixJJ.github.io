@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 22 Oct 2019 14:37:36 -0400</pubDate>
-    <lastBuildDate>Tue, 22 Oct 2019 14:37:36 -0400</lastBuildDate>
+    <pubDate>Sat, 26 Oct 2019 14:02:56 -0400</pubDate>
+    <lastBuildDate>Sat, 26 Oct 2019 14:02:56 -0400</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -1095,6 +1095,7 @@ function httpGet(theUrl)
 
 function onRestart() {
     chart = null;
+    var url = &quot;&quot;;
     document.getElementById(&quot;greeting&quot;).hidden = true;
     
     if (document.getElementById(&quot;radio-adain-flow-comb-none&quot;).checked) {
@@ -1104,23 +1105,29 @@ function onRestart() {
             [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;AdaIN Stability Flow v.s. Comb&quot;],
             [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;AdaIN Stability Comb v.s. None&quot;]
             ];
-        var url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_adain_flow_comb_none.csv&quot;;
-        httpGet(url);
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_adain_flow_comb_none.csv&quot;;
+    } else if (document.getElementById(&quot;radio-sfn-flow-comb-none&quot;).checked) {
+        compare_type = &quot;sfn_flow_comb_none&quot;;
+        // [total, [A_cnt, B_cnt], [A_name, B_name]]
+        comp = [
+            [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;SFN Stability Flow v.s. Comb&quot;],
+            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;SFN Stability Comb v.s. None&quot;]
+            ];
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_comb_none.csv&quot;;
     } else if (document.getElementById(&quot;radio-sfn-comb-none&quot;).checked) {
         compare_type = &quot;comb_none&quot;;
         comp = [
             [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;SFN Stability Comb v.s. None&quot;]
             ];
-        var url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_none.csv&quot;;
-        httpGet(url);
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_none.csv&quot;;
     } else if (document.getElementById(&quot;radio-sfn-comb-pixel&quot;).checked) {
         compare_type = &quot;comb_pixel&quot;;
         comp = [
             [0, [0, 0], [&quot;comb&quot;, &quot;diff&quot;], &quot;SFN Stability Comb v.s. Pixel&quot;]
             ];
-        var url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv&quot;;
-        httpGet(url);
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv&quot;;
     }
+    httpGet(url);
     total_number = video_url.length;
     document.getElementById(&quot;process-bar&quot;).textContent = `process (0/${total_number})`;
     chart = [];
@@ -1235,26 +1242,18 @@ $(document).ready(function () {
                 &lt;a id=&quot;restart-btn&quot; href=&quot;###&quot; style=&quot;float:left;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Restart&lt;/a&gt;
                 &lt;a id=&quot;show-btn&quot; href=&quot;###&quot; style=&quot;float:right;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Show Name&lt;/a&gt;
             &lt;/div&gt;
-            
-            &lt;!-- Material unchecked --&gt;
             &lt;div class=&quot;form-check&quot;&gt;
                 &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-comb-pixel&quot; name=&quot;compare-type&quot; /&gt;
                 &lt;label class=&quot;form-check-label&quot; for=&quot;materialUnchecked&quot;&gt;Compare SFN (Comb v.s. Pixel)&lt;/label&gt;
             &lt;/div&gt;
-            
-            &lt;!-- Material checked --&gt;
             &lt;div class=&quot;form-check&quot;&gt;
                 &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-comb-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
                 &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Comb v.s. None)&lt;/label&gt;
             &lt;/div&gt;
-
-            &lt;!-- Material checked --&gt;
             &lt;div class=&quot;form-check&quot;&gt;
                 &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-flow-comb-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
                 &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Flow v.s. Comb v.s. None)&lt;/label&gt;
             &lt;/div&gt;
-
-            &lt;!-- Material checked --&gt;
             &lt;div class=&quot;form-check&quot;&gt;
                 &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-adain-flow-comb-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
                 &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare AdaIN (Flow v.s. Comb v.s. None)&lt;/label&gt;

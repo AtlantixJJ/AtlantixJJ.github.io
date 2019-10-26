@@ -1060,6 +1060,7 @@ function httpGet(theUrl)
 
 function onRestart() {
     chart = null;
+    var url = "";
     document.getElementById("greeting").hidden = true;
     
     if (document.getElementById("radio-adain-flow-comb-none").checked) {
@@ -1069,23 +1070,29 @@ function onRestart() {
             [0, [0, 0], ["flow", "comb"], "AdaIN Stability Flow v.s. Comb"],
             [0, [0, 0], ["comb", "none"], "AdaIN Stability Comb v.s. None"]
             ];
-        var url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_adain_flow_comb_none.csv";
-        httpGet(url);
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_adain_flow_comb_none.csv";
+    } else if (document.getElementById("radio-sfn-flow-comb-none").checked) {
+        compare_type = "sfn_flow_comb_none";
+        // [total, [A_cnt, B_cnt], [A_name, B_name]]
+        comp = [
+            [0, [0, 0], ["flow", "comb"], "SFN Stability Flow v.s. Comb"],
+            [0, [0, 0], ["comb", "none"], "SFN Stability Comb v.s. None"]
+            ];
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_comb_none.csv";
     } else if (document.getElementById("radio-sfn-comb-none").checked) {
         compare_type = "comb_none";
         comp = [
             [0, [0, 0], ["comb", "none"], "SFN Stability Comb v.s. None"]
             ];
-        var url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_none.csv";
-        httpGet(url);
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_none.csv";
     } else if (document.getElementById("radio-sfn-comb-pixel").checked) {
         compare_type = "comb_pixel";
         comp = [
             [0, [0, 0], ["comb", "diff"], "SFN Stability Comb v.s. Pixel"]
             ];
-        var url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv";
-        httpGet(url);
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv";
     }
+    httpGet(url);
     total_number = video_url.length;
     document.getElementById("process-bar").textContent = `process (0/${total_number})`;
     chart = [];
@@ -1200,26 +1207,18 @@ $(document).ready(function () {
                 <a id="restart-btn" href="###" style="float:left;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Restart</a>
                 <a id="show-btn" href="###" style="float:right;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Show Name</a>
             </div>
-            
-            <!-- Material unchecked -->
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-sfn-comb-pixel" name="compare-type">
                 <label class="form-check-label" for="materialUnchecked">Compare SFN (Comb v.s. Pixel)</label>
             </div>
-            
-            <!-- Material checked -->
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-sfn-comb-none" name="compare-type" checked>
                 <label class="form-check-label" for="materialChecked">Compare SFN (Comb v.s. None)</label>
             </div>
-
-            <!-- Material checked -->
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-sfn-flow-comb-none" name="compare-type" checked>
                 <label class="form-check-label" for="materialChecked">Compare SFN (Flow v.s. Comb v.s. None)</label>
             </div>
-
-            <!-- Material checked -->
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-adain-flow-comb-none" name="compare-type" checked>
                 <label class="form-check-label" for="materialChecked">Compare AdaIN (Flow v.s. Comb v.s. None)</label>
