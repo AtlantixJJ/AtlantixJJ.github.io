@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "[Demo] Interactive Editing in Aesthetic Painting"
-date:   2018-11-12 08:00:00 +0800
+date:   2018-11-13 08:00:00 +0800
 categories: jekyll update
 ---
 

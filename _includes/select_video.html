@@ -932,8 +932,8 @@ var all_methods = ["comb", "flow", "diff", "none"];
 var comp; // the compare data
 
 var total_number = 0,
-    video_url = [];
-var video_A, video_B;
+    file_url = [];
+var element_A, element_B;
 var compare_type;
 
 // current data
@@ -982,7 +982,7 @@ function get_method_from_url(url) {
 function update() {
     if (cur_number >= total_number)
         return;
-    cur_url = video_url[cur_number].split(",");
+    cur_url = file_url[cur_number].split(",");
     // current comparing method
     cur_method = [get_method_from_url(cur_url[0]),
                 get_method_from_url(cur_url[1])];
@@ -990,7 +990,7 @@ function update() {
     cur_comp = set_current_compare_target();
     document.getElementById("label-A").textContent = get_option_name_from_url(cur_url[0]);
     document.getElementById("label-B").textContent = get_option_name_from_url(cur_url[1]);
-    play_video();
+    update_element();
 }
 
 function update_chart() {
@@ -1029,11 +1029,11 @@ function onLower() {
     update();
 }
 
-function play_video() {
-    video_A.src = cur_url[0];
-    video_A.play().catch((error) => {console.log("Error: " + error);});
-    video_B.src = cur_url[1];
-    video_B.play().catch((error) => {console.log("Error: " + error);});
+function update_element() {
+    element_A.src = cur_url[0];
+    element_A.play().catch((error) => {console.log("Error: " + error);});
+    element_B.src = cur_url[1];
+    element_B.play().catch((error) => {console.log("Error: " + error);});
 }
 
 function httpGet(theUrl)
@@ -1050,7 +1050,7 @@ function httpGet(theUrl)
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
-            video_url = xmlhttp.responseText.split("\n").slice(1, -1);
+            file_url = xmlhttp.responseText.split("\n").slice(1, -1);
             update();
         }
     }
@@ -1079,6 +1079,14 @@ function onRestart() {
             [0, [0, 0], ["comb", "none"], "SFN Stability Comb v.s. None"]
             ];
         url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_comb_none.csv";
+    } else if (document.getElementById("radio-rnn-flow-comb-none").checked) {
+        compare_type = "rnn_flow_comb_none";
+        // [total, [A_cnt, B_cnt], [A_name, B_name]]
+        comp = [
+            [0, [0, 0], ["flow", "comb"], "RNN Stability Flow v.s. Comb"],
+            [0, [0, 0], ["comb", "none"], "RNN Stability Comb v.s. None"]
+            ];
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_rnn_flow_comb_none.csv";
     } else if (document.getElementById("radio-sfn-comb-none").checked) {
         compare_type = "comb_none";
         comp = [
@@ -1093,7 +1101,7 @@ function onRestart() {
         url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv";
     }
     httpGet(url);
-    total_number = video_url.length;
+    total_number = file_url.length;
     document.getElementById("process-bar").textContent = `process (0/${total_number})`;
     chart = [];
     for (var i = 0; i < comp.length; i++) {
@@ -1144,8 +1152,8 @@ $(document).ready(function () {
     $('#restart-btn').click(onRestart);
     $('#show-btn').click(onShow);
 
-    video_A = document.getElementById("video-A");
-    video_B = document.getElementById("video-B");
+    element_A = document.getElementById("element-A");
+    element_B = document.getElementById("element-B");
 
     onRestart();
 
@@ -1163,7 +1171,7 @@ $(document).ready(function () {
             
             <div align='center'>
                 <div style="display:inline-block">
-                    <video id="video-A" controls="controls" height="300" loop="loop" autoplay='autoplay' src='' type="video/mp4">
+                    <video id="element-A" controls="controls" height="300" loop="loop" autoplay='autoplay' src='' type="video/mp4">
                         Your browser does not support the video element.
                     </video>
                 </div>
@@ -1171,7 +1179,7 @@ $(document).ready(function () {
             
             <div align='center'>
                 <div style="display:inline-block">
-                    <video id="video-B" controls="controls" height="300" loop="loop" autoplay='autoplay' src='' type="video/mp4">
+                    <video id="element-B" controls="controls" height="300" loop="loop" autoplay='autoplay' src='' type="video/mp4">
                         Your browser does not support the video element.
                     </video>
                 </div>
@@ -1218,6 +1226,10 @@ $(document).ready(function () {
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-sfn-flow-comb-none" name="compare-type" checked>
                 <label class="form-check-label" for="materialChecked">Compare SFN (Flow v.s. Comb v.s. None)</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio-rnn-flow-comb-none" name="compare-type" checked>
+                <label class="form-check-label" for="materialChecked">Compare RNN (Flow v.s. Comb v.s. None)</label>
             </div>
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-adain-flow-comb-none" name="compare-type" checked>
