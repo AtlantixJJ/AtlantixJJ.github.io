@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 02 Nov 2019 22:59:44 -0400</pubDate>
-    <lastBuildDate>Sat, 02 Nov 2019 22:59:44 -0400</lastBuildDate>
+    <pubDate>Mon, 04 Nov 2019 15:27:40 -0500</pubDate>
+    <lastBuildDate>Mon, 04 Nov 2019 15:27:40 -0500</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -2358,14 +2358,16 @@ function httpGet(theUrl)
 
 function onRestart() {
     // clear chart original content
-    chart.forEach(function (chart_, index) {
-        console.log(comp[index])
-        chart_.options.data[0].dataPoints[0].label = &quot;&quot;;
-        chart_.options.data[0].dataPoints[1].label = &quot;&quot;;
-        chart_.options.data[0].dataPoints[0].y = 0;
-        chart_.options.data[0].dataPoints[1].y = 0;
-        chart_.render();
-    });
+    if (chart != null) {
+        chart.forEach(function (chart_, index) {
+            console.log(comp[index])
+            chart_.options.data[0].dataPoints[0].label = &quot;&quot;;
+            chart_.options.data[0].dataPoints[1].label = &quot;&quot;;
+            chart_.options.data[0].dataPoints[0].y = 0;
+            chart_.options.data[0].dataPoints[1].y = 0;
+            chart_.render();
+        });
+    }
     chart = null;
     var url = &quot;&quot;;
     document.getElementById(&quot;greeting&quot;).hidden = true;
@@ -2377,7 +2379,7 @@ function onRestart() {
             [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;AdaIN Stability Flow v.s. Comb&quot;],
             [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;AdaIN Stability Comb v.s. None&quot;]
             ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_adain_flow_comb_none.csv&quot;;
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_adain_flow_comb_none.csv&quot;;
     } else if (document.getElementById(&quot;radio-sfn-flow-comb-none&quot;).checked) {
         compare_type = &quot;sfn_flow_comb_none&quot;;
         // [total, [A_cnt, B_cnt], [A_name, B_name]]
@@ -2385,7 +2387,7 @@ function onRestart() {
             [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;SFN Stability Flow v.s. Comb&quot;],
             [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;SFN Stability Comb v.s. None&quot;]
             ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_comb_none.csv&quot;;
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_sfn_flow_comb_none.csv&quot;;
     } else if (document.getElementById(&quot;radio-rnn-flow-comb-none&quot;).checked) {
         compare_type = &quot;rnn_flow_comb_none&quot;;
         // [total, [A_cnt, B_cnt], [A_name, B_name]]
@@ -2393,19 +2395,19 @@ function onRestart() {
             [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;RNN Stability Flow v.s. Comb&quot;],
             [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;RNN Stability Comb v.s. None&quot;]
             ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_rnn_flow_comb_none.csv&quot;;
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_rnn_flow_comb_none.csv&quot;;
     } else if (document.getElementById(&quot;radio-sfn-comb-none&quot;).checked) {
         compare_type = &quot;comb_none&quot;;
         comp = [
             [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;SFN Stability Comb v.s. None&quot;]
             ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_none.csv&quot;;
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_sfn_comb_none.csv&quot;;
     } else if (document.getElementById(&quot;radio-sfn-comb-pixel&quot;).checked) {
         compare_type = &quot;comb_pixel&quot;;
         comp = [
             [0, [0, 0], [&quot;comb&quot;, &quot;diff&quot;], &quot;SFN Stability Comb v.s. Pixel&quot;]
             ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv&quot;;
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_sfn_comb_diff.csv&quot;;
     }
     httpGet(url);
     total_number = file_url.length;

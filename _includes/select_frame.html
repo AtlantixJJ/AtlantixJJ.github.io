@@ -1058,14 +1058,16 @@ function httpGet(theUrl)
 
 function onRestart() {
     // clear chart original content
-    chart.forEach(function (chart_, index) {
-        console.log(comp[index])
-        chart_.options.data[0].dataPoints[0].label = "";
-        chart_.options.data[0].dataPoints[1].label = "";
-        chart_.options.data[0].dataPoints[0].y = 0;
-        chart_.options.data[0].dataPoints[1].y = 0;
-        chart_.render();
-    });
+    if (chart != null) {
+        chart.forEach(function (chart_, index) {
+            console.log(comp[index])
+            chart_.options.data[0].dataPoints[0].label = "";
+            chart_.options.data[0].dataPoints[1].label = "";
+            chart_.options.data[0].dataPoints[0].y = 0;
+            chart_.options.data[0].dataPoints[1].y = 0;
+            chart_.render();
+        });
+    }
     chart = null;
     var url = "";
     document.getElementById("greeting").hidden = true;
@@ -1077,7 +1079,7 @@ function onRestart() {
             [0, [0, 0], ["flow", "comb"], "AdaIN Stability Flow v.s. Comb"],
             [0, [0, 0], ["comb", "none"], "AdaIN Stability Comb v.s. None"]
             ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_adain_flow_comb_none.csv";
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_adain_flow_comb_none.csv";
     } else if (document.getElementById("radio-sfn-flow-comb-none").checked) {
         compare_type = "sfn_flow_comb_none";
         // [total, [A_cnt, B_cnt], [A_name, B_name]]
@@ -1085,7 +1087,7 @@ function onRestart() {
             [0, [0, 0], ["flow", "comb"], "SFN Stability Flow v.s. Comb"],
             [0, [0, 0], ["comb", "none"], "SFN Stability Comb v.s. None"]
             ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_comb_none.csv";
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_sfn_flow_comb_none.csv";
     } else if (document.getElementById("radio-rnn-flow-comb-none").checked) {
         compare_type = "rnn_flow_comb_none";
         // [total, [A_cnt, B_cnt], [A_name, B_name]]
@@ -1093,19 +1095,19 @@ function onRestart() {
             [0, [0, 0], ["flow", "comb"], "RNN Stability Flow v.s. Comb"],
             [0, [0, 0], ["comb", "none"], "RNN Stability Comb v.s. None"]
             ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_rnn_flow_comb_none.csv";
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_rnn_flow_comb_none.csv";
     } else if (document.getElementById("radio-sfn-comb-none").checked) {
         compare_type = "comb_none";
         comp = [
             [0, [0, 0], ["comb", "none"], "SFN Stability Comb v.s. None"]
             ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_none.csv";
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_sfn_comb_none.csv";
     } else if (document.getElementById("radio-sfn-comb-pixel").checked) {
         compare_type = "comb_pixel";
         comp = [
             [0, [0, 0], ["comb", "diff"], "SFN Stability Comb v.s. Pixel"]
             ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv";
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_sfn_comb_diff.csv";
     }
     httpGet(url);
     total_number = file_url.length;
