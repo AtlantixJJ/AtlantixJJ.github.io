@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 04 Nov 2019 15:27:40 -0500</pubDate>
-    <lastBuildDate>Mon, 04 Nov 2019 15:27:40 -0500</lastBuildDate>
+    <pubDate>Tue, 05 Nov 2019 22:20:59 -0500</pubDate>
+    <lastBuildDate>Tue, 05 Nov 2019 22:20:59 -0500</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -2224,6 +2224,20 @@ d.arcTo=function(){};d.createPattern=function(a,b){return new I(a,b)};w.prototyp
 /*# sourceMappingURL=bootstrap.min.css.map */
 &lt;/style&gt;
 
+&lt;style type=&quot;text/css&quot;&gt;
+#container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+#leftThing {
+  width: 75%;
+}
+#rightThing {
+  width: 25%;
+}
+&lt;/style&gt;
+
 &lt;script&gt;
 var label_upper = &quot;&quot;,
     label_lower = &quot;&quot;;
@@ -2246,6 +2260,19 @@ var show_name = true;
 
 var chart;
 var text;
+
+function get_ref_image_url(url) {
+    var ref_url = &quot;https://github.com/AtlantixJJ/VideoStableData/raw/master/images/&quot;;
+    if (url.search(&quot;starrynight&quot;) &gt; -1)
+        ref_url += &quot;starry_night.jpg&quot;;
+    else if (url.search(&quot;lamuse&quot;) &gt; -1)
+        ref_url += &quot;la_muse.jpg&quot;;
+    else if (url.search(&quot;feathers&quot;) &gt; -1)
+        ref_url += &quot;feathers.jpg&quot;;
+    else if (url.search(&quot;composition&quot;) &gt; -1)
+        ref_url += &quot;composition_vii.jpg&quot;;
+    return ref_url;
+}
 
 function set_current_compare_target() {
     var ind = 0;
@@ -2290,6 +2317,9 @@ function update() {
     cur_comp = set_current_compare_target();
     document.getElementById(&quot;label-A&quot;).textContent = get_option_name_from_url(cur_url[0]);
     document.getElementById(&quot;label-B&quot;).textContent = get_option_name_from_url(cur_url[1]);
+    // current reference style image
+    document.getElementById(&quot;ref-image&quot;).src = get_ref_image_url(cur_url[0]);
+    document.getElementById(&quot;ref-image&quot;).hidden = false;
     update_element();
 }
 
@@ -2470,14 +2500,36 @@ $(document).ready(function () {
 });
 &lt;/script&gt;
 
-&lt;div style=&quot; margin-right: auto; margin-left: auto; &quot;&gt;
+&lt;div style=&quot;margin-right: auto; margin-left: auto;&quot;&gt;
     &lt;div align=&quot;center&quot;&gt;
         &lt;li id=&quot;process-bar&quot;&gt;process&lt;/li&gt;
         &lt;hr /&gt;
         &lt;h4 align=&quot;center&quot;&gt;  &lt;/h4&gt;
         &lt;ul align=&quot;center&quot;&gt;
             &lt;h3&gt;Please select an image which is more similar to the reference style image. If you cannot decide, randomly select one. &lt;/h3&gt;
-            
+            &lt;!--
+            &lt;div style=&quot;width: 100%; height: 100%; display: flex&quot;&gt;
+                &lt;div style=&quot;width: 75%&quot;&gt;
+                    &lt;div align='center'&gt;
+                        &lt;div style=&quot;display:inline-block&quot;&gt;
+                            &lt;img id=&quot;element-A&quot; height=&quot;250&quot; src=''/&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;div align='center'&gt;
+                        &lt;div style=&quot;display:inline-block&quot;&gt;
+                            &lt;div style=&quot;display:inline-block&quot;&gt;
+                                &lt;img id=&quot;element-B&quot; height=&quot;250&quot; src=''/&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div style=&quot;width: 25%; margin-top: auto; margin-bottom: auto; position:relative;&quot;&gt;
+                    &lt;img id=&quot;ref-image&quot; height=&quot;250&quot; src=&quot;&quot; hidden/&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            --&gt;
             &lt;div align=&quot;center&quot;&gt;
                 &lt;div style=&quot;display:inline-block&quot;&gt;
                     &lt;img id=&quot;element-A&quot; height=&quot;300&quot; src=&quot;&quot; /&gt;
@@ -2503,11 +2555,14 @@ $(document).ready(function () {
             &lt;/table&gt; 
             &lt;table id=&quot;method-box&quot; border=&quot;0&quot; hidden=&quot;&quot;&gt;
                 &lt;tr&gt;
-                    &lt;!--&lt;td&gt;&lt;span style = &quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Type&lt;/span&gt;&lt;/td&gt;--&gt;
                     &lt;td&gt;&lt;span id=&quot;label-A&quot; style=&quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;&lt;/span&gt;&lt;/td&gt;
                     &lt;td&gt;&lt;span id=&quot;label-B&quot; style=&quot;margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;&lt;/span&gt;&lt;/td&gt;
                 &lt;/tr&gt; 
             &lt;/table&gt;
+        &lt;/div&gt;
+        &lt;div&gt;
+            &lt;img id=&quot;ref-image&quot; height=&quot;300&quot; src=&quot;&quot; style=&quot;margin-left: auto; margin-right: auto; position: relative; display: block&quot; hidden=&quot;&quot; /&gt;
+            &lt;span style=&quot;font-family:'Times New Roman', Times, serif; font-size:20px;text-align:right;color: #000000&quot;&gt;The reference image&lt;/span&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 

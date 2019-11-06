@@ -924,6 +924,20 @@ d.arcTo=function(){};d.createPattern=function(a,b){return new I(a,b)};w.prototyp
 /*# sourceMappingURL=bootstrap.min.css.map */
 </style>
 
+<style type="text/css">
+#container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+#leftThing {
+  width: 75%;
+}
+#rightThing {
+  width: 25%;
+}
+</style>
+
 <script>
 var label_upper = "",
     label_lower = "";
@@ -946,6 +960,19 @@ var show_name = true;
 
 var chart;
 var text;
+
+function get_ref_image_url(url) {
+    var ref_url = "https://github.com/AtlantixJJ/VideoStableData/raw/master/images/";
+    if (url.search("starrynight") > -1)
+        ref_url += "starry_night.jpg";
+    else if (url.search("lamuse") > -1)
+        ref_url += "la_muse.jpg";
+    else if (url.search("feathers") > -1)
+        ref_url += "feathers.jpg";
+    else if (url.search("composition") > -1)
+        ref_url += "composition_vii.jpg";
+    return ref_url;
+}
 
 function set_current_compare_target() {
     var ind = 0;
@@ -990,6 +1017,9 @@ function update() {
     cur_comp = set_current_compare_target();
     document.getElementById("label-A").textContent = get_option_name_from_url(cur_url[0]);
     document.getElementById("label-B").textContent = get_option_name_from_url(cur_url[1]);
+    // current reference style image
+    document.getElementById("ref-image").src = get_ref_image_url(cur_url[0]);
+    document.getElementById("ref-image").hidden = false;
     update_element();
 }
 
@@ -1170,14 +1200,36 @@ $(document).ready(function () {
 });
 </script>
 
-<div style=" margin-right: auto; margin-left: auto; ">
+<div style="margin-right: auto; margin-left: auto;">
     <div align="center">
         <li id="process-bar">process</li>
         <hr/>
         <h4 align='center'>  </h4>
         <ul align="center">
             <h3>Please select an image which is more similar to the reference style image. If you cannot decide, randomly select one. </h3>
-            
+            <!--
+            <div style="width: 100%; height: 100%; display: flex">
+                <div style="width: 75%">
+                    <div align='center'>
+                        <div style="display:inline-block">
+                            <img id="element-A" height="250" src=''/>
+                        </div>
+                    </div>
+                    
+                    <div align='center'>
+                        <div style="display:inline-block">
+                            <div style="display:inline-block">
+                                <img id="element-B" height="250" src=''/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="width: 25%; margin-top: auto; margin-bottom: auto; position:relative;">
+                    <img id="ref-image" height="250" src="" hidden/>
+                </div>
+            </div>
+            -->
             <div align='center'>
                 <div style="display:inline-block">
                     <img id="element-A" height="300" src=''/>
@@ -1203,11 +1255,14 @@ $(document).ready(function () {
             </table> 
             <table id="method-box" border="0" hidden>
                 <tr>
-                    <!--<td><span style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Type</span></td>-->
                     <td><span id="label-A" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000"></span></td>
                     <td><span id="label-B" style = "margin-left:100px;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000"></span></td>
                 </tr> 
             </table>
+        </div>
+        <div>
+            <img id="ref-image" height="300" src="" style="margin-left: auto; margin-right: auto; position: relative; display: block" hidden/>
+            <span style="font-family:'Times New Roman', Times, serif; font-size:20px;text-align:right;color: #000000">The reference image</span>
         </div>
     </div>
 
