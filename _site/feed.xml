@@ -5,9 +5,111 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 12 Nov 2019 17:22:16 -0500</pubDate>
-    <lastBuildDate>Tue, 12 Nov 2019 17:22:16 -0500</lastBuildDate>
+    <pubDate>Tue, 12 Nov 2019 18:27:51 -0500</pubDate>
+    <lastBuildDate>Tue, 12 Nov 2019 18:27:51 -0500</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
+    
+      <item>
+        <title>Love048</title>
+        <description>&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot; /&gt;
+  &lt;title&gt;Love 048&lt;/title&gt;
+
+  &lt;link href=&quot;/assets/2048-with-IMAGES/style/main.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
+  &lt;link rel=&quot;shortcut icon&quot; href=&quot;/assets/2048-with-IMAGES/favicon.ico&quot; /&gt;
+  &lt;link rel=&quot;apple-touch-icon&quot; href=&quot;/assets/2048-with-IMAGES/meta/apple-touch-icon.png&quot; /&gt;
+  &lt;link rel=&quot;apple-touch-startup-image&quot; href=&quot;/assets/2048-with-IMAGES/meta/apple-touch-startup-image-640x1096.png&quot; media=&quot;(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)&quot; /&gt; &lt;!-- iPhone 5+ --&gt;
+  &lt;link rel=&quot;apple-touch-startup-image&quot; href=&quot;/assets/2048-with-IMAGES/meta/apple-touch-startup-image-640x920.png&quot; media=&quot;(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)&quot; /&gt; &lt;!-- iPhone, retina --&gt;
+  &lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot; /&gt;
+  &lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot; /&gt;
+
+  &lt;meta name=&quot;HandheldFriendly&quot; content=&quot;True&quot; /&gt;
+  &lt;meta name=&quot;MobileOptimized&quot; content=&quot;320&quot; /&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class=&quot;container&quot;&gt;
+    &lt;div class=&quot;heading&quot;&gt;
+      &lt;h1 class=&quot;title&quot;&gt;Love048&lt;/h1&gt;
+      &lt;div class=&quot;scores-container&quot;&gt;
+        &lt;div class=&quot;score-container&quot;&gt;0&lt;/div&gt;
+        &lt;div class=&quot;best-container&quot;&gt;0&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;above-game&quot;&gt;
+      &lt;p class=&quot;game-intro&quot;&gt;团子鱼的进化之路&lt;/p&gt;
+      &lt;a class=&quot;restart-button&quot;&gt;开始进化&lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;game-container&quot;&gt;
+      &lt;div class=&quot;game-message&quot;&gt;
+        &lt;p style=&quot;font-size:40px; &quot;&gt;&lt;/p&gt;
+        &lt;div class=&quot;lower&quot;&gt;
+	        &lt;a class=&quot;keep-playing-button&quot;&gt;抱走团子鱼～&lt;/a&gt;
+          &lt;a class=&quot;retry-button&quot;&gt;不要放弃团子鱼～&lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;grid-container&quot;&gt;
+        &lt;div class=&quot;grid-row&quot;&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;grid-row&quot;&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;grid-row&quot;&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;grid-row&quot;&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;tile-container&quot;&gt;
+
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;hr /&gt;
+    &lt;hr /&gt;
+  &lt;/div&gt;
+
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/bind_polyfill.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/classlist_polyfill.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/animframe_polyfill.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/keyboard_input_manager.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/html_actuator.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/grid.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/tile.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/local_storage_manager.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/game_manager.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/application.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</description>
+        <pubDate>Mon, 11 Nov 2019 19:00:00 -0500</pubDate>
+        <link>http://localhost:4000/jekyll/update/2019/11/11/Love048.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2019/11/11/Love048.html</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
     
       <item>
         <title>[Demo] Interactive Editing in Aesthetic Painting</title>
@@ -1286,108 +1388,6 @@ $(document).ready(function () {
         <pubDate>Sun, 11 Nov 2018 20:00:00 -0500</pubDate>
         <link>http://localhost:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
         <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
-        
-        
-        <category>jekyll</category>
-        
-        <category>update</category>
-        
-      </item>
-    
-      <item>
-        <title>Love048</title>
-        <description>&lt;html&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;utf-8&quot; /&gt;
-  &lt;title&gt;Love 048&lt;/title&gt;
-
-  &lt;link href=&quot;/assets/2048-with-IMAGES/style/main.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
-  &lt;link rel=&quot;shortcut icon&quot; href=&quot;/assets/2048-with-IMAGES/favicon.ico&quot; /&gt;
-  &lt;link rel=&quot;apple-touch-icon&quot; href=&quot;/assets/2048-with-IMAGES/meta/apple-touch-icon.png&quot; /&gt;
-  &lt;link rel=&quot;apple-touch-startup-image&quot; href=&quot;/assets/2048-with-IMAGES/meta/apple-touch-startup-image-640x1096.png&quot; media=&quot;(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)&quot; /&gt; &lt;!-- iPhone 5+ --&gt;
-  &lt;link rel=&quot;apple-touch-startup-image&quot; href=&quot;/assets/2048-with-IMAGES/meta/apple-touch-startup-image-640x920.png&quot; media=&quot;(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)&quot; /&gt; &lt;!-- iPhone, retina --&gt;
-  &lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot; /&gt;
-  &lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot; /&gt;
-
-  &lt;meta name=&quot;HandheldFriendly&quot; content=&quot;True&quot; /&gt;
-  &lt;meta name=&quot;MobileOptimized&quot; content=&quot;320&quot; /&gt;
-  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui&quot; /&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;div class=&quot;container&quot;&gt;
-    &lt;div class=&quot;heading&quot;&gt;
-      &lt;h1 class=&quot;title&quot;&gt;Love048&lt;/h1&gt;
-      &lt;div class=&quot;scores-container&quot;&gt;
-        &lt;div class=&quot;score-container&quot;&gt;0&lt;/div&gt;
-        &lt;div class=&quot;best-container&quot;&gt;0&lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;above-game&quot;&gt;
-      &lt;p class=&quot;game-intro&quot;&gt;团子鱼的进化之路&lt;/p&gt;
-      &lt;a class=&quot;restart-button&quot;&gt;开始进化&lt;/a&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;game-container&quot;&gt;
-      &lt;div class=&quot;game-message&quot;&gt;
-        &lt;p style=&quot;font-size:40px; &quot;&gt;&lt;/p&gt;
-        &lt;div class=&quot;lower&quot;&gt;
-	        &lt;a class=&quot;keep-playing-button&quot;&gt;抱走团子鱼～&lt;/a&gt;
-          &lt;a class=&quot;retry-button&quot;&gt;不要放弃团子鱼～&lt;/a&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-
-      &lt;div class=&quot;grid-container&quot;&gt;
-        &lt;div class=&quot;grid-row&quot;&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;grid-row&quot;&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;grid-row&quot;&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;grid-row&quot;&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-
-      &lt;div class=&quot;tile-container&quot;&gt;
-
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;hr /&gt;
-    &lt;hr /&gt;
-  &lt;/div&gt;
-
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/bind_polyfill.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/classlist_polyfill.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/animframe_polyfill.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/keyboard_input_manager.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/html_actuator.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/grid.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/tile.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/local_storage_manager.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/game_manager.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/application.js&quot;&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</description>
-        <pubDate>Sun, 11 Nov 2018 19:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/11/11/Love048.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/11/Love048.html</guid>
         
         
         <category>jekyll</category>
