@@ -3,10 +3,10 @@
   <channel>
     <title>Jianjin Xu's Blog</title>
     <description></description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 12 Nov 2019 18:29:58 -0500</pubDate>
-    <lastBuildDate>Tue, 12 Nov 2019 18:29:58 -0500</lastBuildDate>
+    <link>http://0.0.0.0:4000/</link>
+    <atom:link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 12 Nov 2019 20:28:42 -0500</pubDate>
+    <lastBuildDate>Tue, 12 Nov 2019 20:28:42 -0500</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -17,13 +17,6 @@
   &lt;title&gt;Love 048&lt;/title&gt;
 
   &lt;link href=&quot;/assets/2048-with-IMAGES/style/main.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
-  &lt;link rel=&quot;shortcut icon&quot; href=&quot;/assets/2048-with-IMAGES/favicon.ico&quot; /&gt;
-  &lt;link rel=&quot;apple-touch-icon&quot; href=&quot;/assets/2048-with-IMAGES/meta/apple-touch-icon.png&quot; /&gt;
-  &lt;link rel=&quot;apple-touch-startup-image&quot; href=&quot;/assets/2048-with-IMAGES/meta/apple-touch-startup-image-640x1096.png&quot; media=&quot;(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)&quot; /&gt; &lt;!-- iPhone 5+ --&gt;
-  &lt;link rel=&quot;apple-touch-startup-image&quot; href=&quot;/assets/2048-with-IMAGES/meta/apple-touch-startup-image-640x920.png&quot; media=&quot;(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)&quot; /&gt; &lt;!-- iPhone, retina --&gt;
-  &lt;meta name=&quot;apple-mobile-web-app-capable&quot; content=&quot;yes&quot; /&gt;
-  &lt;meta name=&quot;apple-mobile-web-app-status-bar-style&quot; content=&quot;black&quot; /&gt;
-
   &lt;meta name=&quot;HandheldFriendly&quot; content=&quot;True&quot; /&gt;
   &lt;meta name=&quot;MobileOptimized&quot; content=&quot;320&quot; /&gt;
   &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui&quot; /&gt;
@@ -86,6 +79,34 @@
     &lt;hr /&gt;
     &lt;hr /&gt;
   &lt;/div&gt;
+  &lt;script&gt;
+			window.addEventListener('load', () =&gt; {
+				// noinspection JSUnresolvedVariable
+				let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+				let xhr = new XMLHttpRequest();
+				xhr.open('GET', '/assets/2048-with-IMAGES/13jours.mp3');
+				xhr.responseType = 'arraybuffer';
+				xhr.addEventListener('load', () =&gt; {
+					let playsound = (audioBuffer) =&gt; {
+						let source = audioCtx.createBufferSource();
+						source.buffer = audioBuffer;
+						source.connect(audioCtx.destination);
+						source.loop = false;
+						source.start();
+
+						setTimeout(function () {
+							let t = document.createElement('p');
+							t.appendChild(document.createTextNode((new Date()).toLocaleString() + ': Sound played'));
+							document.querySelector('.output').appendChild(t);
+							playsound(audioBuffer);
+						}, 1000 + Math.random()*2500);
+					};
+
+					audioCtx.decodeAudioData(xhr.response).then(playsound);
+				});
+				xhr.send();
+			});
+  &lt;/script&gt;
 
   &lt;script src=&quot;/assets/2048-with-IMAGES/js/bind_polyfill.js&quot;&gt;&lt;/script&gt;
   &lt;script src=&quot;/assets/2048-with-IMAGES/js/classlist_polyfill.js&quot;&gt;&lt;/script&gt;
@@ -101,8 +122,8 @@
 &lt;/html&gt;
 </description>
         <pubDate>Mon, 11 Nov 2019 19:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2019/11/11/Love048.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2019/11/11/Love048.html</guid>
+        <link>http://0.0.0.0:4000/jekyll/update/2019/11/11/Love048.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2019/11/11/Love048.html</guid>
         
         
         <category>jekyll</category>
@@ -121,8 +142,8 @@
 &lt;/video&gt;
 </description>
         <pubDate>Mon, 12 Nov 2018 19:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/11/12/interactive.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/12/interactive.html</guid>
+        <link>http://0.0.0.0:4000/jekyll/update/2018/11/12/interactive.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/11/12/interactive.html</guid>
         
         
         <category>jekyll</category>
@@ -1386,8 +1407,8 @@ $(document).ready(function () {
 &lt;p&gt;&lt;span id=&quot;msg&quot;&gt;&lt;/span&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 11 Nov 2018 20:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
+        <link>http://0.0.0.0:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
         
         
         <category>jekyll</category>
@@ -2713,8 +2734,8 @@ $(document).ready(function () {
 &lt;p&gt;&lt;span id=&quot;msg&quot;&gt;&lt;/span&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 11 Nov 2018 19:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/11/11/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/11/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
+        <link>http://0.0.0.0:4000/jekyll/update/2018/11/11/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/11/11/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
         
         
         <category>jekyll</category>
@@ -2738,8 +2759,8 @@ $(document).ready(function () {
 &lt;p&gt;Moreover, I discover this is actually a relationship between output units – differential relationship. I searched on the web and had not found something close to my indication, so I just invent this word. It means that a set of visible variable is related to each other by some latent mechanism, which kind of describes a joint distribution of these variables. To reveal the relationship between these variables, we can do the following experiment: change a variable a little bit, and then by some latent mechanism all other variable change as well, and these changes might tell us interesting things. For example, in GAN cases, units belong to the same semantic region might well change together and units on other regions won’t.&lt;/p&gt;
 </description>
         <pubDate>Thu, 08 Nov 2018 19:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/11/08/An-Observation-on-Differential-Relationship.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/08/An-Observation-on-Differential-Relationship.html</guid>
+        <link>http://0.0.0.0:4000/jekyll/update/2018/11/08/An-Observation-on-Differential-Relationship.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/11/08/An-Observation-on-Differential-Relationship.html</guid>
         
         
         <category>jekyll</category>
@@ -2822,8 +2843,8 @@ $(document).ready(function () {
 
 </description>
         <pubDate>Thu, 08 Nov 2018 04:03:23 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/11/08/VeRi.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/08/VeRi.html</guid>
+        <link>http://0.0.0.0:4000/jekyll/update/2018/11/08/VeRi.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/11/08/VeRi.html</guid>
         
         
         <category>jekyll</category>
@@ -2845,8 +2866,8 @@ $(document).ready(function () {
 &lt;iframe width=&quot;960&quot; height=&quot;540&quot; src=&quot;https://www.youtube.com/embed/Il596wgjUc8&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 </description>
         <pubDate>Fri, 31 Aug 2018 20:00:00 -0400</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/08/31/NeuralPainter.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/08/31/NeuralPainter.html</guid>
+        <link>http://0.0.0.0:4000/jekyll/update/2018/08/31/NeuralPainter.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/08/31/NeuralPainter.html</guid>
         
         
         <category>jekyll</category>
@@ -3010,8 +3031,8 @@ cmake --build . --target _regex --config Release
 &lt;p&gt;As for other methods, I would recommend using &lt;code class=&quot;highlighter-rouge&quot;&gt;.ycm_extra_conf.py&lt;/code&gt;.&lt;/p&gt;
 </description>
         <pubDate>Fri, 22 Jun 2018 00:00:00 -0400</pubDate>
-        <link>http://localhost:4000/2018/06/22/configure-vim.html</link>
-        <guid isPermaLink="true">http://localhost:4000/2018/06/22/configure-vim.html</guid>
+        <link>http://0.0.0.0:4000/2018/06/22/configure-vim.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/2018/06/22/configure-vim.html</guid>
         
         
       </item>
@@ -3177,8 +3198,8 @@ INFO task_evaluation.py: 187: copypaste: 0.2940,0.5049,0.3039,0.1163,0.3080,0.42
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
         <pubDate>Tue, 05 Jun 2018 05:03:23 -0400</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/06/05/detectron-apply.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/06/05/detectron-apply.html</guid>
+        <link>http://0.0.0.0:4000/jekyll/update/2018/06/05/detectron-apply.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/06/05/detectron-apply.html</guid>
         
         
         <category>jekyll</category>
@@ -3509,8 +3530,8 @@ INFO task_evaluation.py: 187: copypaste: 0.2940,0.5049,0.3039,0.1163,0.3080,0.42
 &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 </description>
         <pubDate>Wed, 07 Sep 2016 05:03:23 -0400</pubDate>
-        <link>http://localhost:4000/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</guid>
+        <link>http://0.0.0.0:4000/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</guid>
         
         
         <category>jekyll</category>
