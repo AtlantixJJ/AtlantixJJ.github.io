@@ -1099,6 +1099,12 @@ function onRestart() {
             [0, [0, 0], ["comb", "diff"], "SFN Stability Comb v.s. Pixel"]
             ];
         url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv";
+    } else if (document.getElementById("radio-sfn-flow-none").checked) {
+        compare_type = "flow_none";
+        comp = [
+            [0, [0, 0], ["flow", "none"], "SFN Stability Flow v.s. None"]
+            ];
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_none.csv";
     }
     httpGet(url);
     total_number = file_url.length;
@@ -1222,6 +1228,10 @@ $(document).ready(function () {
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-sfn-comb-none" name="compare-type" checked>
                 <label class="form-check-label" for="materialChecked">Compare SFN (Comb v.s. None)</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="radio-sfn-flow-none" name="compare-type" checked>
+                <label class="form-check-label" for="materialChecked">Compare SFN (Flow v.s. None)</label>
             </div>
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-sfn-flow-comb-none" name="compare-type" checked>

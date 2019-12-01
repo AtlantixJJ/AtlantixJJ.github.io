@@ -3,10 +3,10 @@
   <channel>
     <title>Jianjin Xu's Blog</title>
     <description></description>
-    <link>http://0.0.0.0:4000/</link>
-    <atom:link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 12 Nov 2019 20:28:42 -0500</pubDate>
-    <lastBuildDate>Tue, 12 Nov 2019 20:28:42 -0500</lastBuildDate>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 01 Dec 2019 10:16:08 -0500</pubDate>
+    <lastBuildDate>Sun, 01 Dec 2019 10:16:08 -0500</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -122,8 +122,8 @@
 &lt;/html&gt;
 </description>
         <pubDate>Mon, 11 Nov 2019 19:00:00 -0500</pubDate>
-        <link>http://0.0.0.0:4000/jekyll/update/2019/11/11/Love048.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2019/11/11/Love048.html</guid>
+        <link>http://localhost:4000/jekyll/update/2019/11/11/Love048.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2019/11/11/Love048.html</guid>
         
         
         <category>jekyll</category>
@@ -142,8 +142,8 @@
 &lt;/video&gt;
 </description>
         <pubDate>Mon, 12 Nov 2018 19:00:00 -0500</pubDate>
-        <link>http://0.0.0.0:4000/jekyll/update/2018/11/12/interactive.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/11/12/interactive.html</guid>
+        <link>http://localhost:4000/jekyll/update/2018/11/12/interactive.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/12/interactive.html</guid>
         
         
         <category>jekyll</category>
@@ -1257,6 +1257,12 @@ function onRestart() {
             [0, [0, 0], [&quot;comb&quot;, &quot;diff&quot;], &quot;SFN Stability Comb v.s. Pixel&quot;]
             ];
         url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv&quot;;
+    } else if (document.getElementById(&quot;radio-sfn-flow-none&quot;).checked) {
+        compare_type = &quot;flow_none&quot;;
+        comp = [
+            [0, [0, 0], [&quot;flow&quot;, &quot;none&quot;], &quot;SFN Stability Flow v.s. None&quot;]
+            ];
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_none.csv&quot;;
     }
     httpGet(url);
     total_number = file_url.length;
@@ -1382,6 +1388,10 @@ $(document).ready(function () {
                 &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Comb v.s. None)&lt;/label&gt;
             &lt;/div&gt;
             &lt;div class=&quot;form-check&quot;&gt;
+                &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-flow-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
+                &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Flow v.s. None)&lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;form-check&quot;&gt;
                 &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-flow-comb-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
                 &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Flow v.s. Comb v.s. None)&lt;/label&gt;
             &lt;/div&gt;
@@ -1407,8 +1417,8 @@ $(document).ready(function () {
 &lt;p&gt;&lt;span id=&quot;msg&quot;&gt;&lt;/span&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 11 Nov 2018 20:00:00 -0500</pubDate>
-        <link>http://0.0.0.0:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
+        <link>http://localhost:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
         
         
         <category>jekyll</category>
@@ -2529,38 +2539,44 @@ function onRestart() {
         compare_type = &quot;adain_flow_comb_none&quot;;
         // [total, [A_cnt, B_cnt], [A_name, B_name]]
         comp = [
-            [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;AdaIN Stability Flow v.s. Comb&quot;],
-            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;AdaIN Stability Comb v.s. None&quot;]
+            [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;AdaIN Quality Flow v.s. Comb&quot;],
+            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;AdaIN Quality Comb v.s. None&quot;]
             ];
         url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_adain_flow_comb_none.csv&quot;;
     } else if (document.getElementById(&quot;radio-sfn-flow-comb-none&quot;).checked) {
         compare_type = &quot;sfn_flow_comb_none&quot;;
         // [total, [A_cnt, B_cnt], [A_name, B_name]]
         comp = [
-            [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;SFN Stability Flow v.s. Comb&quot;],
-            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;SFN Stability Comb v.s. None&quot;]
+            [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;SFN Quality Flow v.s. Comb&quot;],
+            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;SFN Quality Comb v.s. None&quot;]
             ];
         url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_sfn_flow_comb_none.csv&quot;;
     } else if (document.getElementById(&quot;radio-rnn-flow-comb-none&quot;).checked) {
         compare_type = &quot;rnn_flow_comb_none&quot;;
         // [total, [A_cnt, B_cnt], [A_name, B_name]]
         comp = [
-            [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;RNN Stability Flow v.s. Comb&quot;],
-            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;RNN Stability Comb v.s. None&quot;]
+            [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;RNN Quality Flow v.s. Comb&quot;],
+            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;RNN Quality Comb v.s. None&quot;]
             ];
         url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_rnn_flow_comb_none.csv&quot;;
     } else if (document.getElementById(&quot;radio-sfn-comb-none&quot;).checked) {
         compare_type = &quot;comb_none&quot;;
         comp = [
-            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;SFN Stability Comb v.s. None&quot;]
+            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;SFN Quality Comb v.s. None&quot;]
             ];
         url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_sfn_comb_none.csv&quot;;
     } else if (document.getElementById(&quot;radio-sfn-comb-pixel&quot;).checked) {
         compare_type = &quot;comb_pixel&quot;;
         comp = [
-            [0, [0, 0], [&quot;comb&quot;, &quot;diff&quot;], &quot;SFN Stability Comb v.s. Pixel&quot;]
+            [0, [0, 0], [&quot;comb&quot;, &quot;diff&quot;], &quot;SFN Quality Comb v.s. Pixel&quot;]
             ];
         url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_sfn_comb_diff.csv&quot;;
+    } else if (document.getElementById(&quot;radio-sfn-flow-none&quot;).checked) {
+        compare_type = &quot;flow_none&quot;;
+        comp = [
+            [0, [0, 0], [&quot;flow&quot;, &quot;none&quot;], &quot;SFN Quality Flow v.s. None&quot;]
+            ];
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_framequality_sfn_flow_none.csv&quot;;
     }
     httpGet(url);
     total_number = file_url.length;
@@ -2709,6 +2725,10 @@ $(document).ready(function () {
                 &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Comb v.s. None)&lt;/label&gt;
             &lt;/div&gt;
             &lt;div class=&quot;form-check&quot;&gt;
+                &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-flow-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
+                &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Flow v.s. None)&lt;/label&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;form-check&quot;&gt;
                 &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-flow-comb-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
                 &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Flow v.s. Comb v.s. None)&lt;/label&gt;
             &lt;/div&gt;
@@ -2734,8 +2754,8 @@ $(document).ready(function () {
 &lt;p&gt;&lt;span id=&quot;msg&quot;&gt;&lt;/span&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 11 Nov 2018 19:00:00 -0500</pubDate>
-        <link>http://0.0.0.0:4000/jekyll/update/2018/11/11/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/11/11/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
+        <link>http://localhost:4000/jekyll/update/2018/11/11/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/11/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
         
         
         <category>jekyll</category>
@@ -2759,8 +2779,8 @@ $(document).ready(function () {
 &lt;p&gt;Moreover, I discover this is actually a relationship between output units – differential relationship. I searched on the web and had not found something close to my indication, so I just invent this word. It means that a set of visible variable is related to each other by some latent mechanism, which kind of describes a joint distribution of these variables. To reveal the relationship between these variables, we can do the following experiment: change a variable a little bit, and then by some latent mechanism all other variable change as well, and these changes might tell us interesting things. For example, in GAN cases, units belong to the same semantic region might well change together and units on other regions won’t.&lt;/p&gt;
 </description>
         <pubDate>Thu, 08 Nov 2018 19:00:00 -0500</pubDate>
-        <link>http://0.0.0.0:4000/jekyll/update/2018/11/08/An-Observation-on-Differential-Relationship.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/11/08/An-Observation-on-Differential-Relationship.html</guid>
+        <link>http://localhost:4000/jekyll/update/2018/11/08/An-Observation-on-Differential-Relationship.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/08/An-Observation-on-Differential-Relationship.html</guid>
         
         
         <category>jekyll</category>
@@ -2843,8 +2863,8 @@ $(document).ready(function () {
 
 </description>
         <pubDate>Thu, 08 Nov 2018 04:03:23 -0500</pubDate>
-        <link>http://0.0.0.0:4000/jekyll/update/2018/11/08/VeRi.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/11/08/VeRi.html</guid>
+        <link>http://localhost:4000/jekyll/update/2018/11/08/VeRi.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/08/VeRi.html</guid>
         
         
         <category>jekyll</category>
@@ -2866,8 +2886,8 @@ $(document).ready(function () {
 &lt;iframe width=&quot;960&quot; height=&quot;540&quot; src=&quot;https://www.youtube.com/embed/Il596wgjUc8&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 </description>
         <pubDate>Fri, 31 Aug 2018 20:00:00 -0400</pubDate>
-        <link>http://0.0.0.0:4000/jekyll/update/2018/08/31/NeuralPainter.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/08/31/NeuralPainter.html</guid>
+        <link>http://localhost:4000/jekyll/update/2018/08/31/NeuralPainter.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/08/31/NeuralPainter.html</guid>
         
         
         <category>jekyll</category>
@@ -3031,8 +3051,8 @@ cmake --build . --target _regex --config Release
 &lt;p&gt;As for other methods, I would recommend using &lt;code class=&quot;highlighter-rouge&quot;&gt;.ycm_extra_conf.py&lt;/code&gt;.&lt;/p&gt;
 </description>
         <pubDate>Fri, 22 Jun 2018 00:00:00 -0400</pubDate>
-        <link>http://0.0.0.0:4000/2018/06/22/configure-vim.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/2018/06/22/configure-vim.html</guid>
+        <link>http://localhost:4000/2018/06/22/configure-vim.html</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/06/22/configure-vim.html</guid>
         
         
       </item>
@@ -3198,8 +3218,8 @@ INFO task_evaluation.py: 187: copypaste: 0.2940,0.5049,0.3039,0.1163,0.3080,0.42
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
         <pubDate>Tue, 05 Jun 2018 05:03:23 -0400</pubDate>
-        <link>http://0.0.0.0:4000/jekyll/update/2018/06/05/detectron-apply.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2018/06/05/detectron-apply.html</guid>
+        <link>http://localhost:4000/jekyll/update/2018/06/05/detectron-apply.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/06/05/detectron-apply.html</guid>
         
         
         <category>jekyll</category>
@@ -3530,8 +3550,8 @@ INFO task_evaluation.py: 187: copypaste: 0.2940,0.5049,0.3039,0.1163,0.3080,0.42
 &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 </description>
         <pubDate>Wed, 07 Sep 2016 05:03:23 -0400</pubDate>
-        <link>http://0.0.0.0:4000/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</guid>
+        <link>http://localhost:4000/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2016/09/07/Theano-Speech-Recognition-Using-CTC-Build-from-Zero.html</guid>
         
         
         <category>jekyll</category>
