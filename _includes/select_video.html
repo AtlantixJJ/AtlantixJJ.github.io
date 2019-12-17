@@ -1087,24 +1087,12 @@ function onRestart() {
             [0, [0, 0], ["comb", "none"], "RNN Stability Comb v.s. None"]
             ];
         url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_rnn_flow_comb_none.csv";
-    } else if (document.getElementById("radio-sfn-comb-none").checked) {
-        compare_type = "comb_none";
-        comp = [
-            [0, [0, 0], ["comb", "none"], "SFN Stability Comb v.s. None"]
-            ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_none.csv";
-    } else if (document.getElementById("radio-sfn-comb-pixel").checked) {
-        compare_type = "comb_pixel";
-        comp = [
-            [0, [0, 0], ["comb", "diff"], "SFN Stability Comb v.s. Pixel"]
-            ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv";
-    } else if (document.getElementById("radio-sfn-flow-none").checked) {
+    } else if (document.getElementById("radio-slow-sfn-flow-none").checked) {
         compare_type = "flow_none";
         comp = [
             [0, [0, 0], ["flow", "none"], "SFN Stability Flow v.s. None"]
             ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_none.csv";
+        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_slow_sfn_flow_none.csv";
     }
     httpGet(url);
     total_number = file_url.length;
@@ -1222,16 +1210,8 @@ $(document).ready(function () {
                 <a id="show-btn" href="###" style="float:right;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Show Name</a>
             </div>
             <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio-sfn-comb-pixel" name="compare-type">
-                <label class="form-check-label" for="materialUnchecked">Compare SFN (Comb v.s. Pixel)</label>
-            </div>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio-sfn-comb-none" name="compare-type" checked>
-                <label class="form-check-label" for="materialChecked">Compare SFN (Comb v.s. None)</label>
-            </div>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio-sfn-flow-none" name="compare-type" checked>
-                <label class="form-check-label" for="materialChecked">Compare SFN (Flow v.s. None)</label>
+                <input type="radio" class="form-check-input" id="radio-slow-sfn-flow-none" name="compare-type" checked>
+                <label class="form-check-label" for="materialChecked">(SLOW) Compare SFN (Flow v.s. None)</label>
             </div>
             <div class="form-check">
                 <input type="radio" class="form-check-input" id="radio-sfn-flow-comb-none" name="compare-type" checked>

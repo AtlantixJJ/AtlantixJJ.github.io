@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 04 Dec 2019 16:19:48 -0500</pubDate>
-    <lastBuildDate>Wed, 04 Dec 2019 16:19:48 -0500</lastBuildDate>
+    <pubDate>Tue, 17 Dec 2019 15:20:49 -0500</pubDate>
+    <lastBuildDate>Tue, 17 Dec 2019 15:20:49 -0500</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -1264,24 +1264,12 @@ function onRestart() {
             [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;RNN Stability Comb v.s. None&quot;]
             ];
         url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_rnn_flow_comb_none.csv&quot;;
-    } else if (document.getElementById(&quot;radio-sfn-comb-none&quot;).checked) {
-        compare_type = &quot;comb_none&quot;;
-        comp = [
-            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;SFN Stability Comb v.s. None&quot;]
-            ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_none.csv&quot;;
-    } else if (document.getElementById(&quot;radio-sfn-comb-pixel&quot;).checked) {
-        compare_type = &quot;comb_pixel&quot;;
-        comp = [
-            [0, [0, 0], [&quot;comb&quot;, &quot;diff&quot;], &quot;SFN Stability Comb v.s. Pixel&quot;]
-            ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_comb_diff.csv&quot;;
-    } else if (document.getElementById(&quot;radio-sfn-flow-none&quot;).checked) {
+    } else if (document.getElementById(&quot;radio-slow-sfn-flow-none&quot;).checked) {
         compare_type = &quot;flow_none&quot;;
         comp = [
             [0, [0, 0], [&quot;flow&quot;, &quot;none&quot;], &quot;SFN Stability Flow v.s. None&quot;]
             ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_none.csv&quot;;
+        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_slow_sfn_flow_none.csv&quot;;
     }
     httpGet(url);
     total_number = file_url.length;
@@ -1399,16 +1387,8 @@ $(document).ready(function () {
                 &lt;a id=&quot;show-btn&quot; href=&quot;###&quot; style=&quot;float:right;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Show Name&lt;/a&gt;
             &lt;/div&gt;
             &lt;div class=&quot;form-check&quot;&gt;
-                &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-comb-pixel&quot; name=&quot;compare-type&quot; /&gt;
-                &lt;label class=&quot;form-check-label&quot; for=&quot;materialUnchecked&quot;&gt;Compare SFN (Comb v.s. Pixel)&lt;/label&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;form-check&quot;&gt;
-                &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-comb-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
-                &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Comb v.s. None)&lt;/label&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;form-check&quot;&gt;
-                &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-flow-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
-                &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Flow v.s. None)&lt;/label&gt;
+                &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-slow-sfn-flow-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
+                &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;(SLOW) Compare SFN (Flow v.s. None)&lt;/label&gt;
             &lt;/div&gt;
             &lt;div class=&quot;form-check&quot;&gt;
                 &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-flow-comb-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
