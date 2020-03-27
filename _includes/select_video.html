@@ -957,6 +957,16 @@ var radios = [
         "radio-rnn-comb-flow",
         "radio-rnn-comb-none"];
 
+var comps = [
+    ["comb", "diff"],
+    ["comb", "none"],
+    ["diff", "flow"],
+    ["diff", "none"],
+    ["flow", "none"],
+    ["comb", "msra"],
+    ["comb", "flow"],
+    ["comb", "none"]];
+
 var labels = [
     "Video Stability SFN Comb v.s. Pixel",
     "Video Stability SFN Comb v.s. None",
@@ -968,14 +978,14 @@ var labels = [
     "Video Stability RNN Comb v.s. None"];
 
 var exprs = [
-    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_diff.csv",
-    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_none.csv",
-    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_diff_flow.csv",
-    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_diff_none.csv",
-    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_flow_none.csv",
-    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_msra.csv",
-    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_rnn_comb_flow.csv",
-    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_rnn_comb_none.csv"];
+    "{{site.baseurl}}/assets/FDB/video_stability_sfn_comb_diff.csv",
+    "{{site.baseurl}}/assets/FDB/video_stability_sfn_comb_none.csv",
+    "{{site.baseurl}}/assets/FDB/video_stability_sfn_diff_flow.csv",
+    "{{site.baseurl}}/assets/FDB/video_stability_sfn_diff_none.csv",
+    "{{site.baseurl}}/assets/FDB/video_stability_sfn_flow_none.csv",
+    "{{site.baseurl}}/assets/FDB/video_stability_sfn_comb_msra.csv",
+    "{{site.baseurl}}/assets/FDB/video_stability_rnn_comb_flow.csv",
+    "{{site.baseurl}}/assets/FDB/video_stability_rnn_comb_none.csv"];
 
 function buildRadios() {
     //var container = document.getElementById("radio-container");
@@ -1108,6 +1118,10 @@ function onRestart() {
         var radio = document.getElementById(radios[i]);
         if (radio.checked) {
             url = exprs[i];
+            compare_type = radios[i];
+            comp = [
+                [0, [0, 0], comps[i], labels[i]]
+                ];
             break;
         }
     }

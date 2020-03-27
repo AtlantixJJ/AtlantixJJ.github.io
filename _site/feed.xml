@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 27 Mar 2020 17:12:36 +0800</pubDate>
-    <lastBuildDate>Fri, 27 Mar 2020 17:12:36 +0800</lastBuildDate>
+    <pubDate>Fri, 27 Mar 2020 17:24:46 +0800</pubDate>
+    <lastBuildDate>Fri, 27 Mar 2020 17:24:46 +0800</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -1011,6 +1011,16 @@ var radios = [
         &quot;radio-rnn-comb-flow&quot;,
         &quot;radio-rnn-comb-none&quot;];
 
+var comps = [
+    [&quot;comb&quot;, &quot;diff&quot;],
+    [&quot;comb&quot;, &quot;none&quot;],
+    [&quot;diff&quot;, &quot;flow&quot;],
+    [&quot;diff&quot;, &quot;none&quot;],
+    [&quot;flow&quot;, &quot;none&quot;],
+    [&quot;comb&quot;, &quot;msra&quot;],
+    [&quot;comb&quot;, &quot;flow&quot;],
+    [&quot;comb&quot;, &quot;none&quot;]];
+
 var labels = [
     &quot;Video Stability SFN Comb v.s. Pixel&quot;,
     &quot;Video Stability SFN Comb v.s. None&quot;,
@@ -1022,14 +1032,14 @@ var labels = [
     &quot;Video Stability RNN Comb v.s. None&quot;];
 
 var exprs = [
-    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_diff.csv&quot;,
-    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_none.csv&quot;,
-    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_diff_flow.csv&quot;,
-    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_diff_none.csv&quot;,
-    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_flow_none.csv&quot;,
-    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_msra.csv&quot;,
-    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_rnn_comb_flow.csv&quot;,
-    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_rnn_comb_none.csv&quot;];
+    &quot;/assets/FDB/video_stability_sfn_comb_diff.csv&quot;,
+    &quot;/assets/FDB/video_stability_sfn_comb_none.csv&quot;,
+    &quot;/assets/FDB/video_stability_sfn_diff_flow.csv&quot;,
+    &quot;/assets/FDB/video_stability_sfn_diff_none.csv&quot;,
+    &quot;/assets/FDB/video_stability_sfn_flow_none.csv&quot;,
+    &quot;/assets/FDB/video_stability_sfn_comb_msra.csv&quot;,
+    &quot;/assets/FDB/video_stability_rnn_comb_flow.csv&quot;,
+    &quot;/assets/FDB/video_stability_rnn_comb_none.csv&quot;];
 
 function buildRadios() {
     //var container = document.getElementById(&quot;radio-container&quot;);
@@ -1162,6 +1172,10 @@ function onRestart() {
         var radio = document.getElementById(radios[i]);
         if (radio.checked) {
             url = exprs[i];
+            compare_type = radios[i];
+            comp = [
+                [0, [0, 0], comps[i], labels[i]]
+                ];
             break;
         }
     }
