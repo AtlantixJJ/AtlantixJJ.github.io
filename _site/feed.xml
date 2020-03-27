@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 27 Mar 2020 17:24:46 +0800</pubDate>
-    <lastBuildDate>Fri, 27 Mar 2020 17:24:46 +0800</lastBuildDate>
+    <pubDate>Fri, 27 Mar 2020 17:31:14 +0800</pubDate>
+    <lastBuildDate>Fri, 27 Mar 2020 17:31:14 +0800</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -1071,6 +1071,8 @@ function get_option_name_from_url(url) {
         return &quot;OFB&quot;
     } else if (url.search(&quot;none&quot;) &gt; -1) {
         return &quot;No Temporal Loss&quot;;
+    } else if (url.search(&quot;msra&quot;) &gt; -1) {
+        return &quot;Online Stylization Network&quot;;
     }
 }
 
@@ -1155,7 +1157,7 @@ function httpGet(theUrl)
     {
         if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200)
         {
-            file_url = xmlhttp.responseText.split(&quot;\n&quot;).slice(1, -1);
+            file_url = xmlhttp.responseText.replace(&quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/&quot;, &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/&quot;).split(&quot;\n&quot;).slice(1, -1);
             update();
         }
     }

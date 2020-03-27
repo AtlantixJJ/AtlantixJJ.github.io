@@ -1017,6 +1017,8 @@ function get_option_name_from_url(url) {
         return "OFB"
     } else if (url.search("none") > -1) {
         return "No Temporal Loss";
+    } else if (url.search("msra") > -1) {
+        return "Online Stylization Network";
     }
 }
 
@@ -1101,7 +1103,7 @@ function httpGet(theUrl)
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
-            file_url = xmlhttp.responseText.split("\n").slice(1, -1);
+            file_url = xmlhttp.responseText.replace("https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/", "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/").split("\n").slice(1, -1);
             update();
         }
     }
