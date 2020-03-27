@@ -1103,7 +1103,7 @@ function httpGet(theUrl)
     {
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
-            file_url = xmlhttp.responseText.replace("https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/", "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/").split("\n").slice(1, -1);
+            file_url = xmlhttp.responseText.replace("https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/", "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/").replace("video_rnn_none", "video_sfn_none").split("\n").slice(1, -1);
             update();
         }
     }
