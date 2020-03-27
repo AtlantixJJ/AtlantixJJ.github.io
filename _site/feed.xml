@@ -5,8 +5,8 @@
     <description></description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 17 Dec 2019 15:20:49 -0500</pubDate>
-    <lastBuildDate>Tue, 17 Dec 2019 15:20:49 -0500</lastBuildDate>
+    <pubDate>Fri, 27 Mar 2020 17:12:36 +0800</pubDate>
+    <lastBuildDate>Fri, 27 Mar 2020 17:12:36 +0800</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -17,132 +17,9 @@
     Your browser does not support the video element.
 &lt;/video&gt;
 </description>
-        <pubDate>Wed, 13 Nov 2019 04:03:23 -0500</pubDate>
+        <pubDate>Wed, 13 Nov 2019 17:03:23 +0800</pubDate>
         <link>http://localhost:4000/jekyll/update/2019/11/13/ODP.html</link>
         <guid isPermaLink="true">http://localhost:4000/jekyll/update/2019/11/13/ODP.html</guid>
-        
-        
-        <category>jekyll</category>
-        
-        <category>update</category>
-        
-      </item>
-    
-      <item>
-        <title>Love048</title>
-        <description>&lt;html&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;utf-8&quot; /&gt;
-  &lt;title&gt;Love 048&lt;/title&gt;
-
-  &lt;link href=&quot;/assets/2048-with-IMAGES/style/main.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
-  &lt;meta name=&quot;HandheldFriendly&quot; content=&quot;True&quot; /&gt;
-  &lt;meta name=&quot;MobileOptimized&quot; content=&quot;320&quot; /&gt;
-  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui&quot; /&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;div class=&quot;container&quot;&gt;
-    &lt;div class=&quot;heading&quot;&gt;
-      &lt;h1 class=&quot;title&quot;&gt;Love048&lt;/h1&gt;
-      &lt;div class=&quot;scores-container&quot;&gt;
-        &lt;div class=&quot;score-container&quot;&gt;0&lt;/div&gt;
-        &lt;div class=&quot;best-container&quot;&gt;0&lt;/div&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;above-game&quot;&gt;
-      &lt;p class=&quot;game-intro&quot;&gt;团子鱼的进化之路&lt;/p&gt;
-      &lt;a class=&quot;restart-button&quot;&gt;开始进化&lt;/a&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;game-container&quot;&gt;
-      &lt;div class=&quot;game-message&quot;&gt;
-        &lt;p style=&quot;font-size:40px; &quot;&gt;&lt;/p&gt;
-        &lt;div class=&quot;lower&quot;&gt;
-	        &lt;a class=&quot;keep-playing-button&quot;&gt;抱走团子鱼～&lt;/a&gt;
-          &lt;a class=&quot;retry-button&quot;&gt;不要放弃团子鱼～&lt;/a&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-
-      &lt;div class=&quot;grid-container&quot;&gt;
-        &lt;div class=&quot;grid-row&quot;&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;grid-row&quot;&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;grid-row&quot;&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;grid-row&quot;&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
-        &lt;/div&gt;
-      &lt;/div&gt;
-
-      &lt;div class=&quot;tile-container&quot;&gt;
-
-      &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;hr /&gt;
-    &lt;hr /&gt;
-  &lt;/div&gt;
-  &lt;script&gt;
-			window.addEventListener('load', () =&gt; {
-				// noinspection JSUnresolvedVariable
-				let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-				let xhr = new XMLHttpRequest();
-				xhr.open('GET', '/assets/2048-with-IMAGES/13jours.mp3');
-				xhr.responseType = 'arraybuffer';
-				xhr.addEventListener('load', () =&gt; {
-					let playsound = (audioBuffer) =&gt; {
-						let source = audioCtx.createBufferSource();
-						source.buffer = audioBuffer;
-						source.connect(audioCtx.destination);
-						source.loop = false;
-						source.start();
-
-						setTimeout(function () {
-							let t = document.createElement('p');
-							t.appendChild(document.createTextNode((new Date()).toLocaleString() + ': Sound played'));
-							document.querySelector('.output').appendChild(t);
-							playsound(audioBuffer);
-						}, 1000 + Math.random()*2500);
-					};
-
-					audioCtx.decodeAudioData(xhr.response).then(playsound);
-				});
-				xhr.send();
-			});
-  &lt;/script&gt;
-
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/bind_polyfill.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/classlist_polyfill.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/animframe_polyfill.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/keyboard_input_manager.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/html_actuator.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/grid.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/tile.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/local_storage_manager.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/game_manager.js&quot;&gt;&lt;/script&gt;
-  &lt;script src=&quot;/assets/2048-with-IMAGES/js/application.js&quot;&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</description>
-        <pubDate>Mon, 11 Nov 2019 19:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2019/11/11/Love048.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2019/11/11/Love048.html</guid>
         
         
         <category>jekyll</category>
@@ -160,9 +37,9 @@
     Your browser does not support the video element.
 &lt;/video&gt;
 </description>
-        <pubDate>Mon, 12 Nov 2018 19:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/11/12/interactive.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/12/interactive.html</guid>
+        <pubDate>Tue, 13 Nov 2018 08:00:00 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2018/11/13/interactive.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/13/interactive.html</guid>
         
         
         <category>jekyll</category>
@@ -1124,6 +1001,47 @@ var show_name = true;
 var chart;
 var text;
 
+var radios = [
+        &quot;radio-sfn-comb-diff&quot;,
+        &quot;radio-sfn-comb-none&quot;,
+        &quot;radio-sfn-diff-flow&quot;,
+        &quot;radio-sfn-diff-none&quot;,
+        &quot;radio-sfn-flow-none&quot;,
+        &quot;radio-sfn-comb-msra&quot;,
+        &quot;radio-rnn-comb-flow&quot;,
+        &quot;radio-rnn-comb-none&quot;];
+
+var labels = [
+    &quot;Video Stability SFN Comb v.s. Pixel&quot;,
+    &quot;Video Stability SFN Comb v.s. None&quot;,
+    &quot;Video Stability SFN Pixel v.s. Flow&quot;,
+    &quot;Video Stability SFN Pixel v.s. None&quot;,
+    &quot;Video Stability SFN Flow v.s. None&quot;,
+    &quot;Video Stability SFN Comb v.s. MSRA&quot;,
+    &quot;Video Stability RNN Comb v.s. Flow&quot;,
+    &quot;Video Stability RNN Comb v.s. None&quot;];
+
+var exprs = [
+    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_diff.csv&quot;,
+    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_none.csv&quot;,
+    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_diff_flow.csv&quot;,
+    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_diff_none.csv&quot;,
+    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_flow_none.csv&quot;,
+    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_msra.csv&quot;,
+    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_rnn_comb_flow.csv&quot;,
+    &quot;https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_rnn_comb_none.csv&quot;];
+
+function buildRadios() {
+    //var container = document.getElementById(&quot;radio-container&quot;);
+    for(var i = 0; i &lt; radios.length; i ++) {
+        var radio_name = radios[i],
+            label_name = labels[i],
+            expr = exprs[i];
+        var html = &quot;&lt;div class='form-check'&gt;&quot; + &quot;&lt;input type='radio' class='form-check-input' id=&quot; + radio_name + &quot; name='compare-type' checked&gt;&quot; + &quot;&lt;label class='form-check-label' for='materialChecked'&gt;&quot; + label_name + &quot;&lt;/label&gt;&lt;/div&gt;&quot;;
+        $(&quot;#radio-container&quot;).append(html);
+    }
+}
+
 function set_current_compare_target() {
     var ind = 0;
     comp.forEach(function (item, index) {
@@ -1239,38 +1157,15 @@ function onRestart() {
     chart = null;
     var url = &quot;&quot;;
     document.getElementById(&quot;greeting&quot;).hidden = true;
-    
-    if (document.getElementById(&quot;radio-adain-flow-comb-none&quot;).checked) {
-        compare_type = &quot;adain_flow_comb_none&quot;;
-        // [total, [A_cnt, B_cnt], [A_name, B_name]]
-        comp = [
-            [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;AdaIN Stability Flow v.s. Comb&quot;],
-            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;AdaIN Stability Comb v.s. None&quot;]
-            ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_adain_flow_comb_none.csv&quot;;
-    } else if (document.getElementById(&quot;radio-sfn-flow-comb-none&quot;).checked) {
-        compare_type = &quot;sfn_flow_comb_none&quot;;
-        // [total, [A_cnt, B_cnt], [A_name, B_name]]
-        comp = [
-            [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;SFN Stability Flow v.s. Comb&quot;],
-            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;SFN Stability Comb v.s. None&quot;]
-            ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_comb_none.csv&quot;;
-    } else if (document.getElementById(&quot;radio-rnn-flow-comb-none&quot;).checked) {
-        compare_type = &quot;rnn_flow_comb_none&quot;;
-        // [total, [A_cnt, B_cnt], [A_name, B_name]]
-        comp = [
-            [0, [0, 0], [&quot;flow&quot;, &quot;comb&quot;], &quot;RNN Stability Flow v.s. Comb&quot;],
-            [0, [0, 0], [&quot;comb&quot;, &quot;none&quot;], &quot;RNN Stability Comb v.s. None&quot;]
-            ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_rnn_flow_comb_none.csv&quot;;
-    } else if (document.getElementById(&quot;radio-slow-sfn-flow-none&quot;).checked) {
-        compare_type = &quot;flow_none&quot;;
-        comp = [
-            [0, [0, 0], [&quot;flow&quot;, &quot;none&quot;], &quot;SFN Stability Flow v.s. None&quot;]
-            ];
-        url = &quot;https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_slow_sfn_flow_none.csv&quot;;
+
+    for (var i = 0; i &lt; radios.length; i ++) {
+        var radio = document.getElementById(radios[i]);
+        if (radio.checked) {
+            url = exprs[i];
+            break;
+        }
     }
+    
     httpGet(url);
     total_number = file_url.length;
     document.getElementById(&quot;process-bar&quot;).textContent = `process (0/${total_number})`;
@@ -1326,6 +1221,7 @@ $(document).ready(function () {
     element_A = document.getElementById(&quot;element-A&quot;);
     element_B = document.getElementById(&quot;element-B&quot;);
 
+    buildRadios();
     onRestart();
 
     document.getElementById(&quot;msg&quot;).textContent = &quot;&quot;;
@@ -1386,23 +1282,8 @@ $(document).ready(function () {
                 &lt;a id=&quot;restart-btn&quot; href=&quot;###&quot; style=&quot;float:left;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Restart&lt;/a&gt;
                 &lt;a id=&quot;show-btn&quot; href=&quot;###&quot; style=&quot;float:right;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Show Name&lt;/a&gt;
             &lt;/div&gt;
-            &lt;div class=&quot;form-check&quot;&gt;
-                &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-slow-sfn-flow-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
-                &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;(SLOW) Compare SFN (Flow v.s. None)&lt;/label&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;form-check&quot;&gt;
-                &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-sfn-flow-comb-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
-                &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare SFN (Flow v.s. Comb v.s. None)&lt;/label&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;form-check&quot;&gt;
-                &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-rnn-flow-comb-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
-                &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare RNN (Flow v.s. Comb v.s. None)&lt;/label&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;form-check&quot;&gt;
-                &lt;input type=&quot;radio&quot; class=&quot;form-check-input&quot; id=&quot;radio-adain-flow-comb-none&quot; name=&quot;compare-type&quot; checked=&quot;&quot; /&gt;
-                &lt;label class=&quot;form-check-label&quot; for=&quot;materialChecked&quot;&gt;Compare AdaIN (Flow v.s. Comb v.s. None)&lt;/label&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
+
+            &lt;div id=&quot;radio-container&quot;&gt;&lt;/div&gt;
 
         &lt;div style=&quot;width: 600px;&quot;&gt;
             &lt;span style=&quot;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000&quot;&gt;Statistics&lt;/span&gt;
@@ -1413,11 +1294,12 @@ $(document).ready(function () {
 
 &lt;/div&gt;
 
-&lt;p&gt;&lt;span id=&quot;msg&quot;&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;span id=&quot;msg&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;
 </description>
-        <pubDate>Sun, 11 Nov 2018 20:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/11/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
+        <pubDate>Mon, 12 Nov 2018 09:00:00 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2018/11/12/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/12/bFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
         
         
         <category>jekyll</category>
@@ -2752,9 +2634,9 @@ $(document).ready(function () {
 
 &lt;p&gt;&lt;span id=&quot;msg&quot;&gt;&lt;/span&gt;&lt;/p&gt;
 </description>
-        <pubDate>Sun, 11 Nov 2018 19:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/11/11/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/11/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
+        <pubDate>Mon, 12 Nov 2018 08:00:00 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2018/11/12/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/12/aFrame-Difference-Temporal-Loss-For-Video-Stylization.html</guid>
         
         
         <category>jekyll</category>
@@ -2777,9 +2659,9 @@ $(document).ready(function () {
 
 &lt;p&gt;Moreover, I discover this is actually a relationship between output units – differential relationship. I searched on the web and had not found something close to my indication, so I just invent this word. It means that a set of visible variable is related to each other by some latent mechanism, which kind of describes a joint distribution of these variables. To reveal the relationship between these variables, we can do the following experiment: change a variable a little bit, and then by some latent mechanism all other variable change as well, and these changes might tell us interesting things. For example, in GAN cases, units belong to the same semantic region might well change together and units on other regions won’t.&lt;/p&gt;
 </description>
-        <pubDate>Thu, 08 Nov 2018 19:00:00 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/11/08/An-Observation-on-Differential-Relationship.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/08/An-Observation-on-Differential-Relationship.html</guid>
+        <pubDate>Fri, 09 Nov 2018 08:00:00 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2018/11/09/An-Observation-on-Differential-Relationship.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/09/An-Observation-on-Differential-Relationship.html</guid>
         
         
         <category>jekyll</category>
@@ -2861,7 +2743,7 @@ $(document).ready(function () {
 &lt;p&gt;&lt;img src=&quot;/assets/vere/veri_b3_4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 </description>
-        <pubDate>Thu, 08 Nov 2018 04:03:23 -0500</pubDate>
+        <pubDate>Thu, 08 Nov 2018 17:03:23 +0800</pubDate>
         <link>http://localhost:4000/jekyll/update/2018/11/08/VeRi.html</link>
         <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/11/08/VeRi.html</guid>
         
@@ -2884,9 +2766,9 @@ $(document).ready(function () {
 
 &lt;iframe width=&quot;960&quot; height=&quot;540&quot; src=&quot;https://www.youtube.com/embed/Il596wgjUc8&quot; frameborder=&quot;0&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
 </description>
-        <pubDate>Fri, 31 Aug 2018 20:00:00 -0400</pubDate>
-        <link>http://localhost:4000/jekyll/update/2018/08/31/NeuralPainter.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/08/31/NeuralPainter.html</guid>
+        <pubDate>Sat, 01 Sep 2018 08:00:00 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2018/09/01/NeuralPainter.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/09/01/NeuralPainter.html</guid>
         
         
         <category>jekyll</category>
@@ -3049,7 +2931,7 @@ cmake --build . --target _regex --config Release
 
 &lt;p&gt;As for other methods, I would recommend using &lt;code class=&quot;highlighter-rouge&quot;&gt;.ycm_extra_conf.py&lt;/code&gt;.&lt;/p&gt;
 </description>
-        <pubDate>Fri, 22 Jun 2018 00:00:00 -0400</pubDate>
+        <pubDate>Fri, 22 Jun 2018 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/2018/06/22/configure-vim.html</link>
         <guid isPermaLink="true">http://localhost:4000/2018/06/22/configure-vim.html</guid>
         
@@ -3216,9 +3098,132 @@ INFO task_evaluation.py: 186: copypaste: AP,AP50,AP75,APs,APm,APl
 INFO task_evaluation.py: 187: copypaste: 0.2940,0.5049,0.3039,0.1163,0.3080,0.4274
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
-        <pubDate>Tue, 05 Jun 2018 05:03:23 -0400</pubDate>
+        <pubDate>Tue, 05 Jun 2018 17:03:23 +0800</pubDate>
         <link>http://localhost:4000/jekyll/update/2018/06/05/detectron-apply.html</link>
         <guid isPermaLink="true">http://localhost:4000/jekyll/update/2018/06/05/detectron-apply.html</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>Love048</title>
+        <description>&lt;html&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot; /&gt;
+  &lt;title&gt;Love 048&lt;/title&gt;
+
+  &lt;link href=&quot;/assets/2048-with-IMAGES/style/main.css&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;
+  &lt;meta name=&quot;HandheldFriendly&quot; content=&quot;True&quot; /&gt;
+  &lt;meta name=&quot;MobileOptimized&quot; content=&quot;320&quot; /&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class=&quot;container&quot;&gt;
+    &lt;div class=&quot;heading&quot;&gt;
+      &lt;h1 class=&quot;title&quot;&gt;Love048&lt;/h1&gt;
+      &lt;div class=&quot;scores-container&quot;&gt;
+        &lt;div class=&quot;score-container&quot;&gt;0&lt;/div&gt;
+        &lt;div class=&quot;best-container&quot;&gt;0&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;above-game&quot;&gt;
+      &lt;p class=&quot;game-intro&quot;&gt;团子鱼的进化之路&lt;/p&gt;
+      &lt;a class=&quot;restart-button&quot;&gt;开始进化&lt;/a&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;game-container&quot;&gt;
+      &lt;div class=&quot;game-message&quot;&gt;
+        &lt;p style=&quot;font-size:40px; &quot;&gt;&lt;/p&gt;
+        &lt;div class=&quot;lower&quot;&gt;
+	        &lt;a class=&quot;keep-playing-button&quot;&gt;抱走团子鱼～&lt;/a&gt;
+          &lt;a class=&quot;retry-button&quot;&gt;不要放弃团子鱼～&lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;grid-container&quot;&gt;
+        &lt;div class=&quot;grid-row&quot;&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;grid-row&quot;&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;grid-row&quot;&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;grid-row&quot;&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+          &lt;div class=&quot;grid-cell&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div class=&quot;tile-container&quot;&gt;
+
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;hr /&gt;
+    &lt;hr /&gt;
+  &lt;/div&gt;
+  &lt;script&gt;
+			window.addEventListener('load', () =&gt; {
+				// noinspection JSUnresolvedVariable
+				let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+				let xhr = new XMLHttpRequest();
+				xhr.open('GET', '/assets/2048-with-IMAGES/13jours.mp3');
+				xhr.responseType = 'arraybuffer';
+				xhr.addEventListener('load', () =&gt; {
+					let playsound = (audioBuffer) =&gt; {
+						let source = audioCtx.createBufferSource();
+						source.buffer = audioBuffer;
+						source.connect(audioCtx.destination);
+						source.loop = false;
+						source.start();
+
+						setTimeout(function () {
+							let t = document.createElement('p');
+							t.appendChild(document.createTextNode((new Date()).toLocaleString() + ': Sound played'));
+							document.querySelector('.output').appendChild(t);
+							playsound(audioBuffer);
+						}, 1000 + Math.random()*2500);
+					};
+
+					audioCtx.decodeAudioData(xhr.response).then(playsound);
+				});
+				xhr.send();
+			});
+  &lt;/script&gt;
+
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/bind_polyfill.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/classlist_polyfill.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/animframe_polyfill.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/keyboard_input_manager.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/html_actuator.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/grid.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/tile.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/local_storage_manager.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/game_manager.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;/assets/2048-with-IMAGES/js/application.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</description>
+        <pubDate>Sun, 12 Nov 2017 08:00:00 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2017/11/12/Love048.html</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2017/11/12/Love048.html</guid>
         
         
         <category>jekyll</category>

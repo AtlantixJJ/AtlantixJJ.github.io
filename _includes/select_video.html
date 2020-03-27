@@ -947,6 +947,47 @@ var show_name = true;
 var chart;
 var text;
 
+var radios = [
+        "radio-sfn-comb-diff",
+        "radio-sfn-comb-none",
+        "radio-sfn-diff-flow",
+        "radio-sfn-diff-none",
+        "radio-sfn-flow-none",
+        "radio-sfn-comb-msra",
+        "radio-rnn-comb-flow",
+        "radio-rnn-comb-none"];
+
+var labels = [
+    "Video Stability SFN Comb v.s. Pixel",
+    "Video Stability SFN Comb v.s. None",
+    "Video Stability SFN Pixel v.s. Flow",
+    "Video Stability SFN Pixel v.s. None",
+    "Video Stability SFN Flow v.s. None",
+    "Video Stability SFN Comb v.s. MSRA",
+    "Video Stability RNN Comb v.s. Flow",
+    "Video Stability RNN Comb v.s. None"];
+
+var exprs = [
+    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_diff.csv",
+    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_none.csv",
+    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_diff_flow.csv",
+    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_diff_none.csv",
+    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_flow_none.csv",
+    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_sfn_comb_msra.csv",
+    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_rnn_comb_flow.csv",
+    "https://atlantixjj.coding.net/p/VideoStableData/d/VideoStableData/git/raw/master/expr/video_stability_rnn_comb_none.csv"];
+
+function buildRadios() {
+    //var container = document.getElementById("radio-container");
+    for(var i = 0; i < radios.length; i ++) {
+        var radio_name = radios[i],
+            label_name = labels[i],
+            expr = exprs[i];
+        var html = "<div class='form-check'>" + "<input type='radio' class='form-check-input' id=" + radio_name + " name='compare-type' checked>" + "<label class='form-check-label' for='materialChecked'>" + label_name + "</label></div>";
+        $("#radio-container").append(html);
+    }
+}
+
 function set_current_compare_target() {
     var ind = 0;
     comp.forEach(function (item, index) {
@@ -1062,38 +1103,15 @@ function onRestart() {
     chart = null;
     var url = "";
     document.getElementById("greeting").hidden = true;
-    
-    if (document.getElementById("radio-adain-flow-comb-none").checked) {
-        compare_type = "adain_flow_comb_none";
-        // [total, [A_cnt, B_cnt], [A_name, B_name]]
-        comp = [
-            [0, [0, 0], ["flow", "comb"], "AdaIN Stability Flow v.s. Comb"],
-            [0, [0, 0], ["comb", "none"], "AdaIN Stability Comb v.s. None"]
-            ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_adain_flow_comb_none.csv";
-    } else if (document.getElementById("radio-sfn-flow-comb-none").checked) {
-        compare_type = "sfn_flow_comb_none";
-        // [total, [A_cnt, B_cnt], [A_name, B_name]]
-        comp = [
-            [0, [0, 0], ["flow", "comb"], "SFN Stability Flow v.s. Comb"],
-            [0, [0, 0], ["comb", "none"], "SFN Stability Comb v.s. None"]
-            ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_sfn_flow_comb_none.csv";
-    } else if (document.getElementById("radio-rnn-flow-comb-none").checked) {
-        compare_type = "rnn_flow_comb_none";
-        // [total, [A_cnt, B_cnt], [A_name, B_name]]
-        comp = [
-            [0, [0, 0], ["flow", "comb"], "RNN Stability Flow v.s. Comb"],
-            [0, [0, 0], ["comb", "none"], "RNN Stability Comb v.s. None"]
-            ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_rnn_flow_comb_none.csv";
-    } else if (document.getElementById("radio-slow-sfn-flow-none").checked) {
-        compare_type = "flow_none";
-        comp = [
-            [0, [0, 0], ["flow", "none"], "SFN Stability Flow v.s. None"]
-            ];
-        url = "https://raw.githubusercontent.com/AtlantixJJ/VideoStableData/master/compare_videostability_slow_sfn_flow_none.csv";
+
+    for (var i = 0; i < radios.length; i ++) {
+        var radio = document.getElementById(radios[i]);
+        if (radio.checked) {
+            url = exprs[i];
+            break;
+        }
     }
+    
     httpGet(url);
     total_number = file_url.length;
     document.getElementById("process-bar").textContent = `process (0/${total_number})`;
@@ -1149,6 +1167,7 @@ $(document).ready(function () {
     element_A = document.getElementById("element-A");
     element_B = document.getElementById("element-B");
 
+    buildRadios();
     onRestart();
 
     document.getElementById("msg").textContent = "";
@@ -1209,23 +1228,8 @@ $(document).ready(function () {
                 <a id="restart-btn" href="###" style="float:left;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Restart</a>
                 <a id="show-btn" href="###" style="float:right;font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Show Name</a>
             </div>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio-slow-sfn-flow-none" name="compare-type" checked>
-                <label class="form-check-label" for="materialChecked">(SLOW) Compare SFN (Flow v.s. None)</label>
-            </div>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio-sfn-flow-comb-none" name="compare-type" checked>
-                <label class="form-check-label" for="materialChecked">Compare SFN (Flow v.s. Comb v.s. None)</label>
-            </div>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio-rnn-flow-comb-none" name="compare-type" checked>
-                <label class="form-check-label" for="materialChecked">Compare RNN (Flow v.s. Comb v.s. None)</label>
-            </div>
-            <div class="form-check">
-                <input type="radio" class="form-check-input" id="radio-adain-flow-comb-none" name="compare-type" checked>
-                <label class="form-check-label" for="materialChecked">Compare AdaIN (Flow v.s. Comb v.s. None)</label>
-            </div>
-        </div>
+
+            <div id="radio-container"></div>
 
         <div style="width: 600px;">
             <span style = "font-family:'Times New Roman', Times, serif; font-size:24px;text-align:right;color: #000000">Statistics</span>
