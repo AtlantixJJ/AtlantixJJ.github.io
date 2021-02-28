@@ -10,8 +10,8 @@
   <meta name="description" content="Detectron In a Day">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/jekyll/update/2018/06/05/detectron-apply.html">
-  <link rel="alternate" type="application/rss+xml" title="Jianjin Xu's Blog" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="http://atlantixjj.github.io/jekyll/update/2018/06/05/detectron-apply.html">
+  <link rel="alternate" type="application/rss+xml" title="Jianjin Xu's Blog" href="http://atlantixjj.github.io/feed.xml">
 </head>
 
 
@@ -74,11 +74,11 @@
 
 <p>Clone from its github page and build as requested.</p>
 
-<p>Obstacle 1: <code class="highlighter-rouge">X display</code> not set properly.</p>
+<p>Obstacle 1: <code class="language-plaintext highlighter-rouge">X display</code> not set properly.</p>
 
-<p>Solution: Reinstall <code class="highlighter-rouge">xorg</code>.</p>
+<p>Solution: Reinstall <code class="language-plaintext highlighter-rouge">xorg</code>.</p>
 
-<p>Obstacle 2: <code class="highlighter-rouge">undefined symbol: PyFPE_jbuf</code>. A rare issue, when you compile it before you change the python library this will happen. For example, switching from anaconda3 to anaconda2. The solution is to clean all the build and make again.</p>
+<p>Obstacle 2: <code class="language-plaintext highlighter-rouge">undefined symbol: PyFPE_jbuf</code>. A rare issue, when you compile it before you change the python library this will happen. For example, switching from anaconda3 to anaconda2. The solution is to clean all the build and make again.</p>
 
 <h3 id="caffe2-installation-from-source">Caffe2 Installation (From Source)</h3>
 
@@ -92,13 +92,13 @@
 
 <ol>
   <li>
-    <p>cmake failure: <code class="highlighter-rouge">string does not recognize sub-command APPEND</code>. Probably caused by low version of CMake. To deal with it, you need to install the latest CMake from source.</p>
+    <p>cmake failure: <code class="language-plaintext highlighter-rouge">string does not recognize sub-command APPEND</code>. Probably caused by low version of CMake. To deal with it, you need to install the latest CMake from source.</p>
   </li>
   <li>
-    <p>make failure。<code class="highlighter-rouge">/usr/bin/ld: cannot find -lnvrtc</code>. After examing its code, I found <code class="highlighter-rouge">sudo</code> to be part of the failure. Use user permission to build the source will eliminate this failure.</p>
+    <p>make failure。<code class="language-plaintext highlighter-rouge">/usr/bin/ld: cannot find -lnvrtc</code>. After examing its code, I found <code class="language-plaintext highlighter-rouge">sudo</code> to be part of the failure. Use user permission to build the source will eliminate this failure.</p>
   </li>
   <li>
-    <p>opencv linking failure。<code class="highlighter-rouge">/usr/local/lib/libopencv_core.so.3.4: undefined reference to dgeqrf_</code>。It is probably the problem with opencv pre-built binaries. To solve it, you need to build opencv from source.</p>
+    <p>opencv linking failure。<code class="language-plaintext highlighter-rouge">/usr/local/lib/libopencv_core.so.3.4: undefined reference to dgeqrf_</code>。It is probably the problem with opencv pre-built binaries. To solve it, you need to build opencv from source.</p>
   </li>
 </ol>
 
@@ -106,14 +106,14 @@
 
 <h3 id="caffe2-installation-by-anaconda">Caffe2 Installation (By Anaconda)</h3>
 
-<p>It seems that <code class="highlighter-rouge">detectron</code> only support python2. So unfortunate for Anaconda3 users.</p>
+<p>It seems that <code class="language-plaintext highlighter-rouge">detectron</code> only support python2. So unfortunate for Anaconda3 users.</p>
 
 <p>There is no problem installing anaconda2, and install Caffe2 is one line:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda install -c caffe2 caffe2-cuda8.0-cudnn7
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>conda install -c caffe2 caffe2-cuda8.0-cudnn7
 </code></pre></div></div>
 
-<p>I notice that the official instruction suggest to add <code class="highlighter-rouge">gcc4.8</code> subfix if the GCC version is lower than 5. But if you do that, the package cannot be found. And Continue without subfix seems to be fine. Anyway.</p>
+<p>I notice that the official instruction suggest to add <code class="language-plaintext highlighter-rouge">gcc4.8</code> subfix if the GCC version is lower than 5. But if you do that, the package cannot be found. And Continue without subfix seems to be fine. Anyway.</p>
 
 <p>But later, there is other issues with CUDA library. Lots of version problem:</p>
 
@@ -126,7 +126,7 @@
   </li>
 </ol>
 
-<p>Download from NVIDIA and install to local directory solve the problem. I suppose you do not have sudo permission, in this case fake a <code class="highlighter-rouge">usr/local/</code> in your local directory will help.</p>
+<p>Download from NVIDIA and install to local directory solve the problem. I suppose you do not have sudo permission, in this case fake a <code class="language-plaintext highlighter-rouge">usr/local/</code> in your local directory will help.</p>
 
 <p>Then I verified the installation. Successful!</p>
 
@@ -134,12 +134,12 @@
 
 <p>The instruction is very simple:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install -r ./requirements.txt --user
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install -r ./requirements.txt --user
 make
 python2 detectron/tests/test_spatial_narrow_as_op.py
 </code></pre></div></div>
 
-<p>However <code class="highlighter-rouge">pip install -r ./requirements.txt --user</code> cause serious problem in my case. It seems that pip fails to recognize conda, and the libraries are installed twice. As a result, the whole python environment breaks. It is more convenient reinstalling anaconda than repairing it.</p>
+<p>However <code class="language-plaintext highlighter-rouge">pip install -r ./requirements.txt --user</code> cause serious problem in my case. It seems that pip fails to recognize conda, and the libraries are installed twice. As a result, the whole python environment breaks. It is more convenient reinstalling anaconda than repairing it.</p>
 
 <p>After this, I continue without error.</p>
 
@@ -147,7 +147,7 @@ python2 detectron/tests/test_spatial_narrow_as_op.py
 
 <p>Inference:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python2 tools/infer_simple.py \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python2 tools/infer_simple.py \
     --cfg configs/12_2017_baselines/e2e_mask_rcnn_R-101-FPN_2x.yaml \
     --output-dir ./log/detectron-visualizations \
     --image-ext jpg \
@@ -157,7 +157,7 @@ python2 detectron/tests/test_spatial_narrow_as_op.py
 
 <p>Train (End to End):</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python2 tools/train_net.py \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python2 tools/train_net.py \
     --cfg configs/my/e2e_mask_rcnn_R-50-FPN_1x.yaml \
     OUTPUT_DIR ./log/detectron-mye2e_2
 </code></pre></div></div>
@@ -169,13 +169,13 @@ python2 detectron/tests/test_spatial_narrow_as_op.py
     <p>Reduce NUM_GPU to suit your machine.</p>
   </li>
   <li>
-    <p>Add dataset in <code class="highlighter-rouge">dataset_catalog.py</code> if your dataset is not at the particular position.</p>
+    <p>Add dataset in <code class="language-plaintext highlighter-rouge">dataset_catalog.py</code> if your dataset is not at the particular position.</p>
   </li>
   <li>
     <p>Modify dataset name too.</p>
   </li>
   <li>
-    <p>Learning rate schedule modification. If you are not using 8 GPUs, then you should do a linear learning rate schedule stretch according to <code class="highlighter-rouge">getting_started</code> section.</p>
+    <p>Learning rate schedule modification. If you are not using 8 GPUs, then you should do a linear learning rate schedule stretch according to <code class="language-plaintext highlighter-rouge">getting_started</code> section.</p>
   </li>
 </ol>
 
@@ -183,13 +183,13 @@ python2 detectron/tests/test_spatial_narrow_as_op.py
 
 <h4 id="expr-1">Expr 1</h4>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python2 tools/train_net.py \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python2 tools/train_net.py \
     --multi-gpu-testing \
     --cfg configs/my/e2e_mask_rcnn_R-50-FPN_1x.yaml \
     OUTPUT_DIR ./log/detectron-mye2e_2
 </code></pre></div></div>
 
-<p>In this experiment, I forgot to stretch the learning rate schedule, and it failed with learning, resulting in <code class="highlighter-rouge">Negative Area</code> fault.</p>
+<p>In this experiment, I forgot to stretch the learning rate schedule, and it failed with learning, resulting in <code class="language-plaintext highlighter-rouge">Negative Area</code> fault.</p>
 
 <h4 id="expr-2">Expr 2</h4>
 
@@ -197,7 +197,7 @@ python2 detectron/tests/test_spatial_narrow_as_op.py
 
 <p>result:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.294
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.294
 Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=100 ] = 0.505
 Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=100 ] = 0.304
 Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=100 ] = 0.116

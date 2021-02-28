@@ -6,7 +6,7 @@
 
 <p>Configure options:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure --prefix=/home/atlantix/usr/local/ \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./configure --prefix=/home/atlantix/usr/local/ \
     --with-features=huge \
     --enable-rubyinterp \
     --enable-python3interp \
@@ -32,7 +32,7 @@
     –with-python-config-dir=/home/atlantix/anaconda2/lib/python2.7/config <br />
 Need to make sure lua perl ruby is installed.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make &amp;&amp; make install
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>make &amp;&amp; make install
 </code></pre></div></div>
 
 <p>Then vim is installed locally. Make sure that the local bin directory is in the path.</p>
@@ -43,7 +43,7 @@ Need to make sure lua perl ruby is installed.</p>
 
 <p>Then add <a href="https://github.com/Valloric/YouCompleteMe">YouCompleteMe</a> to this configuration.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/Valloric/YouCompleteMe
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/Valloric/YouCompleteMe
 cd YouCompleteMe
 git submodule update --init --recursive
 </code></pre></div></div>
@@ -57,11 +57,11 @@ git submodule update --init --recursive
     <p>Go. Pass.</p>
   </li>
   <li>
-    <p>Install tsserver: <code class="highlighter-rouge">npm i typescript -g</code>. This is the typescript server. If you need to use proxy, then do</p>
+    <p>Install tsserver: <code class="language-plaintext highlighter-rouge">npm i typescript -g</code>. This is the typescript server. If you need to use proxy, then do</p>
   </li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ npm config set proxy http://server:port
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ npm config set proxy http://server:port
 $ npm config set https-proxy https://server:port
 </code></pre></div></div>
 
@@ -77,9 +77,9 @@ $ npm config set https-proxy https://server:port
   </li>
 </ol>
 
-<p><code class="highlighter-rouge"> curl https://sh.rustup.rs -sSf | sh</code></p>
+<p><code class="language-plaintext highlighter-rouge"> curl https://sh.rustup.rs -sSf | sh</code></p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Welcome to Rust!
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Welcome to Rust!
 
 This will download and install the official compiler for the Rust programming
 language, and its package manager, Cargo.
@@ -116,7 +116,7 @@ Current installation options:
   <li>cargo. Installed together with rustup.</li>
 </ol>
 
-<p>Native configuration failed for me. run <code class="highlighter-rouge">./install.py --all</code> will result in a HASH error. Because the program failed to download a specific clang prebuilt libraries. So here I try to build YCM manually.</p>
+<p>Native configuration failed for me. run <code class="language-plaintext highlighter-rouge">./install.py --all</code> will result in a HASH error. Because the program failed to download a specific clang prebuilt libraries. So here I try to build YCM manually.</p>
 
 <p>Download clang and llvm from official site and extract the prebuilt binary:</p>
 
@@ -124,14 +124,14 @@ Current installation options:
 
 <p>Follow the instructions:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~ &amp;&amp; mkdir ycm_build &amp;&amp; cd ycm_build
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~ &amp;&amp; mkdir ycm_build &amp;&amp; cd ycm_build
 cmake -G "Unix Makefiles" -DPATH_TO_LLVM_ROOT=/home/atlantix/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/clang_archives/clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-14.04 . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/cpp
 cmake --build . --target ycm_core --config Release
 </code></pre></div></div>
 
 <p>or this for Ubuntu 16.04</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~ &amp;&amp; mkdir ycm_build &amp;&amp; cd ycm_build
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~ &amp;&amp; mkdir ycm_build &amp;&amp; cd ycm_build
 cmake -G "Unix Makefiles" -DPATH_TO_LLVM_ROOT=~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/clang_archives/clang+llvm-6.0.0-x86_64-linux-gnu-ubuntu-16.04 . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/cpp
 cmake --build . --target ycm_core --config Release
 </code></pre></div></div>
@@ -140,12 +140,12 @@ cmake --build . --target ycm_core --config Release
 
 <p>cd into this directory</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cmake -G "Unix Makefiles" . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/third_party/cregex
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cmake -G "Unix Makefiles" . ~/.vim_runtime/my_plugins/YouCompleteMe/third_party/ycmd/third_party/cregex
 cmake --build . --target _regex --config Release
 </code></pre></div></div>
 
 <p>And build support for other languages as instructed in full installation guide.</p>
 
-<p>To enable completion in C language project, you need to add a few step to your project. If you are using CMake, then add a line <code class="highlighter-rouge">set(CMAKE_EXPORT_COMPILE_COMMANDS ON)</code> to cmake and build it. This will generate a json named compile_commands.json. Make sure this file is at the root of your project.</p>
+<p>To enable completion in C language project, you need to add a few step to your project. If you are using CMake, then add a line <code class="language-plaintext highlighter-rouge">set(CMAKE_EXPORT_COMPILE_COMMANDS ON)</code> to cmake and build it. This will generate a json named compile_commands.json. Make sure this file is at the root of your project.</p>
 
-<p>As for other methods, I would recommend using <code class="highlighter-rouge">.ycm_extra_conf.py</code>.</p>
+<p>As for other methods, I would recommend using <code class="language-plaintext highlighter-rouge">.ycm_extra_conf.py</code>.</p>
