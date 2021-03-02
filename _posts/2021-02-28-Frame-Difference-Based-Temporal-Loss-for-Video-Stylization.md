@@ -13,6 +13,6 @@ Our method follows the first category of methods, which is to build a new tempor
 
 I build a simple user study `game` in my blog to help demonstrate our method.
 
-- [Evaluation of video stability](http://atlantixjj.github.io/ekyll/update/2018/11/13/video-stability.html) 
+- [Evaluation of video stability](https://atlantixjj.github.io/jekyll/update/2018/11/13/video-stability.html) 
 
-- [Evaluation of frame quality](http://atlantixjj.github.io/ekyll/update/2018/11/12/frame-quality.html)
+- [Evaluation of frame quality](https://atlantixjj.github.io/jekyll/update/2018/11/12/frame-quality.html)
