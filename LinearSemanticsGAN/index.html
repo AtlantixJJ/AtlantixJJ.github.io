@@ -246,41 +246,79 @@
 	<hr>
 	<center><h1>GAN's Linear Semantic Embedding</h1></center>
 
-	<center>
-		<table align=center width=850px>
-			<tr>
-				<td>
-					<center>
-						<img class="round" style="width:800px" src="./resources/pipeline.png"/>
-					</center>
-				</td>
-			</tr>
-		</table>
-		<table align=center width=850px>
-			<tr>
-				<td>
-					We find that the generated image semantics can be extracted from GAN's feature maps using a linear transformation, referred to as the Linear Semantic Extractor, LSE.
-					The LSE is learned using cross-entropy loss using supervisions provided by off-the-shelf segmentation network.
-				</td>
-			</tr>
-			<tr>
-				<td>
-					We conduct extensive experiments to verify that GAN indeed embed semantics linearly.
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<center>
-						<img class="round" style="width:800px" src="./resources/se_quant.png"/>
-					</center>
-				</td>
-			</tr>
-		</table>
-	</center>
+	<table align=center width=850px>
+		<tr>
+			<td align=center>
+				<img class="round" style="width:800px" src="./resources/pipeline.png"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p><strong>Linear Semantic Extractor (LSE)</strong>. We find that the generated image semantics can be extracted from GAN's feature maps using a linear transformation.
+				As shown in the figure above, the LSE simply upsamples and concatenates GAN's feature maps into a block, and then run a 1x1 convolution on top of the block.
+				The LSE is trained using cross-entropy loss using supervisions provided by off-the-shelf segmentation network.
+				We conduct extensive experiments to support the linear semantics hypothesis.
+				Our evidence is two-fold.</p>
+				<br>
+			</td>
+		</tr>
+
+		<tr>
+			<td align=center>
+				<img class="round" style="width:850px" src="./resources/se_quant.png"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p><strong>Evidence 1: LSE suffices to extract the semantics from GANs</strong>.
+				We study to what extent could the semantics be better extracted by Nonlinear Semantic Extractors (NSEs). 
+				Table.1 shows that in most cases, the performance of LSE is within a range of 3.5% relative to the best NSE method.
+				Although NSEs achieve the best performance, their differences with the LSEs are marginal.
+				This experiment directly supports that LSE suffices to extract GAN's semantics.</p>
+				<br>
+			</td>
+		</tr>
+
+		<tr>
+			<td align=center>
+				<img style="width:450px" src="./resources/fewshot_quant.png"/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p><strong>Evidence 2: LSE can be trained using few annotations</strong>.
+				We only use N=1, 4, 8, 16 annotations to train the LSE (for StyleGAN2 models) and repeatedly train each LSE 5 times to account for the training data variance.
+				As shown in Table.2, given N=16 annotations, the 16-shot LSEs achieve around 90%, 80%, and 70% performance relative to the fully trained models.</p>
+				<br>
+			</td>
+		</tr>
+	</table>
+	<table align=center width=900px>
+		<tr>
+			<td align=center>
+				<img class="round" style="width: 300px" src="resources/face_appendix_5.png" />
+			</td>
+			<td align=center>
+				<img class="round" style="width: 300px" src="resources/bedroom_appendix_5.png" />
+			</td>
+			<td align=center>
+				<img class="round" style="width: 300px" src="resources/church_appendix_5.png" />
+			</td>
+		</tr>
+	</table>
+	<table align=center width=850px>
+		<tr>
+			<td align=center>
+				<p>Figure: qualitative comparison of LSE, NSE-1, and NSE-2.
+				<br>
+				</p>
+			</td>
+		</tr>
+	</table>
 
 	<hr>
 
-	<center><h1>Code</h1></center>
+	<center><h1>Applications</h1></center>
 
 	<table align=center width=420px>
 		<center>
