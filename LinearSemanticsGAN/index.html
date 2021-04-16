@@ -230,7 +230,7 @@
 	<hr>
 	<center><h1>Talk</h1></center>
 	<p align="center">
-		<iframe width="660" height="395" src="https://www.youtube.com/watch?v=xcQqUJqu5WM" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen align="center"></iframe>
+		<iframe width="960" height="540" src="https://www.youtube.com/embed/xcQqUJqu5WM" allow="autoplay; encrypted-media" frameborder="0" allowfullscreen></iframe>
 	</p>
 
 	<table align=center width=800px>
@@ -242,6 +242,25 @@
 			</center>
 		</tr>
 	</table>
+
+	<br>
+	<hr>
+
+	<table align=center width=700px>
+		<center><h1>Paper and Supplementary Materials</h1></center>
+		<tr>
+			<td><a href="resources/Linear_Semantics_in_GAN.pdf"><img class="layered-paper-big" style="height:175px" src="./resources/paper.png"/></a></td>
+
+			<td><span style="font-size:14pt">Jianjin Xu, Changxi Zheng<br>
+				<b>Linear Semantics in Generative Adversarial Networks</b><br>
+				In CVPR 2021.<br>
+				(hosted on <a href="https://arxiv.org/abs/2104.00487">ArXiv</a>)<br>
+			</td>
+
+		</tr>
+	</table>
+	<br>
+	<br>
 
 	<hr>
 	<center><h1>GAN's Linear Semantic Embedding</h1></center>
@@ -293,7 +312,8 @@
 			</td>
 		</tr>
 	</table>
-	<table align=center width=900px>
+
+	<!--<table align=center width=900px>
 		<tr>
 			<td align=center>
 				<img class="round" style="width: 300px" src="resources/face_appendix_5.png" />
@@ -305,13 +325,26 @@
 				<img class="round" style="width: 300px" src="resources/church_appendix_5.png" />
 			</td>
 		</tr>
+	</table>-->
+
+	<table align=center width=900px>
+		<tr>
+			<td align=center>
+				<img class="round" style="width: 300px" src="resources/face_paper_1.png" />
+			</td>
+			<td align=center>
+				<img class="round" style="width: 300px" src="resources/bedroom_paper_1.png" />
+			</td>
+			<td align=center>
+				<img class="round" style="width: 300px" src="resources/church_paper_1.png" />
+			</td>
+		</tr>
 	</table>
 	<table align=center width=850px>
 		<tr>
 			<td align=center>
-				<p>Figure: qualitative comparison of LSE, NSE-1, and NSE-2.
+				<p><i>Figure: qualitative comparison of LSE, NSE-1, and NSE-2.</i></p>
 				<br>
-				</p>
 			</td>
 		</tr>
 	</table>
@@ -320,67 +353,74 @@
 
 	<center><h1>Applications</h1></center>
 
-	<table align=center width=420px>
-		<center>
-			<tr>
-				<td>
-				</td>
-			</tr>
-		</center>
-	</table>
-	<table align=center width=400px>
-		<tr>
-			<td align=center width=400px>
-				<center>
-					<td><img class="round" style="width:450px" src="./resources/method_diagram.png"/></td>
-				</center>
-			</td>
-		</tr>
-	</table>
 	<table align=center width=850px>
-		<center>
-			<tr>
-				<td>
-					Short description if wanted
-				</td>
-			</tr>
-		</center>
-	</table>
-	<table align=center width=800px>
-		<br>
-		<tr><center>
-			<span style="font-size:28px">&nbsp;<a href='https://github.com/richzhang/webpage-template'>[GitHub]</a>
-			</center>
-		</span>
-	</table>
-	<br>
-	<hr>
-	<table align=center width=450px>
-		<center><h1>Paper and Supplementary Material</h1></center>
 		<tr>
-			<td><a href=""><img class="layered-paper-big" style="height:175px" src="./resources/paper.png"/></a></td>
-			<td><span style="font-size:14pt">F. Author, S. Author, T. Author.<br>
-				<b>Creative and Descriptive Paper Title.</b><br>
-				In Conference, 20XX.<br>
-				(hosted on <a href="">ArXiv</a>)<br>
-				<!-- (<a href="./resources/camera-ready.pdf">camera ready</a>)<br> -->
-				<span style="font-size:4pt"><a href=""><br></a>
-				</span>
+			<td align=center>
+				<video controls="controls" height="400px" loop="loop" autoplay='autoplay' src='resources/LinearGAN_Training.mp4' type="video/mp4">
+					Your browser does not support the video element.
+					</video>
+			</td>
+		</tr>
+		<tr>
+			<td align=center>
+				<p><i>Video: demonstration of training a few-shot LSE.</i></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>After annotating a few annotations, we obtain a competitve semantic segmentation model for GAN generated images. The few-shot LSEs further enables image editing applications.</p>
+				<br>
 			</td>
 		</tr>
 	</table>
-	<br>
 
-	<table align=center width=600px>
+	<table align=center width=850px>
 		<tr>
-			<td><span style="font-size:14pt"><center>
-				<a href="./resources/bibtex.txt">[Bibtex]</a>
-			</center></td>
+			<td>
+				<p>We propose two image editing applications:
+				few-shot <strong>Semantic Image Editing</strong> and few-shot <strong>Semantic Conditional Sampling</strong>.
+				Both applications are formulated as an optimization problem:
+				find a latent vector that produces images satisfying given semantic constraints.
+				For SIE, we optimize the initial latent vector to get close to the user-modified semantic mask.
+				For SCS, we optimize several random latent vectors and return the closest one to the user-specific semantic mask.
+				</p>
+				<br>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<img class="round" src="resources/SIE_stroke.png" style="width: 850px"/>
+			</td>
+		</tr>
+		<tr>
+			<td align=center>
+				<p><i>Figure: comparison of color-based editing, SIE using UNet (baseline), SIE using 8-shot LSE (ours), and SIE using fully trained LSE.</i></p>
+				<br>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<p><strong>Semantic Image Editing</strong>.
+				In many cases, the user may want to control a GAN’s image generation process. For example, they might want to adjust the hair color of a generated facial image from blond to red; and the user may draw a red stroke on the hair to easily specify their intent.
+				However, without explicit notion of semantics, the minimization process may not respect image semantics, leading to undesired changes of shapes and textures.
+				Leveraging LSE, we propose an approached called Semantic Image Editing (SIE) to enable semantic-aware image generation.
+				Our method can edit the images better than the baseline, SIE(UNet).
+				More results are shown in the video below.
+				</p>
+				<br>
+			</td>
+		</tr>
+		<tr>
+			<td>
+
+			</td>
 		</tr>
 	</table>
 
-	<hr>
 	<br>
+	<hr>
 
 	<table align=center width=900px>
 		<tr>
