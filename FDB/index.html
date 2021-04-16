@@ -118,10 +118,10 @@
 
 <html>
 <head>
-	<title>Linear Semantics in Generative Adversarial Networks</title>
+	<title>Frame Difference-Based Temporal Loss for Video Stylization</title>
 	<meta property="og:image" content="./resources/teaser.png"/> 
-	<meta property="og:title" content="Linear Semantics in Generative Adversarial Networks" />
-	<meta property="og:description" content="We study how GAN model image semantics and thereby enable controllability over the semantics of generated images." />
+	<meta property="og:title" content="Frame Difference-Based Temporal Loss for Video Stylization." />
+	<meta property="og:description" content="We propose a simple temporal loss to stablize style-transferred videos." />
 
 	<!-- Get from Google Analytics -->
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -138,58 +138,51 @@
 <body>
 	<br>
 	<center>
-		<span style="font-size:36px">Linear Semantics in Generative Adversarial Networks</span>
-		<table align=center width=600px>
-			<table align=center width=600px>
+		<span style="font-size:36px">Frame Difference-Based Temporal Loss for Video Stylization</span>
+		<table align=center width=900px>
+			<table align=center width=900px>
 				<tr>
-					<td align=center width=100px>
-						<center>
-							<span style="font-size:24px"><a href="https://atlantixjj.github.io">Jianjin Xu</a><sup>1,2</sup></span>
-						</center>
+					<td align=center width=300px>
+						<span style="font-size:24px"><a href="https://atlantixjj.github.io">Jianjin Xu</a><sup>1,2</sup></span>
 					</td>
-					<td align=center width=100px>
-						<center>
-							<span style="font-size:24px"><a href="http://www.cs.columbia.edu/~cxz/">Changxi Zheng</a><sup>1</sup></span>
-						</center>
+					<td align=center width=300px>
+						<span style="font-size:24px"><a href="http://www.cs.columbia.edu/~cxz/">Zheyang Xiong</a><sup>3</sup></span>
+					</td>
+					<td align=center width=300px>
+						<span style="font-size:24px"><a href="http://www.cs.columbia.edu/~cxz/">Xiaolin Hu</a><sup>1</sup></span>
 					</td>
 				</tr>
 				<tr>
-					<td align=center width=100px>
-						<center>
-							<span style="font-size:24px"><sup>1</sup>Columbia University</span>
-						</center>
+					<td align=center width=200px>
+						<span style="font-size:24px"><sup>1</sup>Tsinghua University</span>
 					</td>
-					<td align=center width=100px>
-						<center>
-							<span style="font-size:24px"><sup>2</sup>Panzhihua University</span>
-						</center>
+					<td align=center width=200px>
+						<span style="font-size:24px"><sup>2</sup>Panzhihua University</span>
+					</td>
+					<td align=center width=200px>
+						<span style="font-size:24px"><sup>2</sup>Rice University</span>
 					</td>
 				</tr>
 			</table>
 			<table align=center width=250px>
 				<tr>
 					<td align=center width=120px>
-						<center>
-							<span style="font-size:24px"><a href='https://arxiv.org/abs/2104.00487'>[Paper]</a></span>
-						</center>
+						<span style="font-size:24px"><a href='https://arxiv.org/abs/2102.05822'>[Paper]</a></span>
 					</td>
 					<td align=center width=120px>
-						<center>
-							<span style="font-size:24px"><a href='https://github.com/AtlantixJJ/LinearGAN'>[Code]</a></span><br>
-						</center>
+						<span style="font-size:24px"><a href='https://github.com/AtlantixJJ/frame-difference-loss'>[Code]</a></span><br>
 					</td>
 				</tr>
 			</table>
 		</table>
 	</center>
 
+	<!-- no teaser for FDB
 	<center>
 		<table align=center width=850px>
 			<tr>
-				<td>
-					<center>
-						<img class="round" style="width:500px" src="./resources/teaser.png"/>
-					</center>
+				<td align=center>
+					<img class="round" style="width:500px" src="./resources/teaser.png"/>
 				</td>
 			</tr>
 		</table>
@@ -200,7 +193,7 @@
 				</td>
 			</tr>
 		</table>
-	</center>
+	</center>-->
 
 	<hr>
 
@@ -208,52 +201,33 @@
 		<center><h1>Abstract</h1></center>
 		<tr>
 			<td>
-				Generative Adversarial Networks (GANs) are able to generate high-quality images, but it remains difficult to explicitly specify the semantics of synthesized images.
-				In this work, we aim to better understand the semantic representation of GANs, and thereby enable semantic control in GAN's generation process.
-				Interestingly, we find that a well-trained GAN encodes image semantics in its internal feature maps in a surprisingly simple way:
-				<strong>a linear transformation of feature maps suffices to extract the generated image semantics.
-				</strong>
-			</td>
-		</tr>
-
-		<tr>
-			<td>
-			<br/>
-			To verify this simplicity, we conduct extensive experiments on various GANs and datasets; and thanks to this simplicity, we are able to learn a semantic segmentation model for a trained GAN from a small number (e.g., 8) of labeled images.
-			Last but not least, leveraging our findings, we propose two few-shot image editing approaches, namely Semantic-Conditional Sampling and Semantic Image Editing.
-			Given a trained GAN and as few as eight semantic annotations, the user is able to generate diverse images subject to a user-provided semantic layout, and control the synthesized image semantics.
+				<p>Neural style transfer models have been used to stylize an ordinary video to specific styles. To ensure temporal
+				inconsistency between the frames of the stylized video, a common approach is to estimate the optic flow of the pixels in the original
+				video and make the generated pixels match the estimated optical flow. This is achieved by minimizing an optical flow-based (OFB) loss
+				during model training. However, optical flow estimation is itself a challenging task, particularly in complex scenes. In addition, it incurs a
+				high computational cost. We propose a much simpler temporal loss called the frame difference-based (FDB) loss to solve the temporal
+				inconsistency problem. It is defined as the distance between the difference between the stylized frames and the difference between the
+				original frames. The differences between the two frames are measured in both the pixel space and the feature space specified by the
+				convolutional neural networks. A set of human behavior experiments involving 62 subjects with 25,600 votes showed that the
+				performance of the proposed FDB loss matched that of the OFB loss. The performance was measured by subjective evaluation of
+				stability and stylization quality of the generated videos on two typical video stylization models. The results suggest that the proposed
+				FDB loss is a strong alternative to the commonly used OFB loss for video stylization.
+				</p>
 			</td>
 		</tr>
 	</table>
 	<br>
 
 	<hr>
-	<center><h1>Talk</h1></center>
-	<p align="center">
-		<iframe width="960" height="540" src="https://www.youtube.com/embed/xcQqUJqu5WM" allow="autoplay; encrypted-media" frameborder="0" allowfullscreen></iframe>
-	</p>
 
 	<table align=center width=800px>
-		<br>
-		<tr>
-			<center>
-				<span style="font-size:28px"><a href=''>[Slides]</a>
-				</span>
-			</center>
-		</tr>
-	</table>
-
-	<br>
-	<hr>
-
-	<table align=center width=700px>
 		<center><h1>Paper and Supplementary Materials</h1></center>
 		<tr>
 			<td><a href="resources/Linear_Semantics_in_GAN.pdf"><img class="layered-paper-big" style="height:175px" src="./resources/paper.png"/></a></td>
 
-			<td><span style="font-size:14pt">Jianjin Xu, Changxi Zheng<br>
-				<b>Linear Semantics in Generative Adversarial Networks</b><br>
-				In CVPR 2021.<br>
+			<td><span style="font-size:14pt">Jianjin Xu, Zheyang Xiong, Xiaolin Hu<br>
+				<b>Frame Difference-Based Temporal Loss for Video Stylization</b><br>
+				Submitted to TPAMI.<br>
 				(hosted on <a href="https://arxiv.org/abs/2104.00487">ArXiv</a>)
 				<br>
 				<span style="font-size:14pt">
@@ -262,98 +236,50 @@
 					</a>
 				</span>
 			</td>
+
 		</tr>
 	</table>
-
 	<br>
 	<br>
 
 	<hr>
-	<center><h1>GAN's Linear Semantic Embedding</h1></center>
+	<center><h1>Methods</h1></center>
 
 	<table align=center width=850px>
 		<tr>
 			<td align=center>
-				<img class="round" style="width:800px" src="./resources/pipeline.png"/>
+				<img class="round" style="width:850px" src="./resources/pipeline.png"/>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<p><strong>Linear Semantic Extractor (LSE)</strong>. We find that the generated image semantics can be extracted from GAN's feature maps using a linear transformation.
-				As shown in the figure above, the LSE simply upsamples and concatenates GAN's feature maps into a block, and then run a 1x1 convolution on top of the block.
-				The LSE is trained using cross-entropy loss using supervisions provided by off-the-shelf segmentation network.
-				We conduct extensive experiments to support the linear semantics hypothesis.
-				Our evidence is two-fold.</p>
+				<p>
+				We propose a Frame Difference-Based (FDB) loss for stablizing stylized videos.
+				The FDB loss is the distance between the difference of original frames and the difference of stylized frames.
+				The difference is calculated in both pixel space and feature space.
+				</p>
 				<br>
 			</td>
 		</tr>
-
 		<tr>
 			<td align=center>
-				<img class="round" style="width:850px" src="./resources/se_quant.png"/>
+				<img class="round" style="width:400px" src="resources/cfdb_stability.png"/>
+				<img class="round" style="width:400px" src="resources/cfdb_quality.png"/>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<p><strong>Evidence 1: LSE suffices to extract the semantics from GANs</strong>.
-				We study to what extent could the semantics be better extracted by Nonlinear Semantic Extractors (NSEs). 
-				Table.1 shows that in most cases, the performance of LSE is within a range of 3.5% relative to the best NSE method.
-				Although NSEs achieve the best performance, their differences with the LSEs are marginal.
-				This experiment directly supports that LSE suffices to extract GAN's semantics.</p>
+				<p>We evaluate the proposed FDB to the Optic Flow-Based (OFB) loss, which is the baseline.
+				As the instability phenomena is subtle in pixel values, existing numeric metrics fail to discriminate the stablization ability of different algorithms, we resort to user study to evaluate the video stability and frame quality of our methods.</p>
 				<br>
-			</td>
-		</tr>
-
-		<tr>
-			<td align=center>
-				<img style="width:450px" src="./resources/fewshot_quant.png"/>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<p><strong>Evidence 2: LSE can be trained using few annotations</strong>.
-				We only use N=1, 4, 8, 16 annotations to train the LSE (for StyleGAN2 models) and repeatedly train each LSE 5 times to account for the training data variance.
-				As shown in Table.2, given N=16 annotations, the 16-shot LSEs achieve around 90%, 80%, and 70% performance relative to the fully trained models.</p>
-				<br>
+				<p>We conduct two-alternative forced choice (2AFC) experiments on self-hosted behavior studies.
+				The user study involved a total of 62 subjects and 25,600 votes.
+				Results show that the proposed loss (C-FDB loss) is able to match the OFB loss in both frame quality and video stability.
+				</p>
 			</td>
 		</tr>
 	</table>
 
-	<!--<table align=center width=900px>
-		<tr>
-			<td align=center>
-				<img class="round" style="width: 300px" src="resources/face_appendix_5.png" />
-			</td>
-			<td align=center>
-				<img class="round" style="width: 300px" src="resources/bedroom_appendix_5.png" />
-			</td>
-			<td align=center>
-				<img class="round" style="width: 300px" src="resources/church_appendix_5.png" />
-			</td>
-		</tr>
-	</table>-->
-
-	<table align=center width=900px>
-		<tr>
-			<td align=center>
-				<img class="round" style="width: 300px" src="resources/face_paper_1.png" />
-			</td>
-			<td align=center>
-				<img class="round" style="width: 300px" src="resources/bedroom_paper_1.png" />
-			</td>
-			<td align=center>
-				<img class="round" style="width: 300px" src="resources/church_paper_1.png" />
-			</td>
-		</tr>
-	</table>
-	<table align=center width=850px>
-		<tr>
-			<td align=center>
-				<p><i>Figure: qualitative comparison of LSE, NSE-1, and NSE-2.</i></p>
-				<br>
-			</td>
-		</tr>
-	</table>
 
 	<hr>
 

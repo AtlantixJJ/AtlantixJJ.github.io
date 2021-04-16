@@ -1,0 +1,8 @@
+@misc{xu2021frame,
+      title={Frame Difference-Based Temporal Loss for Video Stylization}, 
+      author={Jianjin Xu and Zheyang Xiong and Xiaolin Hu},
+      year={2021},
+      eprint={2102.05822},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
