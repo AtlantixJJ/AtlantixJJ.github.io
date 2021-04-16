@@ -1,6 +1,8 @@
-@inproceedings{author20XXtitle,
-  title={Please cite me},
-  author={Author, First and Author, Second and Author, Third},
-  booktitle={Conference},
-  year={20XX}
+@misc{xu2021linear,
+      title={Linear Semantics in Generative Adversarial Networks}, 
+      author={Jianjin Xu and Changxi Zheng},
+      year={2021},
+      eprint={2104.00487},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
 }

@@ -119,9 +119,9 @@
 <html>
 <head>
 	<title>Linear Semantics in Generative Adversarial Networks</title>
-	<meta property="og:image" content="Path to my teaser.png"/> <!-- Facebook automatically scrapes this. Go to https://developers.facebook.com/tools/debug/ if you update and want to force Facebook to rescrape. -->
-	<meta property="og:title" content="Creative and Descriptive Paper Title." />
-	<meta property="og:description" content="Paper description." />
+	<meta property="og:image" content="./resources/teaser.png"/> 
+	<meta property="og:title" content="Linear Semantics in Generative Adversarial Networks" />
+	<meta property="og:description" content="We study how GAN model image semantics and thereby enable controllability over the semantics of generated images." />
 
 	<!-- Get from Google Analytics -->
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -186,7 +186,7 @@
 	<center>
 		<table align=center width=850px>
 			<tr>
-				<td width=260px>
+				<td>
 					<center>
 						<img class="round" style="width:500px" src="./resources/teaser.png"/>
 					</center>
@@ -196,7 +196,7 @@
 		<table align=center width=850px>
 			<tr>
 				<td>
-					To appear in CVPR 2021.
+					We find that the generated image semantics can be extracted from GAN's feature maps using a linear transformation.
 				</td>
 			</tr>
 		</table>
@@ -208,7 +208,20 @@
 		<center><h1>Abstract</h1></center>
 		<tr>
 			<td>
-				This is my abstract.
+				Generative Adversarial Networks (GANs) are able to generate high-quality images, but it remains difficult to explicitly specify the semantics of synthesized images.
+				In this work, we aim to better understand the semantic representation of GANs, and thereby enable semantic control in GAN's generation process.
+				Interestingly, we find that a well-trained GAN encodes image semantics in its internal feature maps in a surprisingly simple way:
+				<strong>a linear transformation of feature maps suffices to extract the generated image semantics.
+				</strong>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+			<br/>
+			To verify this simplicity, we conduct extensive experiments on various GANs and datasets; and thanks to this simplicity, we are able to learn a semantic segmentation model for a trained GAN from a small number (e.g., 8) of labeled images.
+			Last but not least, leveraging our findings, we propose two few-shot image editing approaches, namely Semantic-Conditional Sampling and Semantic Image Editing.
+			Given a trained GAN and as few as eight semantic annotations, the user is able to generate diverse images subject to a user-provided semantic layout, and control the synthesized image semantics.
 			</td>
 		</tr>
 	</table>
@@ -217,7 +230,7 @@
 	<hr>
 	<center><h1>Talk</h1></center>
 	<p align="center">
-		<iframe width="660" height="395" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen align="center"></iframe>
+		<iframe width="660" height="395" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen align="center"></iframe>
 	</p>
 
 	<table align=center width=800px>
@@ -229,6 +242,42 @@
 			</center>
 		</tr>
 	</table>
+
+	<hr>
+	<center><h1>GAN's Linear Semantic Embedding</h1></center>
+
+	<center>
+		<table align=center width=850px>
+			<tr>
+				<td>
+					<center>
+						<img class="round" style="width:800px" src="./resources/pipeline.png"/>
+					</center>
+				</td>
+			</tr>
+		</table>
+		<table align=center width=850px>
+			<tr>
+				<td>
+					We find that the generated image semantics can be extracted from GAN's feature maps using a linear transformation, referred to as the Linear Semantic Extractor, LSE.
+					The LSE is learned using cross-entropy loss using supervisions provided by off-the-shelf segmentation network.
+				</td>
+			</tr>
+			<tr>
+				<td>
+					We conduct extensive experiments to verify that GAN indeed embed semantics linearly.
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<center>
+						<img class="round" style="width:800px" src="./resources/se_quant.png"/>
+					</center>
+				</td>
+			</tr>
+		</table>
+	</center>
+
 	<hr>
 
 	<center><h1>Code</h1></center>
