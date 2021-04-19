@@ -118,10 +118,10 @@
 
 <html>
 <head>
-	<title>Frame Difference-Based Temporal Loss for Video Stylization</title>
+	<title>Interactive Editing in Aesthetic Painting</title>
 	<meta property="og:image" content="./resources/teaser.png"/> 
-	<meta property="og:title" content="Frame Difference-Based Temporal Loss for Video Stylization." />
-	<meta property="og:description" content="We propose a simple temporal loss to stablize style-transferred videos." />
+	<meta property="og:title" content="Interactive Editing in Aesthetic Painting" />
+	<meta property="og:description" content="Interactive Editing in Aesthetic Painting." />
 
 	<!-- Get from Google Analytics -->
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -138,7 +138,7 @@
 <body>
 	<br>
 	<center>
-		<span style="font-size:36px">Frame Difference-Based Temporal Loss for Video Stylization</span>
+		<span style="font-size:36px">Interactive Editing in Aesthetic Painting</span>
 		<table align=center width=900px>
 			<table align=center width=900px>
 				<tr>
@@ -166,10 +166,7 @@
 			<table align=center width=250px>
 				<tr>
 					<td align=center width=120px>
-						<span style="font-size:24px"><a href='https://arxiv.org/abs/2102.05822'>[Paper]</a></span>
-					</td>
-					<td align=center width=120px>
-						<span style="font-size:24px"><a href='https://github.com/AtlantixJJ/frame-difference-loss'>[Code]</a></span><br>
+						<span style="font-size:24px"><a href='./resources/aipainting.pdf'>[Paper]</a></span>
 					</td>
 				</tr>
 			</table>
@@ -187,63 +184,19 @@
 				</td>
 			</tr>
 		</table>
-		<table align=center width=850px>
-			<tr>
-				<td>
-					We find that the generated image semantics can be extracted from GAN's feature maps using a linear transformation.
-				</td>
-			</tr>
-		</table>
 	</center>
 
 	<hr>
 
 	<table align=center width=850px>
-		<center><h1>Abstract</h1></center>
 		<tr>
 			<td>
-				<p>Neural style transfer models have been used to stylize an ordinary video to specific styles. To ensure temporal
-				inconsistency between the frames of the stylized video, a common approach is to estimate the optic flow of the pixels in the original
-				video and make the generated pixels match the estimated optical flow. This is achieved by minimizing an optical flow-based (OFB) loss
-				during model training. However, optical flow estimation is itself a challenging task, particularly in complex scenes. In addition, it incurs a
-				high computational cost. We propose a much simpler temporal loss called the frame difference-based (FDB) loss to solve the temporal
-				inconsistency problem. It is defined as the distance between the difference between the stylized frames and the difference between the
-				original frames. The differences between the two frames are measured in both the pixel space and the feature space specified by the
-				convolutional neural networks. A set of human behavior experiments involving 62 subjects with 25,600 votes showed that the
-				performance of the proposed FDB loss matched that of the OFB loss. The performance was measured by subjective evaluation of
-				stability and stylization quality of the generated videos on two typical video stylization models. The results suggest that the proposed
-				FDB loss is a strong alternative to the commonly used OFB loss for video stylization.
+				<p>This is a work done as a part of [AI Painting: <a href="./resources/aipainting.pdf">Aesthetic Painting Generation System (ACMMM'18)</a>. I cooperated with the author of this work, added an interactive edit part to the origin work, as well as developed a new UI. The final application can be accessed from both PC and mobile phones, and the following video is demo of the new system on mobile phone.
 				</p>
 			</td>
 		</tr>
 	</table>
 	<br>
-
-	<hr>
-
-	<table align=center width=800px>
-		<center><h1>Paper and Supplementary Materials</h1></center>
-		<tr>
-			<td><a href="resources/Linear_Semantics_in_GAN.pdf"><img class="layered-paper-big" style="height:175px" src="./resources/paper.png"/></a></td>
-
-			<td><span style="font-size:14pt">Jianjin Xu, Zheyang Xiong, Xiaolin Hu<br>
-				<b>Frame Difference-Based Temporal Loss for Video Stylization</b><br>
-				Submitted to TPAMI.<br>
-				(hosted on <a href="https://arxiv.org/abs/2104.00487">ArXiv</a>)
-				<br>
-				<span style="font-size:14pt">
-					<a href="./resources/bibtex.txt">
-						[Bibtex]
-					</a>
-				</span>
-			</td>
-
-		</tr>
-	</table>
-	<br>
-
-
-<br>
 </body>
 </html>
 
