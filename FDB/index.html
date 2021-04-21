@@ -164,13 +164,19 @@
 					</td>
 				</tr>
 			</table>
-			<table align=center width=250px>
+			<table align=center width=600px>
 				<tr>
 					<td align=center width=120px>
 						<span style="font-size:24px"><a href='https://arxiv.org/abs/2102.05822'>[Paper]</a></span>
 					</td>
 					<td align=center width=120px>
 						<span style="font-size:24px"><a href='https://github.com/AtlantixJJ/frame-difference-loss'>[Code]</a></span><br>
+					</td>
+					<td align=center width=200px>
+						<span style="font-size:24px"><a href='video.html'>[Demo/Stablity]</a></span><br>
+					</td>
+					<td align=center width=200px>
+						<span style="font-size:24px"><a href='frame.html'>[Demo/Quality]</a></span><br>
 					</td>
 				</tr>
 			</table>
@@ -270,9 +276,9 @@
 		<tr>
 			<td>
 				<p>We evaluate the proposed FDB to the Optic Flow-Based (OFB) loss, which is the baseline.
-				As the instability phenomena is subtle in pixel values, existing numeric metrics fail to discriminate the stablization ability of different algorithms, we resort to user study to evaluate the video stability and frame quality of our methods.</p>
+				As the instability phenomena is subtle in pixel values, existing numeric metrics fail to discriminate the stablization ability of different algorithms, we resort to user study to evaluate the video stability and frame quality of our methods.
 				<br>
-				<p>We conduct two-alternative forced choice (2AFC) experiments on self-hosted behavior studies.
+				We conduct two-alternative forced choice (2AFC) experiments on self-hosted behavior studies.
 				The user study involved a total of 62 subjects and 25,600 votes.
 				Results show that the proposed loss (C-FDB loss) is able to match the OFB loss in both frame quality and video stability.
 				</p>
@@ -280,73 +286,18 @@
 		</tr>
 	</table>
 
-
+	<br>
 	<hr>
 
-	<center><h1>Applications</h1></center>
-
-	<table align=center width=850px>
-		<tr>
-			<td align=center>
-				<video controls="controls" height="400px" loop="loop" autoplay='autoplay' src='resources/LinearGAN_Training.mp4' type="video/mp4">
-					Your browser does not support the video element.
-					</video>
-			</td>
-		</tr>
-		<tr>
-			<td align=center>
-				<p><i>Video: demonstration of training a few-shot LSE.</i></p>
-			</td>
-		</tr>
+	<table align=center width=900px>
+		<center><h1>Demonstrations</h1></center>
 		<tr>
 			<td>
-				<p>After annotating a few annotations, we obtain a competitve semantic segmentation model for GAN generated images. The few-shot LSEs further enables image editing applications.</p>
-				<br>
-			</td>
-		</tr>
-	</table>
-
-	<table align=center width=850px>
-		<tr>
-			<td>
-				<p>We propose two image editing applications:
-				few-shot <strong>Semantic Image Editing</strong> and few-shot <strong>Semantic Conditional Sampling</strong>.
-				Both applications are formulated as an optimization problem:
-				find a latent vector that produces images satisfying given semantic constraints.
-				For SIE, we optimize the initial latent vector to get close to the user-modified semantic mask.
-				For SCS, we optimize several random latent vectors and return the closest one to the user-specific semantic mask.
+				<p style="font-size: 24px">
+					Come and try them out!
+					<br>
+					The online 2AFC experiments are roughly replicated: <a href="frame.html">video stability</a> | <a href="video.html">frame quality</a>
 				</p>
-				<br>
-			</td>
-		</tr>
-		
-		<tr>
-			<td>
-				<img class="round" src="resources/SIE_stroke.png" style="width: 850px"/>
-			</td>
-		</tr>
-		<tr>
-			<td align=center>
-				<p><i>Figure: comparison of color-based editing, SIE using UNet (baseline), SIE using 8-shot LSE (ours), and SIE using fully trained LSE.</i></p>
-				<br>
-			</td>
-		</tr>
-
-		<tr>
-			<td>
-				<p><strong>Semantic Image Editing</strong>.
-				In many cases, the user may want to control a GAN’s image generation process. For example, they might want to adjust the hair color of a generated facial image from blond to red; and the user may draw a red stroke on the hair to easily specify their intent.
-				However, without explicit notion of semantics, the minimization process may not respect image semantics, leading to undesired changes of shapes and textures.
-				Leveraging LSE, we propose an approached called Semantic Image Editing (SIE) to enable semantic-aware image generation.
-				Our method can edit the images better than the baseline, SIE(UNet).
-				More results are shown in the video below.
-				</p>
-				<br>
-			</td>
-		</tr>
-		<tr>
-			<td>
-
 			</td>
 		</tr>
 	</table>
